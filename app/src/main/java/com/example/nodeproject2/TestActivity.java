@@ -73,7 +73,8 @@ public class TestActivity extends AppCompatActivity {
 //        textView1 = findViewById(R.id.textView2);
 //        textView2 = findViewById(R.id.textView);
 
-        String path1 = "http://172.30.1.35:3000/"; //안산 단원구
+//        String path1 = "http://172.30.1.35:3000/"; //안산 단원구
+        String path1 = "http://sugang.konkuk.ac.kr/";
         String path2 = "https://weather.naver.com/rgn/cityWetrCity.nhn?cityRgnCd=CT008008";
         new getData1().execute(path1);
         new getData2().execute(path2);
@@ -88,7 +89,7 @@ public class TestActivity extends AppCompatActivity {
                     Document document = Jsoup.connect(params[0].toString()).get();
                     Elements elements = document.select("#App");
 
-                    if(elements.text().equals("40")) {
+                    if (elements.text().equals("40")) {
                         System.out.println(elements.text());
                         break;
                     }

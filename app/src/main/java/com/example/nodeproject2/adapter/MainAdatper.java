@@ -17,7 +17,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
     ArrayList<Subject> data;
 
      public interface OnItemClickListener {
-        void OnItemClick(ViewHolder holder,View view,int pos);
+        void OnItemClick(ViewHolder holder,View view,int pos) throws InterruptedException;
     }
     private OnItemClickListener itemClickListener = null;
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -29,8 +29,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         public TextView sub_num;
         public TextView sub_title;
         public TextView pro_name;
-        public TextView total_num;
-        public TextView current_num;
+        public TextView capacity_total;
+        public TextView capacity_year;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -38,11 +38,15 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
             sub_num = itemView.findViewById(R.id.subject_num);
             sub_title = itemView.findViewById(R.id.subject_title);
             pro_name = itemView.findViewById(R.id.professor_name);
-            total_num = itemView.findViewById(R.id.total_number_of_persnals);
-            current_num = itemView.findViewById(R.id.current_num);
+            capacity_total = itemView.findViewById(R.id.capacity_total);
+            capacity_year = itemView.findViewById(R.id.capacity_year);
 
             itemView.setOnClickListener(view -> {
-                itemClickListener.OnItemClick(this,itemView,getAdapterPosition());
+                try {
+                    itemClickListener.OnItemClick(this,itemView,getAdapterPosition());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             });
 
         }
@@ -60,11 +64,11 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.sub_title.setText(data.get(position).getSubject_title2());
+        holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
         holder.sub_num.setText(data.get(position).getSubject_num());
-        holder.current_num.setText("0");
-        holder.total_num.setText("30");
+        holder.capacity_total.setText(data.get(position).getCapacity_total());
+        holder.capacity_year.setText(data.get(position).getCapacity_year());
 
     }
 

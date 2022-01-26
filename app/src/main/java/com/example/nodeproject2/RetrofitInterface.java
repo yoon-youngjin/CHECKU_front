@@ -1,6 +1,5 @@
 package com.example.nodeproject2;
 
-import com.example.nodeproject2.datas.Subject;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -16,7 +15,7 @@ public interface RetrofitInterface {
     Call<Void> excuteSignup(@Body HashMap<String, String> map);
 
     @POST("/click")
-    Call<Void> excuteClick(@Body HashMap<String, String> map);
+    Call<String> excuteClick(@Body HashMap<String, String> map);
 
 
 }

@@ -32,6 +32,9 @@ android {
 }
 
 dependencies {
+    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
+    implementation 'com.opencsv:opencsv:4.4'
+
     implementation 'gun0912.ted:tedpermission:2.0.0'
     implementation 'org.jsoup:jsoup:1.11.3'
     compileOnly 'org.projectlombok:lombok:1.18.12'
