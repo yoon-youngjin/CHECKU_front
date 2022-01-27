@@ -16,7 +16,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     ArrayList<Subject> data;
 
-    public interface OnItemClickListener {
+     public interface OnItemClickListener {
         void OnItemClick(ViewHolder holder,View view,int pos) throws InterruptedException;
     }
     private OnItemClickListener itemClickListener = null;
