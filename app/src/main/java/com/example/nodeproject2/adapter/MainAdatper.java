@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.datas.Subject;
+import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 
@@ -16,12 +19,12 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     ArrayList<Subject> data;
 
-     public interface OnItemClickListener {
-        void OnItemClick(ViewHolder holder,View view,int pos) throws InterruptedException;
+     public interface OnCheckedChangeListener {
+        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked);
     }
-    private OnItemClickListener itemClickListener = null;
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.itemClickListener = listener;
+    private OnCheckedChangeListener itemChangeListener = null;
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.itemChangeListener = listener;
     }
 
     Context context;
@@ -31,6 +34,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
+        public Switch start_switch;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -40,15 +44,16 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
+            start_switch = itemView.findViewById(R.id.start_switch);
 
-            itemView.setOnClickListener(view -> {
-                try {
-                    itemClickListener.OnItemClick(this,itemView,getAdapterPosition());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @SneakyThrows
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        itemChangeListener.OnItemChange(ViewHolder.this,itemView,getAdapterPosition(),isChecked);
+
                 }
             });
-
         }
     }
 
@@ -63,6 +68,11 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
@@ -71,6 +81,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         holder.capacity_year.setText(data.get(position).getCapacity_year());
 
     }
+
+
 
     public MainAdatper(Context context, ArrayList<Subject> data) {
         this.data = data;

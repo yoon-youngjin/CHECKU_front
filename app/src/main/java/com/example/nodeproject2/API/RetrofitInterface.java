@@ -1,5 +1,6 @@
 package com.example.nodeproject2.API;
 
+import org.json.JSONArray;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -16,6 +17,9 @@ public interface RetrofitInterface {
 
     @POST("/click")
     Call<String> excuteClick(@Body HashMap<String, String> map);
+
+    @POST("/click")
+    Call<Void> excuteInit(@Body HashMap<String, String> map);
 
 
 }

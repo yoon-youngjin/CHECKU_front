@@ -3,15 +3,18 @@ package com.example.nodeproject2.view;
 
 import android.content.Intent;
 import android.os.*;
+import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.nodeproject2.API.RetrofitInterface;
 import com.example.nodeproject2.CSVFile;
 import com.example.nodeproject2.service.MyService;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.ActivityMainBinding;
 import com.example.nodeproject2.datas.Subject;
+import retrofit2.Retrofit;
 
 
 import java.io.*;
@@ -20,10 +23,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
     ActivityMainBinding binding = null;
     ArrayList<Subject> subData;
     MainAdatper adatper;
     RecyclerView recyclerView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,10 @@ public class MainActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
         initData();
+//        Intent intent = new Intent(this,MyService.class);
+//        intent.putExtra("init", "init");
+//        startService(intent);
     }
 
 
@@ -71,19 +79,24 @@ public class MainActivity extends AppCompatActivity {
     private void showView() {
         recyclerView = binding.mainRecyclerview;
         adatper = new MainAdatper(this, subData);
-        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
+        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
             @Override
-            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
-
-                String subject_num = holder.sub_num.getText().toString();
-
-                Intent intent = new Intent(getApplicationContext(), MyService.class);
-                intent.putExtra("subject_num", subject_num);
-                startService(intent);
-
+            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos,boolean isChecked) {
+                Log.d("checked", String.valueOf(isChecked));
+                if(isChecked) {
+                    String subject_num = holder.sub_num.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), MyService.class);
+                    intent.putExtra("subject_num", subject_num);
+                    startService(intent);
+                }
+                else {
+                    //TODO 보낸 요청 취소
+                    MyService.callArrayList.get(0).cancel();
+                }
 
             }
         });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
 

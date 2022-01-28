@@ -22,6 +22,7 @@ public class CSVFile {
         Subject sub;
         try( BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String csvLine;
+            reader.readLine();
             while ((csvLine = reader.readLine()) != null) {
                 String[] row = csvLine.split(",");
                 sub = Subject.builder().main_num(row[0]).major_division(row[1]).subject_num(row[2]).subject_title(row[3]).credit(row[4])
