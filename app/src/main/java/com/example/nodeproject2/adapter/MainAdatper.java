@@ -13,6 +13,7 @@ import com.example.nodeproject2.R;
 import com.example.nodeproject2.datas.Subject;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
@@ -20,7 +21,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
     ArrayList<Subject> data;
 
      public interface OnCheckedChangeListener {
-        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked);
+        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
     }
     private OnCheckedChangeListener itemChangeListener = null;
     public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {

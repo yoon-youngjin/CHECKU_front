@@ -29,8 +29,8 @@ public class MyService extends Service {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://172.30.1.30:2000";
-    public static ArrayList<Call> callArrayList = new ArrayList<>();
+    private String BASE_URL = "http://172.30.1.5:2000";
+    public static HashMap<String, Call> hmap = new HashMap<>();
 
 
     public MyService() {
@@ -52,13 +52,35 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
             return Service.START_STICKY;
+        } else if (intent.getStringExtra("test") == null) {
+            startMonitoring(intent);
         }
 //        else if (intent.getStringExtra("init").equals("init")) {
 //            getData();
 //
 //        }
         else {
-            startMonitoring(intent);
+            hmap.get(intent.getStringExtra("subject_num")).cancel();
+            if(hmap.get(intent.getStringExtra("subject_num")).isCanceled()) {
+                Log.d("check","cancel");
+            }else {
+                Log.d("check","cancel fail");
+            }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("start", "1");
+            map.put("subject_num", intent.getStringExtra("subject_num"));
+            Call<String> call = retrofitInterface.excuteClick(map);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d("check", "Success!!");
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("check", "Fail!!");
+
+                }
+            });
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -75,9 +97,10 @@ public class MyService extends Service {
         String subject_num = intent.getStringExtra("subject_num");
 
         HashMap<String, String> map = new HashMap<>();
+        map.put("start","0");
         map.put("subject_num", subject_num);
         Call<String> call = retrofitInterface.excuteClick(map);
-        callArrayList.add(call);
+        hmap.put(subject_num,call);
 
         call.enqueue(new Callback<String>() {
             @Override
