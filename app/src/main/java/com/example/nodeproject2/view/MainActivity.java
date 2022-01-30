@@ -16,6 +16,7 @@ import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.ActivityMainBinding;
 import com.example.nodeproject2.datas.Subject;
 import okhttp3.OkHttpClient;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,35 +38,20 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Subject> subData;
     MainAdatper adatper;
     RecyclerView recyclerView;
-    private Retrofit retrofit;
-    private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://172.30.1.30:2000";
 
 
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
         setContentView(binding.getRoot());
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.DAYS)
-                .readTimeout(1, TimeUnit.DAYS)
-//                .writeTimeout(100, TimeUnit.SECONDS)
-                .build();
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-        retrofitInterface = retrofit.create(RetrofitInterface.class);
 
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+
         initData();
 //        Intent intent = new Intent(this,MyService.class);
 //        intent.putExtra("init", "init");
@@ -80,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = getResources().getAssets().open("file.csv");
             CSVFile file = new CSVFile(is);
             subData = file.read();
+
             // 엑셀 읽기
 //            Workbook wb = new HSSFWorkbook(is);
 //            Sheet sheet = wb.getSheetAt(0);
@@ -108,23 +95,17 @@ public class MainActivity extends AppCompatActivity {
         adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
             @Override
             public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos,boolean isChecked) throws IOException {
-                Log.d("checked", String.valueOf(isChecked));
+                Intent intent = new Intent(getApplicationContext(), MyService.class);
+                String subject_num = holder.sub_num.getText().toString();
+                intent.putExtra("subject_num", subject_num);
                 if(isChecked) {
-                    String subject_num = holder.sub_num.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), MyService.class);
-                    intent.putExtra("subject_num", subject_num);
+                    intent.putExtra("checked",true);
                     startService(intent);
                 }
                 else {
-                    //TODO 보낸 요청 취소
-                    String subject_num = holder.sub_num.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), MyService.class);
-                    intent.putExtra("test", "test");
-                    intent.putExtra("subject_num", subject_num);
+                    intent.putExtra("checked",false);
                     startService(intent);
-
                 }
-
             }
         });
 

@@ -13,7 +13,9 @@ import androidx.core.app.NotificationCompat;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.API.RetrofitInterface;
 import com.example.nodeproject2.view.MainActivity;
+import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +23,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -29,9 +30,8 @@ public class MyService extends Service {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://172.30.1.5:2000";
+    private String BASE_URL = "http://172.30.1.60:2000";
     public static HashMap<String, Call> hmap = new HashMap<>();
-
 
     public MyService() {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -50,91 +50,103 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) {
-            return Service.START_STICKY;
-        } else if (intent.getStringExtra("test") == null) {
-            startMonitoring(intent);
-        }
-//        else if (intent.getStringExtra("init").equals("init")) {
-//            getData();
-//
-//        }
-        else {
-            hmap.get(intent.getStringExtra("subject_num")).cancel();
-            if(hmap.get(intent.getStringExtra("subject_num")).isCanceled()) {
-                Log.d("check","cancel");
-            }else {
-                Log.d("check","cancel fail");
-            }
-            HashMap<String, String> map = new HashMap<>();
-            map.put("start", "1");
-            map.put("subject_num", intent.getStringExtra("subject_num"));
-            Call<String> call = retrofitInterface.excuteClick(map);
+        if (intent.getStringExtra("init").equals("init")) {
+            Call<String> call = retrofitInterface.excuteInit();
             call.enqueue(new Callback<String>() {
+                @SneakyThrows
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    Log.d("check", "Success!!");
+                    System.out.println(response.body());
+
+                    JSONObject jsonObject = new JSONObject(response.body());
+                    PendingIntent intent = new Pen
+                    System.out.println(jsonObject.get("0"));
+                    System.out.println(jsonObject.get("1"));
+
                 }
+
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Log.d("check", "Fail!!");
-
                 }
             });
+//
+        }
+
+        if (intent == null) {
+            return Service.START_STICKY;
+        } else if (intent.getBooleanExtra("checked", true)) {
+            startMonitoring(intent);
+        } else if (intent.getBooleanExtra("checked", false)) {
+            stopMonitoring(intent);
         }
 
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private void stopMonitoring(Intent intent) {
+        String subject_num = intent.getStringExtra("subject_num");
+        hmap.get(subject_num).cancel();
+        if (hmap.get(subject_num).isCanceled()) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("checked", "false");
+            map.put("subject_num", subject_num);
+            Call<String> call = retrofitInterface.excuteClick(map);
+            call.enqueue(new Callback<String>() {
+                @SneakyThrows
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d("response", response.body() + "stop");
+
+                    JSONObject obj = new JSONObject(response.body());
+
+                    System.out.println(obj.getString("0"));
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.getStringExtra(response.body());
+                    startActivity(intent);
+//                    PendingIntent pendingIntent
+//                            = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("check", "Fail!!");
+                }
+            });
+        } else {
+            Log.d("check", "cancel fail");
+        }
+
+
+    }
+
     private void getData() {
         //TODO 앱시작 데이터 가져오기 구현
-
 //        Call<String> call = retrofitInterface.excuteClick(map);
 
     }
 
     private void startMonitoring(Intent intent) {
+
+
         String subject_num = intent.getStringExtra("subject_num");
 
         HashMap<String, String> map = new HashMap<>();
-        map.put("start","0");
+        map.put("checked", "true");
         map.put("subject_num", subject_num);
         Call<String> call = retrofitInterface.excuteClick(map);
-        hmap.put(subject_num,call);
+        hmap.put(subject_num, call);
 
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.code() == 200) {
-                    Intent testIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    PendingIntent pendingIntent
-                            = PendingIntent.getActivity(getApplicationContext(), 0, testIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                    // 오래오 윗버젼일 때는 아래와 같이 채널을 만들어 Notification과 연결해야 한다.
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        NotificationChannel channel = new NotificationChannel("channel", "play!!",
-                                NotificationManager.IMPORTANCE_DEFAULT);
-
-                        // Notification과 채널 연걸
-                        NotificationManager mNotificationManager = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
-                        mNotificationManager.createNotificationChannel(channel);
-
-                        // Notification 세팅
-                        NotificationCompat.Builder notification
-                                = new NotificationCompat.Builder(getApplicationContext(), "channel")
-                                .setSmallIcon(R.drawable.img)
-                                .setContentTitle(response.body())
-                                .setContentIntent(pendingIntent)
-                                .setContentText("");
-
-                        // id 값은 0보다 큰 양수가 들어가야 한다.
-                        mNotificationManager.notify(1, notification.build());
-                        // foreground에서 시작
-                        startForeground(1, notification.build());
-                        Log.d("check", response.body());
-                    }
+                    sniping_notification(response);
                 } else if (response.code() == 400) {
-//                        Toast.makeText(MainActivity.this, "Already registered", Toast.LENGTH_LONG).show();
+                    Log.d("sniping_fail", "fail");
                 }
             }
 
@@ -144,6 +156,36 @@ public class MyService extends Service {
             }
         });
 
+    }
+
+    private void sniping_notification(Response<String> response) {
+        Intent testIntent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pendingIntent
+                = PendingIntent.getActivity(getApplicationContext(), 0, testIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // 오래오 윗버젼일 때는 아래와 같이 채널을 만들어 Notification과 연결해야 한다.
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel", "play!!",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            // Notification과 채널 연걸
+            NotificationManager mNotificationManager = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+            mNotificationManager.createNotificationChannel(channel);
+
+            // Notification 세팅
+            NotificationCompat.Builder notification
+                    = new NotificationCompat.Builder(getApplicationContext(), "channel")
+                    .setSmallIcon(R.drawable.img)
+                    .setContentTitle(response.body())
+                    .setContentIntent(pendingIntent)
+                    .setContentText("");
+
+            // id 값은 0보다 큰 양수가 들어가야 한다.
+            mNotificationManager.notify(1, notification.build());
+            // foreground에서 시작
+            startForeground(1, notification.build());
+            Log.d("check", response.body());
+        }
     }
 
     @Nullable
