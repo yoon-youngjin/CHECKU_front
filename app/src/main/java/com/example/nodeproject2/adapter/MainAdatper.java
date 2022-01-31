@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.nodeproject2.R;
-import com.example.nodeproject2.datas.Subject;
+import com.example.nodeproject2.datas.Lecture;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
-    ArrayList<Subject> data;
+    ArrayList<Lecture> data;
 
      public interface OnCheckedChangeListener {
         void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
@@ -85,7 +85,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
 
 
-    public MainAdatper(Context context, ArrayList<Subject> data) {
+    public MainAdatper(Context context, ArrayList<Lecture> data) {
         this.data = data;
         this.context = context;
 

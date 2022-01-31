@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @ToString
-public class Subject {
+public class Lecture {
     // 학수번호
     private String main_num;
     // 이수구분

@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.API.RetrofitInterface;
 import com.example.nodeproject2.view.MainActivity;
@@ -28,51 +29,18 @@ import java.util.concurrent.TimeUnit;
 
 public class MyService extends Service {
 
-    private Retrofit retrofit;
-    private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://172.30.1.60:2000";
+
     public static HashMap<String, Call> hmap = new HashMap<>();
 
     public MyService() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.DAYS)
-                .readTimeout(1, TimeUnit.DAYS)
-//                .writeTimeout(100, TimeUnit.SECONDS)
-                .build();
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-        retrofitInterface = retrofit.create(RetrofitInterface.class);
+        hmap = new HashMap<>();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getStringExtra("init").equals("init")) {
-            Call<String> call = retrofitInterface.excuteInit();
-            call.enqueue(new Callback<String>() {
-                @SneakyThrows
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    System.out.println(response.body());
-
-                    JSONObject jsonObject = new JSONObject(response.body());
-                    PendingIntent intent = new Pen
-                    System.out.println(jsonObject.get("0"));
-                    System.out.println(jsonObject.get("1"));
-
-                }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    Log.d("check", "Fail!!");
-                }
-            });
-//
-        }
-
+//        if (intent.getStringExtra("init").equals("init")) {
+//            getData();
+//        }
         if (intent == null) {
             return Service.START_STICKY;
         } else if (intent.getBooleanExtra("checked", true)) {
@@ -91,7 +59,7 @@ public class MyService extends Service {
             HashMap<String, String> map = new HashMap<>();
             map.put("checked", "false");
             map.put("subject_num", subject_num);
-            Call<String> call = retrofitInterface.excuteClick(map);
+            Call<String> call = RetrofitClient.retrofitInterface.excuteClick(map);
             call.enqueue(new Callback<String>() {
                 @SneakyThrows
                 @Override
@@ -106,7 +74,6 @@ public class MyService extends Service {
                     startActivity(intent);
 //                    PendingIntent pendingIntent
 //                            = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
 
 
                 }
@@ -125,36 +92,73 @@ public class MyService extends Service {
 
     private void getData() {
         //TODO 앱시작 데이터 가져오기 구현
-//        Call<String> call = retrofitInterface.excuteClick(map);
 
-    }
-
-    private void startMonitoring(Intent intent) {
-
-
-        String subject_num = intent.getStringExtra("subject_num");
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("checked", "true");
-        map.put("subject_num", subject_num);
-        Call<String> call = retrofitInterface.excuteClick(map);
-        hmap.put(subject_num, call);
-
+        Call<String> call = RetrofitClient.retrofitInterface.excuteInit();
         call.enqueue(new Callback<String>() {
+            @SneakyThrows
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if (response.code() == 200) {
-                    sniping_notification(response);
-                } else if (response.code() == 400) {
-                    Log.d("sniping_fail", "fail");
-                }
+                System.out.println(response.body());
+
+                JSONObject jsonObject = new JSONObject(response.body());
+                System.out.println(jsonObject.get("0"));
+                System.out.println(jsonObject.get("1"));
+
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("err", t.getMessage());
+                Log.d("check", "Fail!!");
             }
         });
+        //TODO 액태비티로 데이터 전달 및 새로고침 구현
+
+    }
+
+    private void startMonitoring(Intent intent) {
+        Call<String> call = RetrofitClient.retrofitInterface.excuteInit();
+        call.enqueue(new Callback<String>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println(response.body());
+
+                JSONObject jsonObject = new JSONObject(response.body());
+                System.out.println(jsonObject.get("0"));
+                System.out.println(jsonObject.get("1"));
+                System.out.println(jsonObject.length());
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("check", "Fail!!");
+            }
+        });
+
+//        String subject_num = intent.getStringExtra("subject_num");
+//
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("checked", "true");
+//        map.put("subject_num", subject_num);
+//        Call<String> call = RetrofitClient.retrofitInterface.excuteClick(map);
+//        hmap.put(subject_num, call);
+//
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                if (response.code() == 200) {
+//                    sniping_notification(response);
+//                } else if (response.code() == 400) {
+//                    Log.d("sniping_fail", "fail");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                Log.d("err", t.getMessage());
+//            }
+//        });
 
     }
 
