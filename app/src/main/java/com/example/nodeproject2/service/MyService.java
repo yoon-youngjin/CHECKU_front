@@ -36,6 +36,7 @@ public class MyService extends Service {
         hmap = new HashMap<>();
     }
 
+    @SneakyThrows
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        if (intent.getStringExtra("init").equals("init")) {
@@ -115,52 +116,31 @@ public class MyService extends Service {
 
     }
 
-    private void startMonitoring(Intent intent) {
-        Call<String> call = RetrofitClient.retrofitInterface.excuteInit();
-        call.enqueue(new Callback<String>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println(response.body());
+    private void startMonitoring(Intent intent)  {
+            String subject_num = intent.getStringExtra("subject_num");
 
-                JSONObject jsonObject = new JSONObject(response.body());
-                System.out.println(jsonObject.get("0"));
-                System.out.println(jsonObject.get("1"));
-                System.out.println(jsonObject.length());
+            HashMap<String, String> map = new HashMap<>();
+            map.put("checked", "true");
+            map.put("subject_num", subject_num);
+            Call<String> call = RetrofitClient.retrofitInterface.excuteClick(map);
+            hmap.put(subject_num, call);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.code() == 200) {
+                        sniping_notification(response);
+                    } else if (response.code() == 400) {
+                        Log.d("sniping_fail", "fail");
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("err", t.getMessage());
+                }
+            });
+        }
 
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("check", "Fail!!");
-            }
-        });
-
-//        String subject_num = intent.getStringExtra("subject_num");
-//
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("checked", "true");
-//        map.put("subject_num", subject_num);
-//        Call<String> call = RetrofitClient.retrofitInterface.excuteClick(map);
-//        hmap.put(subject_num, call);
-//
-//        call.enqueue(new Callback<String>() {
-//            @Override
-//            public void onResponse(Call<String> call, Response<String> response) {
-//                if (response.code() == 200) {
-//                    sniping_notification(response);
-//                } else if (response.code() == 400) {
-//                    Log.d("sniping_fail", "fail");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<String> call, Throwable t) {
-//                Log.d("err", t.getMessage());
-//            }
-//        });
-
-    }
 
     private void sniping_notification(Response<String> response) {
         Intent testIntent = new Intent(getApplicationContext(), MainActivity.class);

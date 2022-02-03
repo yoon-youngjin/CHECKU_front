@@ -8,7 +8,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
-    private static String BASE_URL = "http://192.168.0.26:3000";
+    private static String BASE_URL = "http://172.30.1.4:3000";
 
     static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.DAYS)
