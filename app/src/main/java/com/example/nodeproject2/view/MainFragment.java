@@ -25,13 +25,11 @@ import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
 
-    ArrayList<Lecture> lectures;
     RecyclerView recyclerView;
     MainAdatper adatper;
     FragmentMainBinding binding;
     LoadingDialog loadingDialog;
     private LectureViewModel lectureViewModel;
-    int count = 0;
 
 
     @Override
@@ -43,7 +41,7 @@ public class MainFragment extends Fragment {
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.show();
-        initData();
+//        initData();
         initObserver();
 
         lectureViewModel.getData();
@@ -57,11 +55,15 @@ public class MainFragment extends Fragment {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                adatper.notifyDataSetChanged();
-                if (count != 0) {
-                    loadingDialog.dismiss();
-                }
-                count++;
+                showView();
+
+//                lectureViewModel.setLectures(lectures);
+//                System.out.println("check2"+lectures);
+//
+//                System.out.println("check3"+lectureViewModel.getLectures());
+
+//                adatper.notifyDataSetChanged();
+                loadingDialog.dismiss();
 
             }
         });
@@ -73,16 +75,17 @@ public class MainFragment extends Fragment {
         adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
         adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
             @Override
-            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked)  {
+            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
 
                 Intent intent = new Intent(getContext(), MyService.class);
                 String subject_num = holder.sub_num.getText().toString();
                 intent.putExtra("subject_num", subject_num);
                 if (isChecked) {
-                    intent.putExtra("checked", true);
+                    intent.putExtra("checked", "true");
+
                     getActivity().startService(intent);
                 } else {
-                    intent.putExtra("checked", false);
+                    intent.putExtra("checked", "false");
                     getActivity().startService(intent);
                 }
             }
@@ -93,36 +96,36 @@ public class MainFragment extends Fragment {
 
     }
 
-    public void initData() {
-
-        try (InputStream is = getResources().getAssets().open("file.csv");
-        ) {
-            lectures = new ArrayList();
-            CSVFile file = new CSVFile(is);
-            lectures = file.read();
-            lectureViewModel.setLectures(lectures);
-
-            // 엑셀 읽기
-//            Workbook wb = new HSSFWorkbook(is);
-//            Sheet sheet = wb.getSheetAt(0);
-//            int rows = sheet.getPhysicalNumberOfRows();
+//    public void initData() {
 //
-//            for (int i = 0; i < rows; i++) {
-//                HSSFRow row = (HSSFRow) sheet.getRow(i);
-//                Subject sub;
-//                if(row!=null) {
-////                    int cells = row.getPhysicalNumberOfCells();
-//                    sub = Subject.builder().subject_title(row.getCell(7).getStringCellValue()).professor_name(row.getCell(16).getStringCellValue())
-//                            .total_num("40").current_num("0").subject_num(row.getCell(6).getStringCellValue()).build();
-//                    subData.add(sub);
-//                }
-//            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        showView();
-
-    }
+//        try (InputStream is = getResources().getAssets().open("file.csv");
+//        ) {
+//            lectures = new ArrayList();
+//            CSVFile file = new CSVFile(is);
+//            lectures = file.read();
+//            lectureViewModel.setLectures(lectures);
+//
+//            // 엑셀 읽기
+////            Workbook wb = new HSSFWorkbook(is);
+////            Sheet sheet = wb.getSheetAt(0);
+////            int rows = sheet.getPhysicalNumberOfRows();
+////
+////            for (int i = 0; i < rows; i++) {
+////                HSSFRow row = (HSSFRow) sheet.getRow(i);
+////                Subject sub;
+////                if(row!=null) {
+//////                    int cells = row.getPhysicalNumberOfCells();
+////                    sub = Subject.builder().subject_title(row.getCell(7).getStringCellValue()).professor_name(row.getCell(16).getStringCellValue())
+////                            .total_num("40").current_num("0").subject_num(row.getCell(6).getStringCellValue()).build();
+////                    subData.add(sub);
+////                }
+////            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        showView();
+//
+//    }
 
 
 }

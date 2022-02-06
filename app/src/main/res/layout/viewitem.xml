@@ -21,7 +21,8 @@
             <TextView
                     android:id="@+id/capacity_total"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="40"
                     android:textColor="@color/black"/>
@@ -29,7 +30,8 @@
             <TextView
                     android:id="@+id/capacity_year"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="0/40"/>
         </LinearLayout>

@@ -94,7 +94,12 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if(data == null) {
+            return 0;
+        }else {
+            return data.size();
+        }
+
     }
 }
 

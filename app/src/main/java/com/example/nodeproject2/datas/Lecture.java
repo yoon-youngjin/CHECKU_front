@@ -1,5 +1,6 @@
 package com.example.nodeproject2.datas;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
 @Getter
@@ -30,7 +31,6 @@ public class Lecture {
     private String capacity_year;
     // 정원(전체)
     private String capacity_total;
-
 
 
 }

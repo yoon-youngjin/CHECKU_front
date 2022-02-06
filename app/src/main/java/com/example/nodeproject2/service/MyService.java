@@ -44,9 +44,10 @@ public class MyService extends Service {
 //        }
         if (intent == null) {
             return Service.START_STICKY;
-        } else if (intent.getBooleanExtra("checked", true)) {
+        } else if (intent.getStringExtra("checked").equals("true")) {
             startMonitoring(intent);
-        } else if (intent.getBooleanExtra("checked", false)) {
+        } else if (intent.getStringExtra("checked").equals("false")) {
+            System.out.println("check false3");
             stopMonitoring(intent);
         }
 
@@ -56,6 +57,7 @@ public class MyService extends Service {
     private void stopMonitoring(Intent intent) {
         String subject_num = intent.getStringExtra("subject_num");
         hmap.get(subject_num).cancel();
+
         if (hmap.get(subject_num).isCanceled()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("checked", "false");
@@ -67,12 +69,12 @@ public class MyService extends Service {
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.d("response", response.body() + "stop");
 
-                    JSONObject obj = new JSONObject(response.body());
-
-                    System.out.println(obj.getString("0"));
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.getStringExtra(response.body());
-                    startActivity(intent);
+//                    JSONObject obj = new JSONObject(response.body());
+//
+//                    System.out.println(obj.getString("0"));
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    intent.getStringExtra(response.body());
+//                    startActivity(intent);
 //                    PendingIntent pendingIntent
 //                            = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
