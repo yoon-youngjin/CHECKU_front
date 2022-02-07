@@ -22,7 +22,11 @@ public class LectureViewModel extends ViewModel {
     ArrayList<Lecture> arrayList = new ArrayList<>();
 
     public void setLectures(ArrayList<Lecture> lecture) {
+
         arrayList.addAll(lecture);
+        if(lectures.getValue() != null) {
+            lectures.getValue().clear();
+        }
         lectures.setValue(arrayList);
     }
 
@@ -38,16 +42,10 @@ public class LectureViewModel extends ViewModel {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-//                ArrayList<String> temp = new ArrayList<>();
+//                System.out.println(response.body());
                 JSONObject jsonObject = new JSONObject(response.body());
+//                System.out.println(jsonObject);
 
-//                JSONArray temp = (JSONArray) jsonObject.get("0");
-//                System.out.println(temp.get(1));
-
-
-//                System.out.println(jsonObject.get("0").toString().trim());
-//                System.out.println(jsonObject.get("1").toString().trim());
-//                System.out.println(jsonObject.length());
 
                 ArrayList<Lecture> arr_lec = new ArrayList<>();
 
@@ -57,11 +55,7 @@ public class LectureViewModel extends ViewModel {
                             .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
                     arr_lec.add(lec);
                 }
-
                 lectures.setValue(arr_lec);
-
-
-//                System.out.println("check"+lectures);
             }
 
             @Override

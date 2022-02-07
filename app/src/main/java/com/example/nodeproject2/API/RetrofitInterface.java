@@ -19,6 +19,8 @@ public interface RetrofitInterface {
 
     @POST("/init")
     Call<String> excuteInit();
+    @POST("/change")
+    Call<String> excuteChange(@Body HashMap<String, String> map);
 
 
 }

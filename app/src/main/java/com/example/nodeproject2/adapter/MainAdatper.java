@@ -18,7 +18,12 @@ import java.util.ArrayList;
 
 public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
-    ArrayList<Lecture> data;
+    public ArrayList<Lecture> data;
+
+    public void swapItems(ArrayList<Lecture> items) {
+        this.data = items;
+        notifyDataSetChanged();
+    }
 
      public interface OnCheckedChangeListener {
         void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;

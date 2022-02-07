@@ -93,31 +93,6 @@ public class MyService extends Service {
 
     }
 
-    private void getData() {
-        //TODO 앱시작 데이터 가져오기 구현
-
-        Call<String> call = RetrofitClient.retrofitInterface.excuteInit();
-        call.enqueue(new Callback<String>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println(response.body());
-
-                JSONObject jsonObject = new JSONObject(response.body());
-                System.out.println(jsonObject.get("0"));
-                System.out.println(jsonObject.get("1"));
-
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("check", "Fail!!");
-            }
-        });
-        //TODO 액태비티로 데이터 전달 및 새로고침 구현
-
-    }
-
     private void startMonitoring(Intent intent)  {
             String subject_num = intent.getStringExtra("subject_num");
 

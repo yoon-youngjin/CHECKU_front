@@ -3,14 +3,18 @@ package com.example.nodeproject2.view;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.CSVFile;
 import com.example.nodeproject2.adapter.MainAdatper;
@@ -18,10 +22,16 @@ import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
 import com.example.nodeproject2.service.MyService;
 import lombok.SneakyThrows;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainFragment extends Fragment {
 
@@ -41,13 +51,96 @@ public class MainFragment extends Fragment {
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.show();
+        init();
 //        initData();
         initObserver();
 
         lectureViewModel.getData();
 
-
         return binding.getRoot();
+
+    }
+
+    private void init() {
+
+        String[] items = {"1", "2"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+                getContext(), android.R.layout.simple_list_item_1,items
+        );
+        adapter2.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        binding.spinner.setAdapter(adapter2);
+
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                    {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("test", "127428");
+                        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
+                        call.enqueue(new Callback<String>() {
+                            @SneakyThrows
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                JSONObject jsonObject = new JSONObject(response.body());
+                                ArrayList<Lecture> arr_lec = new ArrayList<>();
+                                for (int i = 0; i < jsonObject.length(); i++) {
+                                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
+                                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
+                                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                                    arr_lec.add(lec);
+                                }
+
+                                adatper.swapItems(arr_lec);
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Log.d("check", "Fail!!");
+                            }
+                        });
+                        break;
+                }
+                    case 1:{
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("test", "126914");
+                        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
+                        call.enqueue(new Callback<String>() {
+                            @SneakyThrows
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                JSONObject jsonObject = new JSONObject(response.body());
+                                ArrayList<Lecture> arr_lec = new ArrayList<>();
+                                for (int i = 0; i < jsonObject.length(); i++) {
+                                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
+                                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
+                                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                                    arr_lec.add(lec);
+                                }
+//                                lectureViewModel.setLectures(arr_lec);
+                                adatper.swapItems(arr_lec);
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Log.d("check", "Fail!!");
+                            }
+                        });
+                        break;
+                }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
     }
 
@@ -62,7 +155,6 @@ public class MainFragment extends Fragment {
 //
 //                System.out.println("check3"+lectureViewModel.getLectures());
 
-//                adatper.notifyDataSetChanged();
                 loadingDialog.dismiss();
 
             }
