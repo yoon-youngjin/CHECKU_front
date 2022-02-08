@@ -14,6 +14,7 @@ import retrofit2.Response;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LectureViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Lecture>> lectures
@@ -42,13 +43,34 @@ public class LectureViewModel extends ViewModel {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-//                System.out.println(response.body());
                 JSONObject jsonObject = new JSONObject(response.body());
-//                System.out.println(jsonObject);
-
-
                 ArrayList<Lecture> arr_lec = new ArrayList<>();
+                for (int i = 0; i < jsonObject.length(); i++) {
+                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
+                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
+                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                    arr_lec.add(lec);
+                }
+                lectures.setValue(arr_lec);
+            }
 
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("check", "Fail!!");
+            }
+        });
+    }
+
+    public void getChangeData(String value) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("sbj_num",value);
+        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
+        call.enqueue(new Callback<String>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                JSONObject jsonObject = new JSONObject(response.body());
+                ArrayList<Lecture> arr_lec = new ArrayList<>();
                 for (int i = 0; i < jsonObject.length(); i++) {
                     JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
                     Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
