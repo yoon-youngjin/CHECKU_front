@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.CSVFile;
@@ -39,6 +40,7 @@ public class MainFragment extends Fragment {
     MainAdatper adatper;
     FragmentMainBinding binding;
     LoadingDialog loadingDialog;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
 
 
@@ -51,6 +53,42 @@ public class MainFragment extends Fragment {
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.show();
+        swipeRefreshLayout = binding.swipeLayout;
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("test", "127428");
+                Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
+                call.enqueue(new Callback<String>() {
+                    @SneakyThrows
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        JSONObject jsonObject = new JSONObject(response.body());
+                        ArrayList<Lecture> arr_lec = new ArrayList<>();
+                        for (int i = 0; i < jsonObject.length(); i++) {
+                            JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
+                            Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
+                                    .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                            arr_lec.add(lec);
+                        }
+                        adatper.swapItems(arr_lec);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d("check", "Fail!!");
+                    }
+                });
+
+
+
+
+            }
+        });
+
         init();
 //        initData();
         initObserver();
@@ -91,10 +129,7 @@ public class MainFragment extends Fragment {
                                             .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
                                     arr_lec.add(lec);
                                 }
-
                                 adatper.swapItems(arr_lec);
-
-
                             }
 
                             @Override

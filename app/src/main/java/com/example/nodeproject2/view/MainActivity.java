@@ -62,9 +62,9 @@ public class  MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         super.onCreate(savedInstanceState);
-        setSupportActionBar(binding.toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(binding.toolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayShowTitleEnabled(false);
 
         setContentView(binding.getRoot());
         init();
