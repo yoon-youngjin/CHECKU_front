@@ -30,14 +30,14 @@ import java.io.*;
 import java.util.ArrayList;
 
 
-public class  MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
 
-    ActivityMainBinding binding = null;
-    MainFragment mainFragment;
-    ListFragment listFragment = new ListFragment();
-    FragmentManager fm = getSupportFragmentManager();
-    FragmentTransaction ft = fm.beginTransaction();
+    private ActivityMainBinding binding = null;
+    private MainFragment mainFragment = new MainFragment();
+    private ListFragment listFragment = new ListFragment();
+    private boolean state_check = true;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,13 +48,14 @@ public class  MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.list_item:
-                System.out.println("change");
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.main_frame, listFragment).commit();
-                return true;
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        if (state_check) {
+            ft.replace(R.id.main_frame, listFragment).commit();
+            state_check = false;
+        } else {
+            ft.replace(R.id.main_frame, mainFragment).commit();
+            state_check = true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -69,13 +70,11 @@ public class  MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         init();
     }
+
     private void init() {
-        mainFragment = new MainFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         ft.replace(R.id.main_frame, mainFragment).commit();
     }
-
-
-
-
 
 }

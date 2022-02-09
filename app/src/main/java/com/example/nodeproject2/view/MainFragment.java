@@ -1,10 +1,7 @@
 package com.example.nodeproject2.view;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
-import com.example.nodeproject2.LectureDao;
-import com.example.nodeproject2.LectureDatabase;
+import com.example.nodeproject2.API.LectureDao;
+import com.example.nodeproject2.API.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
-import com.example.nodeproject2.service.MyService;
-import lombok.SneakyThrows;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainFragment extends Fragment {
 
@@ -48,6 +36,7 @@ public class MainFragment extends Fragment {
     private String value;
     private int count;
     private boolean dataCheck;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +53,8 @@ public class MainFragment extends Fragment {
                 .allowMainThreadQueries().build();
 
         lectureDao = db.lectureDao();
+
+
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -83,6 +74,11 @@ public class MainFragment extends Fragment {
 
 
     private void init() {
+
+
+
+
+
         String[] items = getResources().getStringArray(R.array.spinner_data).clone();
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_list_item_1, items
@@ -127,43 +123,40 @@ public class MainFragment extends Fragment {
         recyclerView = binding.mainRecyclerview;
         adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
 
-        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
-            @Override
-            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
-//                Lecture lecture1 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.toString())).subject_title(holder.sub_title.toString())
-//                        .professor_name(holder.pro_name.toString()).capacity_total(holder.capacity_total.toString()).capacity_year(holder.capacity_year.toString())
-//                        .build();
-                Lecture lecture = new Lecture();
-                lecture.setSubject_num(Integer.parseInt(holder.sub_num.getText().toString()));
-                lecture.setProfessor_name(holder.pro_name.getText().toString());
-                lecture.setSubject_title(holder.sub_title.getText().toString());
-                lecture.setCapacity_total(holder.capacity_total.getText().toString());
-                lecture.setCapacity_year(holder.capacity_year.getText().toString());
-
-
-                lectureDao.setInsertLecture(lecture);
-
-                System.out.println(lectureDao.getLectureAll());
-
-            }
-        });
-//        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+//        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
 //            @Override
-//            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+//            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
+//                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+//                        .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+//                        .capacity_year(holder.capacity_year.getText().toString())
+//                        .build();
 //
-//                Intent intent = new Intent(getContext(), MyService.class);
-//                String subject_num = holder.sub_num.getText().toString();
-//                intent.putExtra("subject_num", subject_num);
-//                if (isChecked) {
-//                    intent.putExtra("checked", "true");
+//                lectureDao.setInsertLecture(lecture);
+//                holder.btn.setBackground();
 //
-//                    getActivity().startService(intent);
-//                } else {
-//                    intent.putExtra("checked", "false");
-//                    getActivity().startService(intent);
-//                }
+//                System.out.println(lectureDao.getLectureAll());
+//
 //            }
 //        });
+        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+            @Override
+            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+
+
+                if (isChecked) {
+//                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+//                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+//                            .capacity_year(holder.capacity_year.getText().toString())
+//                            .build();
+//                    lectureDao.setInsertLecture(lecture);
+
+                } else {
+//                    Lecture lec = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();;
+//                    lectureDao.setDeleteLecture(lec);
+
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }

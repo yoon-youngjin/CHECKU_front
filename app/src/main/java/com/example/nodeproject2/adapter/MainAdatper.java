@@ -10,39 +10,57 @@ import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+import com.example.nodeproject2.API.LectureDao;
+import com.example.nodeproject2.API.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.datas.Lecture;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     public ArrayList<Lecture> data;
+    private List<Lecture> lectureList;
 
     public void swapItems(ArrayList<Lecture> items) {
         this.data = items;
         notifyDataSetChanged();
     }
+    public MainAdatper(Context context, ArrayList<Lecture> data) {
+        this.data = data;
+        this.context = context;
 
-    public interface OnItemClickListener {
-        void OnItemClick(ViewHolder holder, View view, int pos);
+        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "my_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+        lectureList = db.lectureDao().getLectureAll();
+
+        System.out.println(lectureList);
+
     }
 
-    private OnItemClickListener itemClickListener = null;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.itemClickListener = listener;
+//    public interface OnItemClickListener {
+//        void OnItemClick(ViewHolder holder, View view, int pos);
+//    }
+//
+//    private OnItemClickListener itemClickListener = null;
+//
+//    public void setOnItemClickListener(OnItemClickListener listener) {
+//        this.itemClickListener = listener;
+//    }
+
+     public interface OnCheckedChangeListener {
+        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
     }
-
-//     public interface OnCheckedChangeListener {
-//        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
-//    }
-//    private OnCheckedChangeListener itemChangeListener = null;
-//    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-//        this.itemChangeListener = listener;
-//    }
+    private OnCheckedChangeListener itemChangeListener = null;
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.itemChangeListener = listener;
+    }
 
     Context context;
 
@@ -52,8 +70,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
-        public Button btn;
-//        public Switch start_switch;
+//        public Button btn;
+        public Switch start_switch;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,26 +81,27 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
-            btn = itemView.findViewById(R.id.favorite_btn);
+            start_switch = itemView.findViewById(R.id.start_switch);
+//            btn = itemView.findViewById(R.id.favorite_btn);
 
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
-                }
-            });
-
-
-//            start_switch = itemView.findViewById(R.id.start_switch);
-
-//            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @SneakyThrows
+//            btn.setOnClickListener(new View.OnClickListener() {
 //                @Override
-//                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                        itemChangeListener.OnItemChange(ViewHolder.this,itemView,getAdapterPosition(),isChecked);
-//
+//                public void onClick(View view) {
+//                    itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
 //                }
 //            });
+
+
+            start_switch = itemView.findViewById(R.id.start_switch);
+
+            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @SneakyThrows
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        itemChangeListener.OnItemChange(ViewHolder.this,itemView,getAdapterPosition(),isChecked);
+
+                }
+            });
         }
     }
 
@@ -106,18 +125,23 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
 
-        holder.sub_num.setText(String.valueOf(data.get(position).getSubject_num()));
+        int sbj_num = data.get(position).getSubject_num();
+
+        if(lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
+            holder.start_switch.setChecked(true);
+        }else {
+            System.out.println(sbj_num);
+        }
+
+        holder.sub_num.setText(String.valueOf(sbj_num));
         holder.capacity_total.setText(data.get(position).getCapacity_total());
         holder.capacity_year.setText(data.get(position).getCapacity_year());
 
-    }
-
-
-    public MainAdatper(Context context, ArrayList<Lecture> data) {
-        this.data = data;
-        this.context = context;
 
     }
+
+
+
 
 
     @Override

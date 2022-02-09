@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Builder
@@ -16,6 +18,16 @@ public class Lecture {
 //    private int ID = 0;
     // 학수번호
     private String main_num;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lecture)) return false;
+        Lecture lecture = (Lecture) o;
+        return subject_num == lecture.subject_num;
+    }
+
+
     // 이수구분
     private String major_division;
 
