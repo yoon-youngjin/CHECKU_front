@@ -15,9 +15,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
+import com.example.nodeproject2.LectureDao;
+import com.example.nodeproject2.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
@@ -35,6 +38,7 @@ import java.util.HashMap;
 
 public class MainFragment extends Fragment {
 
+    private LectureDao lectureDao;
     RecyclerView recyclerView;
     MainAdatper adatper;
     FragmentMainBinding binding;
@@ -54,6 +58,13 @@ public class MainFragment extends Fragment {
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.show();
         swipeRefreshLayout = binding.swipeLayout;
+
+        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+
+        lectureDao = db.lectureDao();
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -94,8 +105,6 @@ public class MainFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-
-
     }
 
     private void initObserver() {
@@ -108,7 +117,7 @@ public class MainFragment extends Fragment {
                     count++;
                 } else {
                     adatper.swapItems(lectures);
-                    dataCheck= true;
+                    dataCheck = true;
                 }
             }
         });
@@ -117,24 +126,44 @@ public class MainFragment extends Fragment {
     private void showView() {
         recyclerView = binding.mainRecyclerview;
         adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
-        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+
+        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
             @Override
-            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
+//                Lecture lecture1 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.toString())).subject_title(holder.sub_title.toString())
+//                        .professor_name(holder.pro_name.toString()).capacity_total(holder.capacity_total.toString()).capacity_year(holder.capacity_year.toString())
+//                        .build();
+                Lecture lecture = new Lecture();
+                lecture.setSubject_num(Integer.parseInt(holder.sub_num.getText().toString()));
+                lecture.setProfessor_name(holder.pro_name.getText().toString());
+                lecture.setSubject_title(holder.sub_title.getText().toString());
+                lecture.setCapacity_total(holder.capacity_total.getText().toString());
+                lecture.setCapacity_year(holder.capacity_year.getText().toString());
 
-                Intent intent = new Intent(getContext(), MyService.class);
-                String subject_num = holder.sub_num.getText().toString();
-                intent.putExtra("subject_num", subject_num);
-                if (isChecked) {
-                    intent.putExtra("checked", "true");
 
-                    getActivity().startService(intent);
-                } else {
-                    intent.putExtra("checked", "false");
-                    getActivity().startService(intent);
-                }
+                lectureDao.setInsertLecture(lecture);
+
+                System.out.println(lectureDao.getLectureAll());
+
             }
         });
-
+//        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+//            @Override
+//            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+//
+//                Intent intent = new Intent(getContext(), MyService.class);
+//                String subject_num = holder.sub_num.getText().toString();
+//                intent.putExtra("subject_num", subject_num);
+//                if (isChecked) {
+//                    intent.putExtra("checked", "true");
+//
+//                    getActivity().startService(intent);
+//                } else {
+//                    intent.putExtra("checked", "false");
+//                    getActivity().startService(intent);
+//                }
+//            }
+//        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }

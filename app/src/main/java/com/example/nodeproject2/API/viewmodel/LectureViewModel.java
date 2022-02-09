@@ -48,7 +48,7 @@ public class LectureViewModel extends ViewModel {
                 for (int i = 0; i < jsonObject.length(); i++) {
                     JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
                     Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(Integer.parseInt(temp.get(0).toString())).build();
                     arr_lec.add(lec);
                 }
                 lectures.setValue(arr_lec);
@@ -74,7 +74,7 @@ public class LectureViewModel extends ViewModel {
                 for (int i = 0; i < jsonObject.length(); i++) {
                     JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
                     Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
+                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(Integer.parseInt(temp.get(0).toString())).build();
                     arr_lec.add(lec);
                 }
                 lectures.setValue(arr_lec);
