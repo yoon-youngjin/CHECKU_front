@@ -24,11 +24,11 @@ public class CSVFile {
             String csvLine;
             reader.readLine();
             while ((csvLine = reader.readLine()) != null) {
-                String[] row = csvLine.split(",");
-                sub = Lecture.builder().main_num(row[0]).major_division(row[1]).subject_num(row[2]).subject_title(row[3]).credit(row[4])
-                        .major_time(row[5]).year(row[6]).opening_major(row[7]).professor_name(row[8]).capacity_year(row[9]).capacity_total(row[10])
-                        .build();
-                resultList.add(sub);
+//                String[] row = csvLine.split(",");
+//                sub = Lecture.builder().main_num(row[0]).major_division(row[1]).subject_num(Integer.parseInt(row[2])).subject_title(row[3])).credit(row[4])
+//                        .major_time(row[5]).year(row[6]).opening_major(row[7]).professor_name(row[8]).capacity_year(row[9]).capacity_total(row[10])
+//                        .build();
+//                resultList.add(sub);
 
             }
         }

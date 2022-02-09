@@ -35,7 +35,7 @@ public class  MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding = null;
     MainFragment mainFragment;
-//    ListFragment listFragment = new ListFragment();
+    ListFragment listFragment = new ListFragment();
     FragmentManager fm = getSupportFragmentManager();
     FragmentTransaction ft = fm.beginTransaction();
 
@@ -50,9 +50,10 @@ public class  MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list_item:
+                System.out.println("change");
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.main_frame, mainFragment).commit();
+                ft.replace(R.id.main_frame, listFragment).commit();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -62,10 +63,9 @@ public class  MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         super.onCreate(savedInstanceState);
-//        setSupportActionBar(binding.toolbar);
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayShowTitleEnabled(false);
-
+        setSupportActionBar(binding.toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         setContentView(binding.getRoot());
         init();
     }

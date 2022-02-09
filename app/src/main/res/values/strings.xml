@@ -1,5 +1,21 @@
 <resources>
+
     <string name="app_name">NodeProject2</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="a">126913</string>
+    <string name="b">126914</string>
+    <string name="c">126915</string>
+    <string name="d">126916</string>
+    <string name="e">126917</string>
+    <string name="f">126918</string>
+    <string name="g">126919</string>
+    <string name="h">126920</string>
+    <string name="i">105291</string>
+    <string name="j">105321</string>
+    <string name="k">121134</string>
+    <string name="l">121135</string>
+    <string name="m">121136</string>
+    <string name="n">126784</string>
+    <string name="o">127320</string>
+
+
 </resources>

@@ -73,11 +73,17 @@
                     android:layout_height="wrap_content"
                     android:text="0030"/>
 
+            <Button
+                    android:id="@+id/favorite_btn"
+                    android:layout_width="30dp" android:layout_height="30dp"
+                    android:background="@drawable/ic_baseline_favorite_border_24">
 
-            <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/start_switch"/>
+            </Button>
+
+            <!--            <Switch-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:id="@+id/start_switch"/>-->
         </LinearLayout>
     </LinearLayout>
 

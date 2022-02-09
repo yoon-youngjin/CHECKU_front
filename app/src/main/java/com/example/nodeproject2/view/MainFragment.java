@@ -1,5 +1,6 @@
 package com.example.nodeproject2.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,10 +15,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
-import com.example.nodeproject2.CSVFile;
+import com.example.nodeproject2.LectureDao;
+import com.example.nodeproject2.LectureDatabase;
+import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
@@ -29,199 +33,141 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainFragment extends Fragment {
 
+    private LectureDao lectureDao;
     RecyclerView recyclerView;
     MainAdatper adatper;
     FragmentMainBinding binding;
     LoadingDialog loadingDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
-
+    private String value;
+    private int count;
+    private boolean dataCheck;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
-//        System.out.println(lectureViewModel);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.show();
         swipeRefreshLayout = binding.swipeLayout;
 
+        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+
+        lectureDao = db.lectureDao();
+
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("test", "127428");
-                Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
-                call.enqueue(new Callback<String>() {
-                    @SneakyThrows
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        JSONObject jsonObject = new JSONObject(response.body());
-                        ArrayList<Lecture> arr_lec = new ArrayList<>();
-                        for (int i = 0; i < jsonObject.length(); i++) {
-                            JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
-                            Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                                    .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
-                            arr_lec.add(lec);
-                        }
-                        adatper.swapItems(arr_lec);
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("check", "Fail!!");
-                    }
-                });
-
-
-
-
+                if (dataCheck) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
-
         init();
-//        initData();
         initObserver();
-
         lectureViewModel.getData();
-
         return binding.getRoot();
 
     }
 
-    private void init() {
 
-        String[] items = {"1", "2"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
-                getContext(), android.R.layout.simple_list_item_1,items
+    private void init() {
+        String[] items = getResources().getStringArray(R.array.spinner_data).clone();
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(
+                getContext(), android.R.layout.simple_list_item_1, items
         );
         adapter2.setDropDownViewResource(android.R.layout.simple_list_item_1);
         binding.spinner.setAdapter(adapter2);
 
         binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    case 0:
-                    {
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("test", "127428");
-                        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
-                        call.enqueue(new Callback<String>() {
-                            @SneakyThrows
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                JSONObject jsonObject = new JSONObject(response.body());
-                                ArrayList<Lecture> arr_lec = new ArrayList<>();
-                                for (int i = 0; i < jsonObject.length(); i++) {
-                                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
-                                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
-                                    arr_lec.add(lec);
-                                }
-                                adatper.swapItems(arr_lec);
-                            }
-
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Log.d("check", "Fail!!");
-                            }
-                        });
-                        break;
-                }
-                    case 1:{
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("test", "126914");
-                        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
-                        call.enqueue(new Callback<String>() {
-                            @SneakyThrows
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                JSONObject jsonObject = new JSONObject(response.body());
-                                ArrayList<Lecture> arr_lec = new ArrayList<>();
-                                for (int i = 0; i < jsonObject.length(); i++) {
-                                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
-                                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(temp.get(0).toString().trim()).build();
-                                    arr_lec.add(lec);
-                                }
-//                                lectureViewModel.setLectures(arr_lec);
-                                adatper.swapItems(arr_lec);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Log.d("check", "Fail!!");
-                            }
-                        });
-                        break;
-                }
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position != 0) {
+                    char pos = (char) (position + 96);
+                    int id = getResources().getIdentifier(String.valueOf(pos), "string", getContext().getPackageName());
+                    value = getResources().getString(id);
+                    lectureViewModel.getChangeData(value);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-
-
     }
 
     private void initObserver() {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                showView();
-
-//                lectureViewModel.setLectures(lectures);
-//                System.out.println("check2"+lectures);
-//
-//                System.out.println("check3"+lectureViewModel.getLectures());
-
-                loadingDialog.dismiss();
-
+                if (count == 0) {
+                    showView();
+                    loadingDialog.dismiss();
+                    count++;
+                } else {
+                    adatper.swapItems(lectures);
+                    dataCheck = true;
+                }
             }
         });
     }
 
     private void showView() {
-
         recyclerView = binding.mainRecyclerview;
         adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
-        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+
+        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
             @Override
-            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
+//                Lecture lecture1 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.toString())).subject_title(holder.sub_title.toString())
+//                        .professor_name(holder.pro_name.toString()).capacity_total(holder.capacity_total.toString()).capacity_year(holder.capacity_year.toString())
+//                        .build();
+                Lecture lecture = new Lecture();
+                lecture.setSubject_num(Integer.parseInt(holder.sub_num.getText().toString()));
+                lecture.setProfessor_name(holder.pro_name.getText().toString());
+                lecture.setSubject_title(holder.sub_title.getText().toString());
+                lecture.setCapacity_total(holder.capacity_total.getText().toString());
+                lecture.setCapacity_year(holder.capacity_year.getText().toString());
 
-                Intent intent = new Intent(getContext(), MyService.class);
-                String subject_num = holder.sub_num.getText().toString();
-                intent.putExtra("subject_num", subject_num);
-                if (isChecked) {
-                    intent.putExtra("checked", "true");
 
-                    getActivity().startService(intent);
-                } else {
-                    intent.putExtra("checked", "false");
-                    getActivity().startService(intent);
-                }
+                lectureDao.setInsertLecture(lecture);
+
+                System.out.println(lectureDao.getLectureAll());
+
             }
         });
-
+//        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+//            @Override
+//            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+//
+//                Intent intent = new Intent(getContext(), MyService.class);
+//                String subject_num = holder.sub_num.getText().toString();
+//                intent.putExtra("subject_num", subject_num);
+//                if (isChecked) {
+//                    intent.putExtra("checked", "true");
+//
+//                    getActivity().startService(intent);
+//                } else {
+//                    intent.putExtra("checked", "false");
+//                    getActivity().startService(intent);
+//                }
+//            }
+//        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
-
     }
+
 
 //    public void initData() {
 //
