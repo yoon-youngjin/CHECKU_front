@@ -15,21 +15,28 @@ import retrofit2.Response;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class LectureViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Lecture>> lectures
             = new MutableLiveData<>();
 
-    ArrayList<Lecture> arrayList = new ArrayList<>();
+    public MutableLiveData<ArrayList<Lecture>> myLectures
+            = new MutableLiveData<>();
 
-    public void setLectures(ArrayList<Lecture> lecture) {
-
-        arrayList.addAll(lecture);
-        if(lectures.getValue() != null) {
-            lectures.getValue().clear();
-        }
-        lectures.setValue(arrayList);
-    }
+//
+//    ArrayList<Lecture> lecturesList = new ArrayList<>();
+//    ArrayList<Lecture> myLecturesList = new ArrayList<>();
+//
+//    public void setLectures(ArrayList<Lecture> lecture) {
+//
+//        lecturesList.addAll(lecture);
+//        if (lectures.getValue() != null) {
+//            lectures.getValue().clear();
+//        }
+//        lectures.setValue(lecturesList);
+//    }
 
     public ArrayList<Lecture> getLectures() {
         return lectures.getValue();
@@ -61,27 +68,54 @@ public class LectureViewModel extends ViewModel {
         });
     }
 
-    public void getChangeData(String value) {
+    public void getChangeAllData(String value) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("sbj_num",value);
-        Call<String> call = RetrofitClient.retrofitInterface.excuteChange(map);
-        call.enqueue(new Callback<String>() {
+        map.put("sbj_num", value);
+        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(map);
+        call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                JSONObject jsonObject = new JSONObject(response.body());
-                ArrayList<Lecture> arr_lec = new ArrayList<>();
-                for (int i = 0; i < jsonObject.length(); i++) {
-                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
-                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(Integer.parseInt(temp.get(0).toString())).build();
-                    arr_lec.add(lec);
-                }
-                lectures.setValue(arr_lec);
+            public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
+                ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                lectures.setValue(data);
+            }
+            @Override
+            public void onFailure(Call<List<Lecture>> call, Throwable t) {
+                Log.d("check", "Fail!!");
+            }
+        });
+    }
+
+    public void getChangeData(List<Lecture> lectureList) {
+        HashMap<String, String[]> map = new HashMap<>();
+        String[] data = new String[lectureList.size()];
+        int i = 0;
+        Iterator<Lecture> it = lectureList.iterator();
+        while (it.hasNext()) {
+            data[i++] = String.valueOf(it.next().getSubject_num());
+        }
+        map.put("sbj_num", data);
+        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChange(map);
+        call.enqueue(new Callback<List<Lecture>>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
+                ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                myLectures.setValue(data);
+
+//                JSONObject jsonObject = new JSONObject(response.body());
+//                ArrayList<Lecture> arr_lec = new ArrayList<>();
+//                for (int i = 0; i < jsonObject.length(); i++) {
+//                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
+//                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
+//                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(Integer.parseInt(temp.get(0).toString())).build();
+//                    arr_lec.add(lec);
+//                }
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");
             }
         });

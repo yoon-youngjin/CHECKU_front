@@ -1,10 +1,11 @@
 package com.example.nodeproject2.API;
 
+import com.example.nodeproject2.datas.Lecture;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
+import retrofit2.http.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface RetrofitInterface {
 
@@ -20,8 +21,9 @@ public interface RetrofitInterface {
     @POST("/init")
     Call<String> excuteInit();
 
+    @POST("/changeAll")
+    Call<List<Lecture>> excuteChangeAll(@Body HashMap<String, String> map);
+
     @POST("/change")
-    Call<String> excuteChange(@Body HashMap<String, String> map);
-
-
+    Call<List<Lecture>> excuteChange(@Body HashMap<String, String[]> map);
 }

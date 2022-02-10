@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,13 +27,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public interface OnCheckedChangeListener {
-        void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) throws IOException;
+    public interface OnItemClickListener {
+        void OnItemClick(ViewHolder holder, View view, int pos);
     }
-    private ListAdapter.OnCheckedChangeListener itemChangeListener = null;
-//    public void setOnCheckedChangeListener(MainAdatper.OnCheckedChangeListener listener) {
-//        this.itemChangeListener = listener;
-//    }
+
+    private OnItemClickListener itemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
 
     Context context;
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,6 +44,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
+        public Button btn;
 //        public Switch start_switch;
 
 
@@ -51,7 +55,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
+            btn = itemView.findViewById(R.id.favorite_btn);
 //            start_switch = itemView.findViewById(R.id.start_switch);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
+                }
+            });
+
 
 //            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @SneakyThrows
@@ -82,6 +95,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
+        holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+
         holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
         holder.sub_num.setText(String.valueOf(data.get(position).getSubject_num()));

@@ -34,9 +34,6 @@ public class MainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
     private String value;
-    private int count;
-    private boolean dataCheck;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +42,6 @@ public class MainFragment extends Fragment {
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        loadingDialog.show();
         swipeRefreshLayout = binding.swipeLayout;
 
         LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
@@ -54,31 +50,24 @@ public class MainFragment extends Fragment {
 
         lectureDao = db.lectureDao();
 
-
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (dataCheck) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
+                loadingDialog.show();
+                lectureViewModel.getChangeAllData(value);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         init();
         initObserver();
-        lectureViewModel.getData();
+//        lectureViewModel.getData();
         return binding.getRoot();
 
     }
 
 
     private void init() {
-
-
-
-
-
+        showView();
         String[] items = getResources().getStringArray(R.array.spinner_data).clone();
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_list_item_1, items
@@ -90,10 +79,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position != 0) {
+                    loadingDialog.show();
                     char pos = (char) (position + 96);
                     int id = getResources().getIdentifier(String.valueOf(pos), "string", getContext().getPackageName());
                     value = getResources().getString(id);
-                    lectureViewModel.getChangeData(value);
+                    lectureViewModel.getChangeAllData(value);
                 }
             }
 
@@ -107,14 +97,9 @@ public class MainFragment extends Fragment {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                if (count == 0) {
-                    showView();
-                    loadingDialog.dismiss();
-                    count++;
-                } else {
-                    adatper.swapItems(lectures);
-                    dataCheck = true;
-                }
+                adatper.swapItems(lectures);
+                loadingDialog.dismiss();
+
             }
         });
     }
@@ -123,40 +108,36 @@ public class MainFragment extends Fragment {
         recyclerView = binding.mainRecyclerview;
         adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
 
-//        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
-//            @Override
-//            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
-//                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-//                        .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-//                        .capacity_year(holder.capacity_year.getText().toString())
-//                        .build();
-//
-//                lectureDao.setInsertLecture(lecture);
-//                holder.btn.setBackground();
-//
-//                System.out.println(lectureDao.getLectureAll());
-//
-//            }
-//        });
-        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
             @Override
-            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
-
-
-                if (isChecked) {
-//                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-//                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-//                            .capacity_year(holder.capacity_year.getText().toString())
-//                            .build();
-//                    lectureDao.setInsertLecture(lecture);
-
-                } else {
-//                    Lecture lec = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();;
-//                    lectureDao.setDeleteLecture(lec);
-
-                }
+            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
+                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+                        .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+                        .capacity_year(holder.capacity_year.getText().toString())
+                        .build();
+                lectureDao.setInsertLecture(lecture);
+                holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
             }
         });
+//        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
+//            @Override
+//            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
+//
+//
+//                if (isChecked) {
+////                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+////                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+////                            .capacity_year(holder.capacity_year.getText().toString())
+////                            .build();
+////                    lectureDao.setInsertLecture(lecture);
+//
+//                } else {
+////                    Lecture lec = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();;
+////                    lectureDao.setDeleteLecture(lec);
+//
+//                }
+//            }
+//        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }

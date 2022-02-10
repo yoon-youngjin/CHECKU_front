@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity
 public class Lecture {
 
-//    private int ID = 0;
+    //    private int ID = 0;
     // 학수번호
     private String main_num;
 
@@ -31,12 +31,42 @@ public class Lecture {
     // 이수구분
     private String major_division;
 
+//    public void setRoom(String room) {
+//        this.room = room;
+//    }
+//
+//
+////
+//    public String getRoom() {
+//        return room;
+//    }
+//
+//
+//    public String getDetail() {
+//        return detail;
+//    }
+//
+    //    detail: null
+//    @SerializedName("room")
+//    private String room;
+//
+//
+//    @SerializedName("detail")
+//    private String detail;
+
+//    public void setDetail(String detail) {
+//        this.detail = detail;
+//    }
+
     // 과목 번호
+    @SerializedName("id")
     @PrimaryKey(autoGenerate = true)
     private int subject_num;
     // 교과목명
+    @SerializedName("name")
     private String subject_title;
     // 학점
+    @SerializedName("grade")
     private String credit;
     // 시간
     private String major_time;
@@ -45,10 +75,10 @@ public class Lecture {
     // 개설학과
     private String opening_major;
     // 교강사
+    @SerializedName("professor")
     private String professor_name;
 
     public Lecture() {
-
     }
 
     public String getMain_num() {
@@ -142,6 +172,7 @@ public class Lecture {
     // 정원(학년)
     private String capacity_year;
     // 정원(전체)
+    @SerializedName("inwon")
     private String capacity_total;
 
 

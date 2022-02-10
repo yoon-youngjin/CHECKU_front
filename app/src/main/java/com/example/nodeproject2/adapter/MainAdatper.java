@@ -44,23 +44,23 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
     }
 
 
-//    public interface OnItemClickListener {
-//        void OnItemClick(ViewHolder holder, View view, int pos);
-//    }
-//
-//    private OnItemClickListener itemClickListener = null;
-//
-//    public void setOnItemClickListener(OnItemClickListener listener) {
-//        this.itemClickListener = listener;
-//    }
+    public interface OnItemClickListener {
+        void OnItemClick(ViewHolder holder, View view, int pos);
+    }
 
-     public interface OnCheckedChangeListener {
-        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
+    private OnItemClickListener itemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
     }
-    private OnCheckedChangeListener itemChangeListener = null;
-    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-        this.itemChangeListener = listener;
-    }
+
+//     public interface OnCheckedChangeListener {
+//        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
+//    }
+//    private OnCheckedChangeListener itemChangeListener = null;
+//    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+//        this.itemChangeListener = listener;
+//    }
 
     Context context;
 
@@ -70,8 +70,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
-//        public Button btn;
-        public Switch start_switch;
+        public Button btn;
+//        public Switch start_switch;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -81,27 +81,27 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
-            start_switch = itemView.findViewById(R.id.start_switch);
-//            btn = itemView.findViewById(R.id.favorite_btn);
+//            start_switch = itemView.findViewById(R.id.start_switch);
+            btn = itemView.findViewById(R.id.favorite_btn);
 
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
-//                }
-//            });
-
-
-            start_switch = itemView.findViewById(R.id.start_switch);
-
-            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @SneakyThrows
+            btn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        itemChangeListener.OnItemChange(ViewHolder.this,itemView,getAdapterPosition(),isChecked);
-
+                public void onClick(View view) {
+                    itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
                 }
             });
+
+
+//            start_switch = itemView.findViewById(R.id.start_switch);
+//
+//            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @SneakyThrows
+//                @Override
+//                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//                        itemChangeListener.OnItemChange(ViewHolder.this,itemView,getAdapterPosition(),isChecked);
+//
+//                }
+//            });
         }
     }
 
@@ -128,9 +128,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
         int sbj_num = data.get(position).getSubject_num();
 
         if(lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
-            holder.start_switch.setChecked(true);
-        }else {
-            System.out.println(sbj_num);
+            holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
         }
 
         holder.sub_num.setText(String.valueOf(sbj_num));

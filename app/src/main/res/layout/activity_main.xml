@@ -7,35 +7,41 @@
         android:layout_height="match_parent"
         tools:context=".view.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:id="@+id/appBarLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
 
-        <androidx.appcompat.widget.Toolbar
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:theme="?attr/actionBarTheme"
-                android:minHeight="?attr/actionBarSize"
-                android:id="@+id/toolbar"
-                app:menu="@menu/return_menu"
-
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?attr/colorPrimary"-->
+<!--                android:theme="?attr/actionBarTheme"-->
+<!--                android:minHeight="?attr/actionBarSize"-->
+<!--                android:id="@+id/toolbar"-->
+<!--                app:menu="@menu/return_menu"-->
+<!--                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"/>-->
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="15dp"
             android:id="@+id/main_frame" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appBarLayout" android:layout_marginTop="77dp">
+            app:layout_constraintTop_toTopOf="parent" >
 
     </FrameLayout>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab_btn"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_baseline_favorite_24"
+            android:layout_margin="30dp"
+            app:elevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
