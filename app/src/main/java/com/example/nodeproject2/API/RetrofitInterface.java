@@ -21,6 +21,10 @@ public interface RetrofitInterface {
     @POST("/init")
     Call<String> excuteInit();
 
+
+//    @GET("/departments/{sbj_num}")
+//    Call<String> excutetest(@Path("sbj_num") String sbj_num);
+
     @POST("/changeAll")
     Call<List<Lecture>> excuteChangeAll(@Body HashMap<String, String> map);
 

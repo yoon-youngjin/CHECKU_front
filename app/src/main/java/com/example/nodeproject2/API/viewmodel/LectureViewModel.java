@@ -79,6 +79,7 @@ public class LectureViewModel extends ViewModel {
                 ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
                 lectures.setValue(data);
             }
+
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");
@@ -95,13 +96,22 @@ public class LectureViewModel extends ViewModel {
             data[i++] = String.valueOf(it.next().getSubject_num());
         }
         map.put("sbj_num", data);
+        System.out.println(data);
         Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChange(map);
         call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
             public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
-                ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
-                myLectures.setValue(data);
+
+                if (response.code() == 200) {
+                    ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                    System.out.println(data);
+                    myLectures.setValue(data);
+                } else {
+                    //TODO 변경
+//                    Log.d("error", response.body().toString());
+                    myLectures.setValue(null);
+                }
 
 //                JSONObject jsonObject = new JSONObject(response.body());
 //                ArrayList<Lecture> arr_lec = new ArrayList<>();

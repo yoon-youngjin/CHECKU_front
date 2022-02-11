@@ -4,10 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -21,28 +18,61 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
+public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> implements Filterable {
 
-    public ArrayList<Lecture> data;
+    private ArrayList<Lecture> unFilteredlist;
+    private ArrayList<Lecture> filteredList;
     private List<Lecture> lectureList;
 
     public void swapItems(ArrayList<Lecture> items) {
-        this.data = items;
+        this.filteredList = items;
         notifyDataSetChanged();
     }
-    public MainAdatper(Context context, ArrayList<Lecture> data) {
-        this.data = data;
-        this.context = context;
 
+
+    public MainAdatper(Context context, ArrayList<Lecture> data) {
+        this.unFilteredlist = data;
+        this.filteredList = data;
+        this.context = context;
         LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "my_db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         lectureList = db.lectureDao().getLectureAll();
 
-        System.out.println(lectureList);
-
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                System.out.println(unFilteredlist);
+                System.out.println(charString+"check");
+                if (charString.equals("")) {
+                    System.out.println("check null");
+                    filteredList = unFilteredlist;
+                } else {
+                    ArrayList<Lecture> filteringList = new ArrayList<>();
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getSubject_title().contains(charString)) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredList = (ArrayList<Lecture>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public interface OnItemClickListener {
         void OnItemClick(ViewHolder holder, View view, int pos);
@@ -122,32 +152,24 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.sub_title.setText(data.get(position).getSubject_title());
-        holder.pro_name.setText(data.get(position).getProfessor_name());
-
-        int sbj_num = data.get(position).getSubject_num();
-
-        if(lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
+        String sub_title = filteredList.get(position).getSubject_title();
+        holder.sub_title.setText(sub_title);
+        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
+        int sbj_num = filteredList.get(position).getSubject_num();
+        if (lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
             holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
         }
-
         holder.sub_num.setText(String.valueOf(sbj_num));
-        holder.capacity_total.setText(data.get(position).getCapacity_total());
-        holder.capacity_year.setText(data.get(position).getCapacity_year());
-
-
+        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
+        holder.capacity_year.setText(filteredList.get(position).getCapacity_year());
     }
-
-
-
-
 
     @Override
     public int getItemCount() {
-        if (data == null) {
+        if (filteredList == null) {
             return 0;
         } else {
-            return data.size();
+            return filteredList.size();
         }
 
     }

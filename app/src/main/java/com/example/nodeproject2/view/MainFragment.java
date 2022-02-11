@@ -2,6 +2,8 @@ package com.example.nodeproject2.view;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,6 @@ public class MainFragment extends Fragment {
         LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
-
         lectureDao = db.lectureDao();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -58,6 +59,7 @@ public class MainFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
         init();
         initObserver();
 //        lectureViewModel.getData();
@@ -91,6 +93,35 @@ public class MainFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+
+        binding.findlectureEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println(count);
+                if(count>0) {
+                    adatper.getFilter().filter(s.toString());
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+//        binding.testBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String test = binding.findlectureEdittext.getText().toString();
+//                adatper.getFilter().filter(test);
+//                binding.findlectureEdittext.setText("");
+//            }
+//        });
     }
 
     private void initObserver() {

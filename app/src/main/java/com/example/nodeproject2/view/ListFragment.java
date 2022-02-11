@@ -2,6 +2,7 @@ package com.example.nodeproject2.view;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,12 +16,18 @@ import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.nodeproject2.API.LectureDao;
 import com.example.nodeproject2.API.LectureDatabase;
+import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.databinding.FragmentListBinding;
 import com.example.nodeproject2.datas.Lecture;
+import lombok.SneakyThrows;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListFragment extends Fragment {
     private LectureDao lectureDao;
@@ -31,12 +38,11 @@ public class ListFragment extends Fragment {
     private LectureViewModel lectureViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("check");
-        lectureViewModel.getChangeData(lectureDao.getLectureAll());
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        lectureViewModel.getChangeData(lectureDao.getLectureAll());
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,13 +60,11 @@ public class ListFragment extends Fragment {
         init();
         initObserver();
 
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //TODO 변경
                 loadingDialog.show();
-
                 lectureViewModel.getChangeData(lectureDao.getLectureAll());
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -85,15 +89,12 @@ public class ListFragment extends Fragment {
         adatper.setOnItemClickListener(new ListAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(ListAdapter.ViewHolder holder, View view, int pos) {
-
                 Lecture lecture = new Lecture();
                 lecture.setSubject_num(Integer.parseInt(holder.sub_num.getText().toString()));
                 lectureDao.setDeleteLecture(lecture);
                 adatper.swapItems(lectureDao.getLectureAll());
-
             }
         });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }

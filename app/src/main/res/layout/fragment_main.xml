@@ -13,8 +13,15 @@
 
         <Spinner
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/spinner"
-        />
+                android:layout_height="wrap_content" android:id="@+id/spinner"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/findlecture_edittext"/>
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/testBtn"/>
+
         <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/main_recyclerview"
@@ -23,7 +30,6 @@
                 tools:listitem="@layout/viewitem"/>
 
     </LinearLayout>
-
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
