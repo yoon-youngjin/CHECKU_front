@@ -69,9 +69,7 @@ public class LectureViewModel extends ViewModel {
     }
 
     public void getChangeAllData(String value) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("sbj_num", value);
-        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(map);
+        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(value,"");
         call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
@@ -79,7 +77,6 @@ public class LectureViewModel extends ViewModel {
                 ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
                 lectures.setValue(data);
             }
-
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");
@@ -96,13 +93,11 @@ public class LectureViewModel extends ViewModel {
             data[i++] = String.valueOf(it.next().getSubject_num());
         }
         map.put("sbj_num", data);
-        System.out.println(data);
         Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChange(map);
         call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
             public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
-
                 if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
                     System.out.println(data);

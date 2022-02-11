@@ -4,11 +4,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,62 +18,60 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
-import com.example.nodeproject2.API.LectureDao;
-import com.example.nodeproject2.API.LectureDatabase;
+import com.example.nodeproject2.API.Lecture.LectureDao;
+import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
+import lombok.SneakyThrows;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
     private LectureDao lectureDao;
-    RecyclerView recyclerView;
-    MainAdatper adatper;
-    FragmentMainBinding binding;
-    LoadingDialog loadingDialog;
+    private RecyclerView recyclerView;
+    private MainAdatper adatper;
+    private FragmentMainBinding binding;
+    private LoadingDialog loadingDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
     private String value;
+    private ArrayAdapter<String> adapter2;
+    private String current_grade = "";
+    private ArrayList<Lecture> maindata;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentMainBinding.inflate(inflater, container, false);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         swipeRefreshLayout = binding.swipeLayout;
 
-        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-        lectureDao = db.lectureDao();
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadingDialog.show();
-                lectureViewModel.getChangeAllData(value);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        lectureDao = getLectureDao();
+        maindata = new ArrayList<>();
 
         init();
         initObserver();
-//        lectureViewModel.getData();
         return binding.getRoot();
-
     }
 
 
     private void init() {
         showView();
         String[] items = getResources().getStringArray(R.array.spinner_data).clone();
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(
+        adapter2 = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_list_item_1, items
         );
         adapter2.setDropDownViewResource(android.R.layout.simple_list_item_1);
@@ -98,13 +98,14 @@ public class MainFragment extends Fragment {
         binding.findlectureEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println(count);
-                if(count>0) {
+
+                if (s.toString().equals("")) {
+                    adatper.getFilter().filter("");
+                } else {
                     adatper.getFilter().filter(s.toString());
                 }
             }
@@ -114,23 +115,79 @@ public class MainFragment extends Fragment {
             }
         });
 
-//        binding.testBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String test = binding.findlectureEdittext.getText().toString();
-//                adatper.getFilter().filter(test);
-//                binding.findlectureEdittext.setText("");
-//            }
-//        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadingDialog.show();
+                lectureViewModel.getChangeAllData(value);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int ckeckedID) {
+                Call<List<Lecture>> call;
+                switch (ckeckedID) {
+                    case R.id.radioButton1:
+                        //TODO 속도비교후 변경
+
+//                        radioBtnClick("");
+                        current_grade = "";
+                        adatper.swapItems(maindata,value,current_grade);
+                        break;
+                    case R.id.radioButton2:
+///                        radioBtnClick("1");
+                        current_grade = "1";
+                        adatper.swapItems(maindata,value,current_grade);
+
+                        break;
+                    case R.id.radioButton3:
+                        radioBtnClick("2");
+                        current_grade = "2";
+                        break;
+                    case R.id.radioButton4:
+                        radioBtnClick("3");
+                        current_grade = "3";
+                        break;
+                }
+            }
+        });
+
+    }
+
+    private void radioBtnClick(String grade) {
+        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(value, grade);
+        call.enqueue(new Callback<List<Lecture>>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
+                if (response.code() == 200) {
+                    ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                    adatper.swapItems(data, "", current_grade);
+                } else {
+                    //TODO 변경
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Lecture>> call, Throwable t) {
+                Log.d("check", "Fail!!");
+            }
+        });
+
     }
 
     private void initObserver() {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                adatper.swapItems(lectures);
+                String current_text = binding.findlectureEdittext.getText().toString();
+                maindata = lectures;
+                System.out.println(maindata);
+                adatper.swapItems(lectures, current_text ,current_grade);
                 loadingDialog.dismiss();
-
             }
         });
     }
@@ -174,7 +231,7 @@ public class MainFragment extends Fragment {
     }
 
 
-//    public void initData() {
+    //    public void initData() {
 //
 //        try (InputStream is = getResources().getAssets().open("file.csv");
 //        ) {
@@ -204,6 +261,15 @@ public class MainFragment extends Fragment {
 //        showView();
 //
 //    }
+    private LectureDao getLectureDao() {
+
+        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+
+        return db.lectureDao();
+
+    }
 
 
 }

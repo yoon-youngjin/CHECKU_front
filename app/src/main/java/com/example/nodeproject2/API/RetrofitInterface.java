@@ -22,11 +22,14 @@ public interface RetrofitInterface {
     Call<String> excuteInit();
 
 
-//    @GET("/departments/{sbj_num}")
-//    Call<String> excutetest(@Path("sbj_num") String sbj_num);
+//    @GET("/subjects/{sbj_num}")
+//    Call<List<Lecture>> excuteChangeAll(@Query("sbj_num") String sbj_num);
 
-    @POST("/changeAll")
-    Call<List<Lecture>> excuteChangeAll(@Body HashMap<String, String> map);
+    @GET("/subjects")
+    Call<List<Lecture>> excuteChangeAll(@Query("subjectId") String subjectId, @Query("grade") String grade);
+
+//    @POST("/changeAll")
+//    Call<List<Lecture>> excuteChangeAll(@Body HashMap<String, String> map);
 
     @POST("/change")
     Call<List<Lecture>> excuteChange(@Body HashMap<String, String[]> map);

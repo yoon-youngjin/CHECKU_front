@@ -44,6 +44,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
+        public TextView grade;
         public Button btn;
 //        public Switch start_switch;
 
@@ -55,6 +56,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
+            grade = itemView.findViewById(R.id.grade);
+
             btn = itemView.findViewById(R.id.favorite_btn);
 //            start_switch = itemView.findViewById(R.id.start_switch);
 
@@ -103,6 +106,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         holder.capacity_total.setText(data.get(position).getCapacity_total());
         holder.capacity_year.setText(data.get(position).getCapacity_year());
+        holder.grade.setText(data.get(position).getCredit());
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.example.nodeproject2.API;
+package com.example.nodeproject2.API.Lecture;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

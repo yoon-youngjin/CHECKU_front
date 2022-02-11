@@ -2,8 +2,6 @@ package com.example.nodeproject2.view;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.example.nodeproject2.API.LectureDao;
-import com.example.nodeproject2.API.LectureDatabase;
-import com.example.nodeproject2.API.RetrofitClient;
+import com.example.nodeproject2.API.Lecture.LectureDao;
+import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.databinding.FragmentListBinding;
 import com.example.nodeproject2.datas.Lecture;
-import lombok.SneakyThrows;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListFragment extends Fragment {
     private LectureDao lectureDao;
@@ -38,11 +30,11 @@ public class ListFragment extends Fragment {
     private LectureViewModel lectureViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        lectureViewModel.getChangeData(lectureDao.getLectureAll());
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        lectureViewModel.getChangeData(lectureDao.getLectureAll());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

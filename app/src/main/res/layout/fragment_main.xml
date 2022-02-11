@@ -15,12 +15,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/spinner"/>
 
+
+        <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <RadioButton
+                    android:text="전체"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/radioButton1"/>
+            <RadioButton
+                    android:text="1학년"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioButton2"/>
+            <RadioButton
+                    android:text="2학년"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioButton3"/>
+            <RadioButton
+                    android:text="3학년"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioButton4"/>
+        </RadioGroup>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/findlecture_edittext"/>
-        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:id="@+id/testBtn"/>
 
         <androidx.recyclerview.widget.RecyclerView
 

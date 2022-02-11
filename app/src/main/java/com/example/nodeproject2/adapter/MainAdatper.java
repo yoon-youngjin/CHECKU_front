@@ -8,13 +8,11 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import com.example.nodeproject2.API.LectureDao;
-import com.example.nodeproject2.API.LectureDatabase;
+import com.example.nodeproject2.API.Lecture.LectureDao;
+import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.datas.Lecture;
-import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +21,13 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     private ArrayList<Lecture> unFilteredlist;
     private ArrayList<Lecture> filteredList;
     private List<Lecture> lectureList;
+    private String current_grade;
 
-    public void swapItems(ArrayList<Lecture> items) {
+    public void swapItems(ArrayList<Lecture> items, String s, String current_grade) {
+        this.unFilteredlist = items;
         this.filteredList = items;
+        this.current_grade = current_grade;
+        getFilter().filter(s);
         notifyDataSetChanged();
     }
 
@@ -34,11 +36,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         this.unFilteredlist = data;
         this.filteredList = data;
         this.context = context;
-        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "my_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-        lectureList = db.lectureDao().getLectureAll();
-
+        this.lectureList = getLectureDao().getLectureAll();
     }
 
     @Override
@@ -47,15 +45,13 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                System.out.println(unFilteredlist);
-                System.out.println(charString+"check");
-                if (charString.equals("")) {
-                    System.out.println("check null");
+                if (charString.equals("") && current_grade.equals("")) {
                     filteredList = unFilteredlist;
                 } else {
                     ArrayList<Lecture> filteringList = new ArrayList<>();
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getSubject_title().contains(charString)) {
+                        if (lec.getSubject_title().contains(charString) && lec.getCredit().contains(current_grade)) {
+                            System.out.println(current_grade);
                             filteringList.add(lec);
                         }
                     }
@@ -100,6 +96,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         public TextView pro_name;
         public TextView capacity_total;
         public TextView capacity_year;
+        public TextView grade;
         public Button btn;
 //        public Switch start_switch;
 
@@ -111,6 +108,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
+            grade = itemView.findViewById(R.id.grade);
 //            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
 
@@ -162,6 +160,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         holder.sub_num.setText(String.valueOf(sbj_num));
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.capacity_year.setText(filteredList.get(position).getCapacity_year());
+        holder.grade.setText(filteredList.get(position).getCredit());
     }
 
     @Override
@@ -173,5 +172,15 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         }
 
     }
+    private LectureDao getLectureDao() {
+
+        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "my_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+
+        return db.lectureDao();
+
+    }
+
 }
 
