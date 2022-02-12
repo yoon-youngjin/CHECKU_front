@@ -56,6 +56,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 if(charString.equals("")) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getCredit().contains(current_grade)) {
+                            System.out.println(lec);
                             filteringList.add(lec);
                         }
                     }
@@ -93,13 +94,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         this.itemClickListener = listener;
     }
 
-//     public interface OnCheckedChangeListener {
-//        void OnItemChange(ViewHolder holder,View view,int pos,boolean isChecked) throws IOException;
-//    }
-//    private OnCheckedChangeListener itemChangeListener = null;
-//    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-//        this.itemChangeListener = listener;
-//    }
+
 
     Context context;
 

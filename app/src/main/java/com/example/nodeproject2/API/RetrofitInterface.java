@@ -3,7 +3,6 @@ package com.example.nodeproject2.API;
 import com.example.nodeproject2.datas.Lecture;
 import retrofit2.Call;
 import retrofit2.http.*;
-
 import java.util.HashMap;
 import java.util.List;
 

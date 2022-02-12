@@ -31,6 +31,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         void OnItemClick(ViewHolder holder, View view, int pos);
     }
 
+    public interface OnCheckedChangeListener {
+        void OnItemChange(ViewHolder holder, View view, int pos, boolean isChecked) throws IOException;
+    }
+
+    private OnCheckedChangeListener itemChangeListener = null;
+
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.itemChangeListener = listener;
+    }
+
     private OnItemClickListener itemClickListener = null;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -46,7 +56,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public TextView capacity_year;
         public TextView grade;
         public Button btn;
-//        public Switch start_switch;
+        public Switch start_switch;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -59,7 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             grade = itemView.findViewById(R.id.grade);
 
             btn = itemView.findViewById(R.id.favorite_btn);
-//            start_switch = itemView.findViewById(R.id.start_switch);
+            start_switch = itemView.findViewById(R.id.start_switch);
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,14 +79,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
 
 
-//            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @SneakyThrows
-//                @Override
-//                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                    itemChangeListener.OnItemChange(MainAdatper.ViewHolder.this,itemView,getAdapterPosition(),isChecked);
-//
-//                }
-//            });
+            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @SneakyThrows
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    itemChangeListener.OnItemChange(ListAdapter.ViewHolder.this,itemView,getAdapterPosition(),isChecked);
+
+                }
+            });
         }
     }
 
@@ -104,6 +114,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         int sbj_num = data.get(position).getSubject_num();
         holder.sub_num.setText(String.format("%04d", sbj_num));
+        holder.start_switch.setVisibility(View.VISIBLE);
 
         holder.capacity_total.setText(data.get(position).getCapacity_total());
         holder.capacity_year.setText(data.get(position).getCapacity_year());

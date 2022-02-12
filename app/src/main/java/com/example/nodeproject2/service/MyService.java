@@ -12,20 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.R;
-import com.example.nodeproject2.API.RetrofitInterface;
 import com.example.nodeproject2.view.MainActivity;
 import lombok.SneakyThrows;
-import okhttp3.OkHttpClient;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class MyService extends Service {
 
@@ -47,7 +39,6 @@ public class MyService extends Service {
         } else if (intent.getStringExtra("checked").equals("true")) {
             startMonitoring(intent);
         } else if (intent.getStringExtra("checked").equals("false")) {
-            System.out.println("check false3");
             stopMonitoring(intent);
         }
 

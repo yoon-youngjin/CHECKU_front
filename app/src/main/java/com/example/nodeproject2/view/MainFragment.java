@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.API.Lecture.LectureDao;
 import com.example.nodeproject2.API.Lecture.LectureDatabase;
@@ -26,11 +24,6 @@ import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
-import lombok.SneakyThrows;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +75,7 @@ public class MainFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position != 0) {
                     loadingDialog.show();
-                    char pos = (char) (position + 96);
+                    char pos = (char) (position + 64);
                     int id = getResources().getIdentifier(String.valueOf(pos), "string", getContext().getPackageName());
                     value = getResources().getString(id);
                     lectureViewModel.getChangeAllData(value);
@@ -133,24 +126,26 @@ public class MainFragment extends Fragment {
                 switch (ckeckedID) {
                     case R.id.radioButton1:
                         //TODO 속도비교후 변경
-//                        radioBtnClick("");
                         current_grade = "";
                         adatper.swapItems(maindata,edit_text,current_grade);
                         break;
                     case R.id.radioButton2:
-///                        radioBtnClick("1");
                         current_grade = "1";
                         adatper.swapItems(maindata,edit_text,current_grade);
 
                         break;
                     case R.id.radioButton3:
-//                        radioBtnClick("2");
                         current_grade = "2";
                         adatper.swapItems(maindata,edit_text,current_grade);
                         break;
                     case R.id.radioButton4:
-                        radioBtnClick("3");
                         current_grade = "3";
+                        adatper.swapItems(maindata,edit_text,current_grade);
+                        break;
+                    case R.id.radioButton5:
+                        current_grade = "4";
+                        adatper.swapItems(maindata,edit_text,current_grade);
+//                        radioBtnClick("4");
                         break;
                 }
             }
@@ -158,27 +153,25 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void radioBtnClick(String grade) {
-        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(value, grade);
-        call.enqueue(new Callback<List<Lecture>>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
-                if (response.code() == 200) {
-                    ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
-                    adatper.swapItems(data, "", current_grade);
-                } else {
-                    //TODO 변경
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Lecture>> call, Throwable t) {
-                Log.d("check", "Fail!!");
-            }
-        });
-
-    }
+//    private void radioBtnClick(String grade) {
+//        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(value, grade);
+//        call.enqueue(new Callback<List<Lecture>>() {
+//            @SneakyThrows
+//            @Override
+//            public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
+//                if (response.code() == 200) {
+//                    ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+//                    adatper.swapItems(data, "", current_grade);
+//                } else {
+//                    //TODO 변경
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<List<Lecture>> call, Throwable t) {
+//                Log.d("check", "Fail!!");
+//            }
+//        });
+//    }
 
     private void initObserver() {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
@@ -187,7 +180,6 @@ public class MainFragment extends Fragment {
                 String current_text = binding.findlectureEdittext.getText().toString();
                 maindata = lectures;
                 adatper.swapItems(lectures, current_text ,current_grade);
-                binding.radioButton1.setChecked(true);
                 loadingDialog.dismiss();
             }
         });
@@ -201,28 +193,26 @@ public class MainFragment extends Fragment {
             @Override
             public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
 
-//                List<Lecture> lectures = lectureDao.getLectureAll();
+                List<Lecture> lectures = lectureDao.getLectureAll();
+                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();
 
-                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-                        .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-                        .capacity_year(holder.capacity_year.getText().toString())
-                        .build();
-                lectureDao.setInsertLecture(lecture);
-                holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
 
-//                if (lectures.contains(Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())))) {
-//                    Lecture temp = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString());
-//                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
-//                    lectureDao.setDeleteLecture(Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())));
-//                }else {
-//                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-//                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-//                            .capacity_year(holder.capacity_year.getText().toString())
-//                            .build();
-//                    lectureDao.setInsertLecture(lecture);
-//                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-//
-//                }
+                if(lectures.contains(lecture)) {
+                    lectureDao.setDeleteLecture(lecture);
+                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+
+                }
+                else {
+                    Lecture lecture2 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+                            .capacity_year(holder.capacity_year.getText().toString())
+                            .build();
+
+                    lectureDao.setInsertLecture(lecture2);
+                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+
+
+                }
 
             }
         });

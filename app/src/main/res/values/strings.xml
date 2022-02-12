@@ -1,21 +1,36 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">NodeProject2</string>
-    <string name="a">126913</string>
-    <string name="b">126914</string>
-    <string name="c">126915</string>
-    <string name="d">126916</string>
-    <string name="e">126917</string>
-    <string name="f">126918</string>
-    <string name="g">126919</string>
-    <string name="h">126920</string>
-    <string name="i">105291</string>
-    <string name="j">105321</string>
-    <string name="k">121134</string>
-    <string name="l">121135</string>
-    <string name="m">121136</string>
-    <string name="n">126784</string>
-    <string name="o">127320</string>
+    <string name="A">126913</string>
+    <string name="B">126914</string>
+    <string name="C">126915</string>
+    <string name="D">126916</string>
+    <string name="E">126917</string>
+    <string name="F">126918</string>
+    <string name="G">126919</string>
+    <string name="H">126920</string>
+    <string name="I">105291</string>
+    <string name="J">105321</string>
+    <string name="K">121134</string>
+    <string name="L">121135</string>
+    <string name="M">121136</string>
+    <string name="N">126784</string>
+    <string name="O">127320</string>
+    <string name="P">105541</string>
+    <string name="Q">105561</string>
+    <string name="R">105591</string>
+    <string name="S">105611</string>
+    <string name="T">121174</string>
+    <string name="U">126780</string>
+    <string name="V">126905</string>
+    <string name="W">103041</string>
+    <string name="X">003221</string>
+    <string name="Y">103391</string>
+    <string name="Z">103271</string>
+
+
+
+
 
 
 </resources>

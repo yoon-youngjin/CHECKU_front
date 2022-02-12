@@ -1,7 +1,9 @@
 package com.example.nodeproject2.view;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +20,9 @@ import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.databinding.FragmentListBinding;
 import com.example.nodeproject2.datas.Lecture;
+import com.example.nodeproject2.service.MyService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ListFragment extends Fragment {
@@ -87,6 +91,33 @@ public class ListFragment extends Fragment {
                 adatper.swapItems(lectureDao.getLectureAll());
             }
         });
+
+        adatper.setOnCheckedChangeListener(new ListAdapter.OnCheckedChangeListener() {
+            @Override
+            public void OnItemChange(ListAdapter.ViewHolder holder, View view, int pos, boolean isChecked) throws IOException {
+
+                Log.d("checked", String.valueOf(isChecked));
+                Intent intent = new Intent(getContext(), MyService.class);
+                String subject_num = holder.sub_num.getText().toString();
+                intent.putExtra("subject_num", subject_num);
+
+                if(isChecked) {
+                    intent.putExtra("checked","true");
+                    getActivity().startService(intent);
+                }
+                else {
+                    //TODO 보낸 요청 취소
+                    intent.putExtra("checked","false");
+                    getActivity().startService(intent);
+
+                }
+
+
+
+
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }
