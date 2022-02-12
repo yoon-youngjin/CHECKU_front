@@ -2,20 +2,13 @@ package com.example.nodeproject2.view;
 
 
 import android.os.*;
-import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
+
 import androidx.viewpager2.widget.ViewPager2;
-import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.FragementAdapter;
 import com.example.nodeproject2.databinding.ActivityMainBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.ArrayList;
-
-import static com.example.nodeproject2.adapter.FragementAdapter.PAGE_POSITION;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,17 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    //fragment 생성
-    public void createFragment()
-    {
+    //    //fragment 생성
+    public void createFragment() {
         listFragment = new ListFragment();
         mainFragment = new MainFragment();
         liberalArtsFragment = new LiberalArtsFragment();
     }
-//
+
+    //
     //viewpager 및 어댑터 생성
-    public void createViewpager()
-    {
+    public void createViewpager() {
         viewPager = binding.viewPager;
         viewPagerAdapter = new FragementAdapter(getSupportFragmentManager(), getLifecycle());
         viewPagerAdapter.addFragment(listFragment);
@@ -61,29 +53,25 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(liberalArtsFragment);
 
 
-
-
         viewPager.setAdapter(viewPagerAdapter);
 //        viewPager.setUserInputEnabled(false);//터치 스크롤 막음
     }
 
     //tablayout - viewpager 연결
-    public void settingTabLayout()
-    {
+    public void settingTabLayout() {
         binding.tablayoutControl.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int pos = tab.getPosition();
 
-                switch (pos)
-                {
-                    case 0 :
+                switch (pos) {
+                    case 0:
                         viewPager.setCurrentItem(0);
                         break;
-                    case 1 :
+                    case 1:
                         viewPager.setCurrentItem(1);
                         break;
-                    case 2 :
+                    case 2:
                         viewPager.setCurrentItem(2);
                         break;
                 }
@@ -100,28 +88,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    private void init() {
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.main_frame, listFragment).commit();
-//
-//
-//        binding.fabBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                if (state_check) {
-//                    ft.replace(R.id.main_frame, mainFragment).commit();
-//                    state_check = false;
-//                } else {
-//                    ft.replace(R.id.main_frame, listFragment).commit();
-//                    state_check = true;
-//                }
-//
-//            }
-//        });
-//    }
-
 
 
 }
