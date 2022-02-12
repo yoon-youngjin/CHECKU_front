@@ -54,6 +54,40 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/radioButton5"/>
         </RadioGroup>
+
+        <RadioGroup
+                android:id="@+id/typeRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <RadioButton
+                    android:text="전체"
+                    android:checked="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/typeRadioButton1"/>
+            <RadioButton
+                    android:text="전필"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/typeRadioButton2"/>
+            <RadioButton
+                    android:text="전선"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/typeRadioButton3"/>
+            <RadioButton
+                    android:text="기타"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/typeRadioButton4"/>
+
+        </RadioGroup>
+
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

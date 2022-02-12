@@ -25,11 +25,11 @@ public class Lecture {
     @SerializedName("name")
     private String subject_title;
     // 학점
-    @SerializedName("grade")
     private String credit;
     // 시간
     private String major_time;
     // 개설학년
+    @SerializedName("grade")
     private String year;
     // 개설학과
     private String opening_major;
@@ -37,6 +37,7 @@ public class Lecture {
     @SerializedName("professor")
     private String professor_name;
     // 이수구분
+    @SerializedName("type")
     private String major_division;
 
     // 정원(학년)

@@ -21,13 +21,14 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     private ArrayList<Lecture> unFilteredlist;
     private ArrayList<Lecture> filteredList;
     private List<Lecture> lectureList;
-    private String current_grade;
+    private String current_grade ="";
+    private String type="";
 
-    public void swapItems(ArrayList<Lecture> items, String s, String current_grade) {
-
+    public void swapItems(ArrayList<Lecture> items, String s,String current_grade,String type) {
         this.unFilteredlist = items;
         this.filteredList = items;
         this.current_grade = current_grade;
+        this.type = type;
         getFilter().filter(s);
         notifyDataSetChanged();
     }
@@ -48,24 +49,88 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 String charString = constraint.toString();
                 ArrayList<Lecture> filteringList = new ArrayList<>();
 
-                // 전체학년 && 과목입력x => filtering x
-                if (charString.equals("") && current_grade.equals("")) {
+                // 학년선택x && 과목입력x && 이수구분x => filtering x
+                if (charString.equals("") && current_grade.equals("") && type.equals("")) {
+                    System.out.println("check1");
                     filteredList = unFilteredlist;
                 }
-                // 학년선택 o && 과목입력 x
-                if(charString.equals("")) {
+                // 학년선택 o && 과목입력 x && 이수구분x
+                else if(charString.equals("") && type.equals("")) {
+                    System.out.println("check2");
+
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getCredit().contains(current_grade)) {
-                            System.out.println(lec);
+                        if (lec.getYear().contains(current_grade)) {
                             filteringList.add(lec);
                         }
                     }
                     filteredList = filteringList;
                 }
-                // 학년 선택 o && 과목입력 o
-                else {
+                // 학년선택x && 과목입력o && 이수구분x
+                else if(current_grade.equals("") && type.equals("")) {
+                    System.out.println("check3");
+
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getSubject_title().contains(charString) && lec.getCredit().contains(current_grade)) {
+                        if (lec.getSubject_title().contains(charString)) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+
+                }
+                // 학년선택x && 과목입력x && 이수구분o
+                else if(current_grade.equals("") && charString.equals("")) {
+                    System.out.println("check4");
+
+                    for (Lecture lec : unFilteredlist) {
+                        if (type.contains(lec.getMajor_division())) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+
+                }
+                // 학년선택o && 과목입력o && 이수구분x
+                else if(type.equals("")) {
+                    System.out.println("check5");
+
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getYear().contains(type) && lec.getSubject_title().contains(charString)) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+
+                }
+                // 학년선택o && 과목입력x && 이수구분o
+                else if(charString.equals("")) {
+                    System.out.println("check6");
+
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getYear().contains(current_grade) && type.contains(lec.getMajor_division())) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+
+                }
+                // 학년선택x && 과목입력o && 이수구분o
+                else if(current_grade.equals("")) {
+                    System.out.println("check7");
+
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division())) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+
+                }
+                // 학년선택o && 과목입력o && 이수구분o
+                else {
+                    System.out.println("check8");
+
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getSubject_title().contains(charString) && lec.getYear().contains(current_grade) && type.contains(lec.getMajor_division())) {
                             filteringList.add(lec);
                         }
                     }
@@ -105,6 +170,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         public TextView capacity_total;
         public TextView capacity_year;
         public TextView grade;
+        public TextView type;
         public Button btn;
 //        public Switch start_switch;
 
@@ -117,6 +183,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             capacity_total = itemView.findViewById(R.id.capacity_total);
             capacity_year = itemView.findViewById(R.id.capacity_year);
             grade = itemView.findViewById(R.id.grade);
+            type = itemView.findViewById(R.id.type);
+
 //            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
 
@@ -163,14 +231,10 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         holder.pro_name.setText(filteredList.get(position).getProfessor_name());
 
         int sbj_num = filteredList.get(position).getSubject_num();
-        if (lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
-            holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-        }
         holder.sub_num.setText(String.format("%04d", sbj_num));
-
+        holder.type.setText(filteredList.get(position).getMajor_division());
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
-        holder.capacity_year.setText(filteredList.get(position).getCapacity_year());
-        holder.grade.setText(filteredList.get(position).getCredit()+ "학년");
+        holder.grade.setText(filteredList.get(position).getYear());
     }
 
     @Override

@@ -39,8 +39,12 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/grade"
-                android:text="1학년"/>
+                android:id="@+id/grade"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/type"
+                android:text="지교"/>
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -83,12 +87,11 @@
                     android:layout_width="30dp" android:layout_height="30dp"
                     android:background="@drawable/ic_baseline_favorite_border_24"/>
 
-
-                        <Switch
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                android:id="@+id/start_switch"/>
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/start_switch"/>
         </LinearLayout>
     </LinearLayout>
 

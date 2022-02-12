@@ -5,6 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface RetrofitInterface {
 
@@ -25,11 +26,11 @@ public interface RetrofitInterface {
 //    Call<List<Lecture>> excuteChangeAll(@Query("sbj_num") String sbj_num);
 
     @GET("/subjects")
-    Call<List<Lecture>> excuteChangeAll(@Query("subjectId") String subjectId, @Query("grade") String grade);
+    Call<List<Lecture>> excuteChangeAll(@QueryMap Map<String,String> map);
 
 //    @POST("/changeAll")
 //    Call<List<Lecture>> excuteChangeAll(@Body HashMap<String, String> map);
 
-    @POST("/change")
+    @POST("/subjects")
     Call<List<Lecture>> excuteChange(@Body HashMap<String, String[]> map);
 }

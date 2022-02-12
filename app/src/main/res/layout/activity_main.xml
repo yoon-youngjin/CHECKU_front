@@ -7,41 +7,142 @@
         android:layout_height="match_parent"
         tools:context=".view.MainActivity">
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--            android:id="@+id/appBarLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?attr/actionBarSize"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--            android:id="@+id/tablayout_control"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:tabTextColor="@color/white"-->
+    <!--            app:tabBackground="@color/black"-->
+    <!--            app:tabIndicatorColor="@color/white"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp">-->
 
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="?attr/colorPrimary"-->
-<!--                android:theme="?attr/actionBarTheme"-->
-<!--                android:minHeight="?attr/actionBarSize"-->
-<!--                android:id="@+id/toolbar"-->
-<!--                app:menu="@menu/return_menu"-->
-<!--                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"/>-->
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-    <FrameLayout
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:id="@+id/mouse_tab_control"-->
+    <!--                android:text="TAB1"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"/>-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:id="@+id/keyboard_tab_control"-->
+    <!--                android:text="TAB2"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"/>-->
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:id="@+id/keyboard_tab_control2"-->
+    <!--                android:text="TAB3"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"/>-->
+
+    <!--    </com.google.android.material.tabs.TabLayout>-->
+
+    <!--    <androidx.viewpager2.widget.ViewPager2-->
+    <!--            android:id="@+id/viewPager"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@id/tablayout_control"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0dp"/>-->
+
+
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--            android:id="@+id/appBarLayout"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="?attr/actionBarSize"-->
+    <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <androidx.appcompat.widget.Toolbar-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:background="?attr/colorPrimary"-->
+    <!--                android:theme="?attr/actionBarTheme"-->
+    <!--                android:minHeight="?attr/actionBarSize"-->
+    <!--                android:id="@+id/toolbar"-->
+    <!--                app:menu="@menu/return_menu"-->
+    <!--                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"/>-->
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Home" />-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Map" />-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="공지" />-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="사랑" />-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="우정" />-->
+
+
+    <!--            <FrameLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:layout_margin="15dp"-->
+    <!--                    android:id="@+id/main_frame" app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                    app:layout_constraintTop_toTopOf="parent" >-->
+
+    <!--            </FrameLayout>-->
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:id="@+id/fab_btn"-->
+    <!--            android:layout_gravity="end|bottom"-->
+    <!--            android:src="@drawable/ic_baseline_favorite_24"-->
+    <!--            android:layout_margin="30dp"-->
+    <!--            app:elevation="6dp"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+    <RelativeLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:id="@+id/main_frame" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    </FrameLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_btn"
-            android:layout_gravity="end|bottom"
-            android:src="@drawable/ic_baseline_favorite_24"
-            android:layout_margin="30dp"
-            app:elevation="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_margin="15dp"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tablayout_control" android:layout_marginBottom="3dp"/>
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tablayout_control"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                app:tabIndicatorGravity="top">
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수강리스트"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전공추가"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="교양추가"/>
+        </com.google.android.material.tabs.TabLayout>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

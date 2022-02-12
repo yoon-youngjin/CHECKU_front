@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,11 +37,13 @@ public class MainFragment extends Fragment {
     private LoadingDialog loadingDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
-    private String value;
+    private String value="";
     private ArrayAdapter<String> adapter2;
     private String current_grade = "";
+    private String type = "";
     private ArrayList<Lecture> maindata;
 
+ //TODO 스크롤시 어댑터 그대로 보여지는거 처리
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,7 +81,7 @@ public class MainFragment extends Fragment {
                     char pos = (char) (position + 64);
                     int id = getResources().getIdentifier(String.valueOf(pos), "string", getContext().getPackageName());
                     value = getResources().getString(id);
-                    lectureViewModel.getChangeAllData(value);
+                    lectureViewModel.getChangeAllData(value,"");
                 }
             }
 
@@ -108,13 +111,18 @@ public class MainFragment extends Fragment {
             }
         });
 
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadingDialog.show();
-                lectureViewModel.getChangeAllData(value);
+                if(value.equals("")) {
+                    Toast.makeText(getContext(),"선택해주세요.",Toast.LENGTH_LONG).show();
+
+                }else {
+                    loadingDialog.show();
+                    lectureViewModel.getChangeAllData(value,"");
+                }
                 swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -127,26 +135,54 @@ public class MainFragment extends Fragment {
                     case R.id.radioButton1:
                         //TODO 속도비교후 변경
                         current_grade = "";
-                        adatper.swapItems(maindata,edit_text,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
                         break;
                     case R.id.radioButton2:
                         current_grade = "1";
-                        adatper.swapItems(maindata,edit_text,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
 
                         break;
                     case R.id.radioButton3:
                         current_grade = "2";
-                        adatper.swapItems(maindata,edit_text,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
                         break;
                     case R.id.radioButton4:
                         current_grade = "3";
-                        adatper.swapItems(maindata,edit_text,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
                         break;
                     case R.id.radioButton5:
                         current_grade = "4";
-                        adatper.swapItems(maindata,edit_text,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
 //                        radioBtnClick("4");
                         break;
+                }
+            }
+        });
+
+        binding.typeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int ckeckedID) {
+                String edit_text = binding.findlectureEdittext.getText().toString();
+
+                switch (ckeckedID) {
+                    case R.id.typeRadioButton1:
+                        type = "";
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
+                        break;
+                    case R.id.typeRadioButton2:
+                        type = "전필";
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
+
+                        break;
+                    case R.id.typeRadioButton3:
+                        type = "전선";
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
+                        break;
+                    case R.id.typeRadioButton4:
+                        type = "지교,지필,교직";
+                        adatper.swapItems(maindata,edit_text,current_grade,type);
+                        break;
+
                 }
             }
         });
@@ -179,7 +215,7 @@ public class MainFragment extends Fragment {
             public void onChanged(ArrayList<Lecture> lectures) {
                 String current_text = binding.findlectureEdittext.getText().toString();
                 maindata = lectures;
-                adatper.swapItems(lectures, current_text ,current_grade);
+                adatper.swapItems(lectures, current_text ,current_grade,type);
                 loadingDialog.dismiss();
             }
         });
@@ -198,18 +234,17 @@ public class MainFragment extends Fragment {
 
 
                 if(lectures.contains(lecture)) {
-                    lectureDao.setDeleteLecture(lecture);
-                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
-
+                    Toast.makeText(getContext(),"이미 등록된 강의입니다.",Toast.LENGTH_LONG).show();
                 }
                 else {
                     Lecture lecture2 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
                             .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-                            .capacity_year(holder.capacity_year.getText().toString())
+                            .year(holder.grade.getText().toString())
                             .build();
 
                     lectureDao.setInsertLecture(lecture2);
-                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+                    Toast.makeText(getContext(),lecture2.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
+
 
 
                 }

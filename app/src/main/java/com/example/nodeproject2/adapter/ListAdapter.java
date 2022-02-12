@@ -21,6 +21,9 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     public List<Lecture> data;
+    Context context;
+
+
 
     public void swapItems(List<Lecture> items) {
         this.data = items;
@@ -47,7 +50,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         this.itemClickListener = listener;
     }
 
-    Context context;
+
+    public ListAdapter(Context context, List<Lecture> data) {
+        this.data = data;
+        this.context = context;
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView sub_num;
         public TextView sub_title;
@@ -83,7 +92,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 @SneakyThrows
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    itemChangeListener.OnItemChange(ListAdapter.ViewHolder.this,itemView,getAdapterPosition(),isChecked);
+                    itemChangeListener.OnItemChange(ListAdapter.ViewHolder.this, itemView, getAdapterPosition(), isChecked);
 
                 }
             });
@@ -108,34 +117,29 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
+        int sbj_num = data.get(position).getSubject_num();
+        String year = data.get(position).getYear();
+
         holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
         holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
-
-        int sbj_num = data.get(position).getSubject_num();
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.start_switch.setVisibility(View.VISIBLE);
-
         holder.capacity_total.setText(data.get(position).getCapacity_total());
-        holder.capacity_year.setText(data.get(position).getCapacity_year());
-        holder.grade.setText(data.get(position).getCredit()+"학년");
 
+        if (year.equals("9")) {
+            holder.grade.setVisibility(View.INVISIBLE);
+        }
+        holder.grade.setText(year);
 
-    }
-
-
-
-    public ListAdapter(Context context, List<Lecture> data) {
-        this.data = data;
-        this.context = context;
     }
 
 
     @Override
     public int getItemCount() {
-        if(data == null) {
+        if (data == null) {
             return 0;
-        }else {
+        } else {
             return data.size();
         }
 

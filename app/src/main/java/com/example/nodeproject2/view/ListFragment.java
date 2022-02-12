@@ -34,6 +34,7 @@ public class ListFragment extends Fragment {
     private LectureViewModel lectureViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -81,7 +82,6 @@ public class ListFragment extends Fragment {
     private void init() {
         recyclerView = binding.listRecyclerview;
         adatper = new ListAdapter(getContext(), lectureDao.getLectureAll());
-
         adatper.setOnItemClickListener(new ListAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(ListAdapter.ViewHolder holder, View view, int pos) {
@@ -96,7 +96,6 @@ public class ListFragment extends Fragment {
             @Override
             public void OnItemChange(ListAdapter.ViewHolder holder, View view, int pos, boolean isChecked) throws IOException {
 
-                Log.d("checked", String.valueOf(isChecked));
                 Intent intent = new Intent(getContext(), MyService.class);
                 String subject_num = holder.sub_num.getText().toString();
                 intent.putExtra("subject_num", subject_num);
@@ -109,12 +108,7 @@ public class ListFragment extends Fragment {
                     //TODO 보낸 요청 취소
                     intent.putExtra("checked","false");
                     getActivity().startService(intent);
-
                 }
-
-
-
-
             }
         });
 

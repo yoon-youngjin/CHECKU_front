@@ -13,10 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class LectureViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Lecture>> lectures
@@ -68,8 +65,15 @@ public class LectureViewModel extends ViewModel {
         });
     }
 
-    public void getChangeAllData(String value) {
-        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(value,"");
+    public void getChangeAllData(String departmentId,String type) {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("departmentId", departmentId);
+        map.put("type", type);
+
+
+
+        Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(map);
         call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
