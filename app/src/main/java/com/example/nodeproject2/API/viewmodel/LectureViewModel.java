@@ -90,7 +90,9 @@ public class LectureViewModel extends ViewModel {
         int i = 0;
         Iterator<Lecture> it = lectureList.iterator();
         while (it.hasNext()) {
-            data[i++] = String.valueOf(it.next().getSubject_num());
+            int sbj_num = it.next().getSubject_num();
+            data[i++] = String.format("%04d", sbj_num);
+
         }
         map.put("sbj_num", data);
         Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChange(map);

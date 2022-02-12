@@ -15,49 +15,8 @@ import java.util.Objects;
 @Entity
 public class Lecture {
 
-    //    private int ID = 0;
     // 학수번호
     private String main_num;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Lecture)) return false;
-        Lecture lecture = (Lecture) o;
-        return subject_num == lecture.subject_num;
-    }
-
-
-    // 이수구분
-    private String major_division;
-
-//    public void setRoom(String room) {
-//        this.room = room;
-//    }
-//
-//
-////
-//    public String getRoom() {
-//        return room;
-//    }
-//
-//
-//    public String getDetail() {
-//        return detail;
-//    }
-//
-    //    detail: null
-//    @SerializedName("room")
-//    private String room;
-//
-//
-//    @SerializedName("detail")
-//    private String detail;
-
-//    public void setDetail(String detail) {
-//        this.detail = detail;
-//    }
-
     // 과목 번호
     @SerializedName("id")
     @PrimaryKey(autoGenerate = true)
@@ -77,9 +36,47 @@ public class Lecture {
     // 교강사
     @SerializedName("professor")
     private String professor_name;
+    // 이수구분
+    private String major_division;
 
+    // 정원(학년)
+    private String capacity_year;
+    // 정원(전체)
+    @SerializedName("inwon")
+    private String capacity_total;
+
+    //    @SerializedName("room")
+//    private String room;
+//
+//
+//    @SerializedName("detail")
+
+
+//    public void setRoom(String room) {
+//        this.room = room;
+//    }
+//
+//
+////
+//    public String getRoom() {
+//        return room;
+//    }
+//
+//
+//    public String getDetail() {
+//        return detail;
+//    }
+//
+
+//    private String detail;
+
+//    public void setDetail(String detail) {
+//        this.detail = detail;
+//    }
     public Lecture() {
+
     }
+
 
     public String getMain_num() {
         return main_num;
@@ -169,11 +166,15 @@ public class Lecture {
         return capacity_total;
     }
 
-    // 정원(학년)
-    private String capacity_year;
-    // 정원(전체)
-    @SerializedName("inwon")
-    private String capacity_total;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lecture)) return false;
+        Lecture lecture = (Lecture) o;
+        return subject_num == lecture.subject_num;
+    }
+
+
 
 
 }

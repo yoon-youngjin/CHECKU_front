@@ -99,14 +99,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
         holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-
         holder.sub_title.setText(data.get(position).getSubject_title());
         holder.pro_name.setText(data.get(position).getProfessor_name());
-        holder.sub_num.setText(String.valueOf(data.get(position).getSubject_num()));
+
+        int sbj_num = data.get(position).getSubject_num();
+        holder.sub_num.setText(String.format("%04d", sbj_num));
 
         holder.capacity_total.setText(data.get(position).getCapacity_total());
         holder.capacity_year.setText(data.get(position).getCapacity_year());
-        holder.grade.setText(data.get(position).getCredit());
+        holder.grade.setText(data.get(position).getCredit()+"학년");
 
 
     }

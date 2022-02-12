@@ -128,24 +128,25 @@ public class MainFragment extends Fragment {
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int ckeckedID) {
-                Call<List<Lecture>> call;
+                String edit_text = binding.findlectureEdittext.getText().toString();
+
                 switch (ckeckedID) {
                     case R.id.radioButton1:
                         //TODO 속도비교후 변경
-
 //                        radioBtnClick("");
                         current_grade = "";
-                        adatper.swapItems(maindata,value,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade);
                         break;
                     case R.id.radioButton2:
 ///                        radioBtnClick("1");
                         current_grade = "1";
-                        adatper.swapItems(maindata,value,current_grade);
+                        adatper.swapItems(maindata,edit_text,current_grade);
 
                         break;
                     case R.id.radioButton3:
-                        radioBtnClick("2");
+//                        radioBtnClick("2");
                         current_grade = "2";
+                        adatper.swapItems(maindata,edit_text,current_grade);
                         break;
                     case R.id.radioButton4:
                         radioBtnClick("3");
@@ -185,8 +186,8 @@ public class MainFragment extends Fragment {
             public void onChanged(ArrayList<Lecture> lectures) {
                 String current_text = binding.findlectureEdittext.getText().toString();
                 maindata = lectures;
-                System.out.println(maindata);
                 adatper.swapItems(lectures, current_text ,current_grade);
+                binding.radioButton1.setChecked(true);
                 loadingDialog.dismiss();
             }
         });
@@ -199,12 +200,30 @@ public class MainFragment extends Fragment {
         adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
             @Override
             public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
+
+//                List<Lecture> lectures = lectureDao.getLectureAll();
+
                 Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
                         .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
                         .capacity_year(holder.capacity_year.getText().toString())
                         .build();
                 lectureDao.setInsertLecture(lecture);
                 holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+
+//                if (lectures.contains(Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())))) {
+//                    Lecture temp = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString());
+//                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+//                    lectureDao.setDeleteLecture(Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())));
+//                }else {
+//                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+//                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+//                            .capacity_year(holder.capacity_year.getText().toString())
+//                            .build();
+//                    lectureDao.setInsertLecture(lecture);
+//                    holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+//
+//                }
+
             }
         });
 //        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {

@@ -24,6 +24,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     private String current_grade;
 
     public void swapItems(ArrayList<Lecture> items, String s, String current_grade) {
+
         this.unFilteredlist = items;
         this.filteredList = items;
         this.current_grade = current_grade;
@@ -45,13 +46,25 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
+                ArrayList<Lecture> filteringList = new ArrayList<>();
+
+                // 전체학년 && 과목입력x => filtering x
                 if (charString.equals("") && current_grade.equals("")) {
                     filteredList = unFilteredlist;
-                } else {
-                    ArrayList<Lecture> filteringList = new ArrayList<>();
+                }
+                // 학년선택 o && 과목입력 x
+                if(charString.equals("")) {
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getCredit().contains(current_grade)) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+                }
+                // 학년 선택 o && 과목입력 o
+                else {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getSubject_title().contains(charString) && lec.getCredit().contains(current_grade)) {
-                            System.out.println(current_grade);
                             filteringList.add(lec);
                         }
                     }
@@ -153,14 +166,16 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         String sub_title = filteredList.get(position).getSubject_title();
         holder.sub_title.setText(sub_title);
         holder.pro_name.setText(filteredList.get(position).getProfessor_name());
+
         int sbj_num = filteredList.get(position).getSubject_num();
         if (lectureList.contains(Lecture.builder().subject_num(sbj_num).build())) {
             holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
         }
-        holder.sub_num.setText(String.valueOf(sbj_num));
+        holder.sub_num.setText(String.format("%04d", sbj_num));
+
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.capacity_year.setText(filteredList.get(position).getCapacity_year());
-        holder.grade.setText(filteredList.get(position).getCredit());
+        holder.grade.setText(filteredList.get(position).getCredit()+ "학년");
     }
 
     @Override

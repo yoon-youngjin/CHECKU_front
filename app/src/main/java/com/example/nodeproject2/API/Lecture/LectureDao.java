@@ -3,6 +3,7 @@ package com.example.nodeproject2.API.Lecture;
 import androidx.room.*;
 import com.example.nodeproject2.datas.Lecture;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao

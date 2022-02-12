@@ -23,6 +23,7 @@
                 android:orientation="horizontal">
             <RadioButton
                     android:text="전체"
+                    android:checked="true"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
