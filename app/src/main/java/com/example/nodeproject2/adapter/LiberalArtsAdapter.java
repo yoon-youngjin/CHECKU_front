@@ -69,7 +69,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
                     filteredList = unFilteredlist;
                 }else if(constraint.equals("")) {
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getEmptySize() != 0) {
+                        if (lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -84,7 +84,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
                 }
                 else {
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getSubject_title().contains(charString) && lec.getEmptySize() != 0) {
+                        if (lec.getSubject_title().contains(charString) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }

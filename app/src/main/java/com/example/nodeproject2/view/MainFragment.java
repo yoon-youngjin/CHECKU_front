@@ -1,13 +1,19 @@
 package com.example.nodeproject2.view;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,6 +28,10 @@ import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
+import com.skydoves.balloon.ArrowOrientation;
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +50,7 @@ public class MainFragment extends Fragment {
     private String type = "";
     private ArrayList<Lecture> maindata;
     private boolean current_checked = false;
+    private Balloon balloon;
 
 
 //    @Override
@@ -63,6 +74,20 @@ public class MainFragment extends Fragment {
         swipeRefreshLayout = binding.swipeLayout;
         lectureDao = getLectureDao();
         maindata = new ArrayList<>();
+        balloon = new Balloon.Builder(getContext())
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.32f)
+                .setWidthRatio(0.6f)
+                .setHeight(65)
+                .setTextSize(10f)
+                .setCornerRadius(4f)
+                .setAlpha(0.9f)
+                .setText("1. 좌측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 위로 스크롤 하면 새로고침 할 수 있어요.")
+                .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
+                .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
+                .setBalloonAnimation(BalloonAnimation.FADE)
+                .build();
         init();
         initObserver();
         return binding.getRoot();
@@ -71,10 +96,31 @@ public class MainFragment extends Fragment {
 
     private void init() {
         showView();
+        SpannableStringBuilder builder = new SpannableStringBuilder("쿠키님들의 전공을 알려주세요.");
+        builder.setSpan(new ForegroundColorSpan(Color.parseColor("#3EAF36")), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        binding.tv.append(builder);
+
+        binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("test");
+
+                balloon.showAlignBottom(binding.tooltipbtn);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        balloon.dismiss();
+                    }
+                }, 5000);
+
+            }
+        });
+
+
         String[] items = getResources().getStringArray(R.array.spinner_data).clone();
-        adapter2 = new ArrayAdapter<>(
-                getContext(), android.R.layout.simple_list_item_1, items
-        );
+
+        adapter2  = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, items);
+
         adapter2.setDropDownViewResource(android.R.layout.simple_list_item_1);
         binding.spinner.setAdapter(adapter2);
 
@@ -86,7 +132,6 @@ public class MainFragment extends Fragment {
 
                     String temp = (String) adapterView.getItemAtPosition(position);
                     temp = temp.replaceAll(" ", "");
-                    temp = temp.replaceAll("·", "");
                     String match = "[^\uAC00-\uD7A30-9a-zA-Z]";
                     temp = temp.replaceAll(match, "");
 
@@ -169,7 +214,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        binding.emptyCheckSwitch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             String edit_text = binding.findlectureEdittext.getText().toString();
 
             @Override
@@ -179,6 +224,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+
 
         binding.typeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

@@ -8,8 +8,6 @@
         tools:context=".view.MainActivity">
 
 
-
-
     <!--    <com.google.android.material.appbar.AppBarLayout-->
     <!--            android:id="@+id/appBarLayout"-->
     <!--            android:layout_width="match_parent"-->
@@ -29,43 +27,67 @@
     <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
 
+    <!--    <RelativeLayout-->
+    <!--            android:orientation="vertical"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent">-->
+
+
+    <!--        <androidx.viewpager2.widget.ViewPager2-->
+    <!--                android:id="@+id/viewPager"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_margin="15dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_above="@+id/tablayout_control" android:layout_marginBottom="3dp"/>-->
+    <!--        <com.google.android.material.tabs.TabLayout-->
+    <!--                android:id="@+id/tablayout_control"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="50dp"-->
+    <!--                android:layout_alignParentBottom="true"-->
+    <!--                app:tabIndicatorGravity="top">-->
+
+    <!--            <com.google.android.material.tabs.TabItem-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:text="수강리스트"/>-->
+
+    <!--            <com.google.android.material.tabs.TabItem-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:text="전공추가"/>-->
+
+    <!--            <com.google.android.material.tabs.TabItem-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:text="교양추가"/>-->
+    <!--        </com.google.android.material.tabs.TabLayout>-->
+    <!--    </RelativeLayout>-->
 
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
+            android:layout_height="wrap_content">
 
         <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_margin="15dp"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/tablayout_control" android:layout_marginBottom="3dp"/>
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tablayout_control"/>
+
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tablayout_control"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                app:tabIndicatorGravity="top">
-
-            <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="수강리스트"/>
-
-            <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="전공추가"/>
-
-            <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="교양추가"/>
-        </com.google.android.material.tabs.TabLayout>
+                app:tabIndicatorColor="@color/kukie_green"
+                app:tabIndicatorGravity="top"
+                app:tabTextColor="@color/black"
+                app:tabSelectedTextColor="@color/kukie_green"
+                app:tabBackground="@color/white"
+                app:tabTextAppearance="@style/TabText"
+                />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

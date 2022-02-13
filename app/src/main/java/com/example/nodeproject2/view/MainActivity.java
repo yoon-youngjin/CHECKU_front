@@ -5,6 +5,7 @@ import android.os.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.viewpager2.widget.ViewPager2;
+import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.FragementAdapter;
 import com.example.nodeproject2.databinding.ActivityMainBinding;
 import com.google.android.material.tabs.TabLayout;
@@ -29,8 +30,15 @@ public class MainActivity extends AppCompatActivity {
         createFragment();
         createViewpager();
         settingTabLayout();
-        new TabLayoutMediator(binding.tablayoutControl, viewPager,
-                (tab, position) -> tab.setText("OBJECT " + (position + 1))
+        String[] tabLayoutTextArray = new String[]{"수강바구니", "전공", "교양"};
+        new TabLayoutMediator(binding
+                .tablayoutControl, viewPager,
+                (tab, position) -> {
+                    tab.setText(tabLayoutTextArray[position]);
+//                    if (position == 1) {
+//                        tab.setIcon(R.drawable.ic_konkuk);
+//                    }
+                }
         ).attach();
         setContentView(binding.getRoot());
 

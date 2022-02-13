@@ -112,7 +112,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 else if (charString.equals("") && type.equals("") && checked == true) {
                     System.out.println("checked");
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getYear().contains(current_grade) && lec.getEmptySize() != 0) {
+                        if (lec.getYear().contains(current_grade) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -143,7 +143,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택x && 과목입력o && 이수구분x && 빈강의o
                 else if (current_grade.equals("") && type.equals("") && checked == true) {
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getSubject_title().contains(charString) && lec.getEmptySize() != 0) {
+                        if (lec.getSubject_title().contains(charString) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -152,7 +152,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택x && 과목입력x && 이수구분o && 빈강의o
                 else if(current_grade.equals("") && charString.equals("") && checked == true){
                     for (Lecture lec : unFilteredlist) {
-                        if (type.contains(lec.getMajor_division()) && lec.getEmptySize() != 0) {
+                        if (type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -161,7 +161,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택x && 과목입력o && 이수구분o && 빈강의o
                 else if(current_grade.equals("") && checked == true){
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division()) && lec.getEmptySize() != 0) {
+                        if (lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -171,7 +171,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택o && 과목입력x && 이수구분o && 빈강의o
                 else if(charString.equals("") && checked == true){
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getYear().contains(current_grade) && type.contains(lec.getMajor_division()) && lec.getEmptySize() != 0) {
+                        if (lec.getYear().contains(current_grade) && type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -181,7 +181,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택o && 과목입력o && 이수구분x && 빈강의o
                 else if(type.equals("") && checked == true){
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && lec.getEmptySize() != 0) {
+                        if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -200,7 +200,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 // 학년선택o && 과목입력o && 이수구분o && 빈강의o
                 else {
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division()) && lec.getEmptySize() != 0) {
+                        if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }

@@ -1,43 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
 
 
     <LinearLayout
+            android:layout_margin="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/border">
 
         <EditText
                 android:id="@+id/codeEditText"
+                android:layout_margin="5dp"
                 android:layout_width="0dp"
+                android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:hint="과목번호로 검색해서 수강리스트에 추가하기"/>
         <Button
                 android:id="@+id/codeBtn"
+                android:background="@drawable/ic_frame_140"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
     </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-    <Switch
-            android:id="@+id/empty_check_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:text="강의목록"
+                android:textColor="#3EAF36"/>
+        <ImageView
+                android:id="@+id/tooltipbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:background="@drawable/ic_tooltip"/>
+
+        <View android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:layout_weight="1"/>
+        <ToggleButton
+                android:text="ToggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:textOn="전체강의"
+                android:textOff="빈 강의"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/selector_radio_text"
+                android:id="@+id/toggleButton"/>
+
+    </LinearLayout>
+
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/swipe_layout"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_layout"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
 
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                     xmlns:tools="http://schemas.android.com/tools"
-                     android:layout_width="match_parent"
+        <FrameLayout
+                android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      tools:context=".view.ListFragment">
 

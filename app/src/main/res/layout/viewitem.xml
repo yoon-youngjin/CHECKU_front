@@ -6,86 +6,113 @@
               android:layout_height="wrap_content"
               android:gravity="center"
               android:layout_margin="10dp"
-              android:background="@drawable/round_border"
               android:orientation="vertical">
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:gravity="center"
             android:orientation="horizontal">
-        <LinearLayout
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
 
-            <TextView
-                    android:id="@+id/emptySize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:id="@+id/favorite_btn"
+                    android:background="@drawable/btn_favorite_off"
+                    android:layout_gravity="center"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent">
+            </Button>
+
+            <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"/>
+                    android:orientation="vertical"
+                    android:layout_margin="5dp">
 
-            <TextView
-                    android:id="@+id/capacity_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="0/40"/>
-        </LinearLayout>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/grade"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/type"
-                android:text="지교"/>
+
+                <TextView
+                        android:id="@+id/type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="전선"
+                        android:textColor="@color/black"/>
+
+                <TextView
+                        android:id="@+id/grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="1학년"
+                        android:textColor="@color/black"/>
+
+                <TextView
+                        android:id="@+id/subject_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="0001"/>
+            </LinearLayout>
+
+        </FrameLayout>
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="5dp">
 
             <TextView
                     android:id="@+id/subject_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:text="선형대수학"
                     android:textColor="@color/black"
-                    android:textSize="16dp"/>
+                    android:textSize="14dp"/>
 
             <TextView
+                    android:layout_marginTop="5dp"
                     android:id="@+id/professor_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="유승주"/>
+                    android:gravity="left"
+                    android:text="유승주"
+                    android:textSize="14sp"/>
 
         </LinearLayout>
 
         <LinearLayout
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="5dp">
 
             <TextView
-                    android:id="@+id/subject_num"
+                    android:id="@+id/capacity_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0030"/>
+                    android:text="30/250"/>
 
             <Button
-                    android:id="@+id/favorite_btn"
-                    android:layout_width="30dp" android:layout_height="30dp"
-                    android:background="@drawable/ic_baseline_favorite_border_24"/>
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/emptySize"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:text="220"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_status"/>
 
             <Switch
                     android:layout_width="match_parent"
@@ -95,5 +122,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/recyclerview_line">
+
+    </View>
 
 </LinearLayout>

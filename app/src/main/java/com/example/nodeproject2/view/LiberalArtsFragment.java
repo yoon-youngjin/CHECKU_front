@@ -2,6 +2,7 @@ package com.example.nodeproject2.view;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +28,9 @@ import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentLiberalArtsBinding;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
+import com.skydoves.balloon.ArrowOrientation;
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
 import lombok.SneakyThrows;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +54,8 @@ public class LiberalArtsFragment extends Fragment {
     private ArrayList<Lecture> originData;
     private boolean empty_checked = false;
     private String type = "";
+    private Balloon balloon;
+
 
     @Override
     public void onResume() {
@@ -65,6 +72,20 @@ public class LiberalArtsFragment extends Fragment {
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         swipeRefreshLayout = binding.swipeLayout;
         lectureDao = getLectureDao();
+        balloon = new Balloon.Builder(getContext())
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.32f)
+                .setWidthRatio(0.6f)
+                .setHeight(65)
+                .setTextSize(10f)
+                .setCornerRadius(4f)
+                .setAlpha(0.9f)
+                .setText("1. 좌측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 위로 스크롤 하면 새로고침 할 수 있어요.")
+                .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
+                .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
+                .setBalloonAnimation(BalloonAnimation.FADE)
+                .build();
         init();
         initObserver();
         return binding.getRoot();
@@ -91,9 +112,28 @@ public class LiberalArtsFragment extends Fragment {
                     lectureViewModel.getChangeAllData("", type, "liberalArts");
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        binding.findlectureEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.toString().equals("")) {
+                    adatper.getFilter().filter("");
+                } else {
+                    adatper.getFilter().filter(s.toString());
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -101,20 +141,41 @@ public class LiberalArtsFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadingDialog.show();
-                lectureViewModel.getChangeAllData("", type, "liberalArts");
+
+                if(type.equals("")) {
+                    Toast.makeText(getContext(),"선택하세요.",Toast.LENGTH_SHORT).show();
+                }else {
+                    loadingDialog.show();
+                    lectureViewModel.getChangeAllData("", type, "liberalArts");
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        binding.emptyCheckSwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            String edit_text = binding.findlectureEdittext.getText().toString();
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                String current_text = binding.findlectureEdittext.getText().toString();
                 empty_checked = checked;
-                adatper.swapItems(originData,current_text,empty_checked);
+                adatper.swapItems(originData,edit_text,empty_checked);
+
             }
         });
+        binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                balloon.showAlignBottom(binding.tooltipbtn);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        balloon.dismiss();
+                    }
+                }, 5000);
+
+            }
+        });
+
 
     }
 
@@ -142,6 +203,8 @@ public class LiberalArtsFragment extends Fragment {
                 List<Lecture> lectures = lectureDao.getLectureAll();
                 Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();
 
+
+
                 if (lectures.contains(lecture)) {
                     Toast.makeText(getContext(), "이미 등록된 강의입니다.", Toast.LENGTH_LONG).show();
                 } else {
@@ -153,6 +216,9 @@ public class LiberalArtsFragment extends Fragment {
                             .year(holder.year.getText().toString())
                             .build();
                     lectureDao.setInsertLecture(lecture2);
+
+                    Toast.makeText(getContext(),lecture2.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
+
                 }
             }
         });

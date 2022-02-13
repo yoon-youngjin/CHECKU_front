@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+    implementation "com.github.skydoves:balloon:1.2.3"
+
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'com.opencsv:opencsv:4.4'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"

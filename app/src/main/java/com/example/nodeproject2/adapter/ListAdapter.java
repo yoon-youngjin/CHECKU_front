@@ -1,6 +1,7 @@
 package com.example.nodeproject2.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 }
                 else {
                     for (Lecture lec : unFilteredlist) {
-                        if (lec.getEmptySize() != 0) {
+                        if (lec.getEmptySize() > 0) {
                             filteringList.add(lec);
                         }
                     }
@@ -96,6 +97,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         public TextView capacity_total;
         public TextView empty;
         public TextView grade;
+        public TextView type;
         public Button btn;
         public Switch start_switch;
 
@@ -108,7 +110,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             capacity_total = itemView.findViewById(R.id.capacity_total);
             grade = itemView.findViewById(R.id.grade);
             empty = itemView.findViewById(R.id.emptySize);
-
+            type = itemView.findViewById(R.id.type);
             btn = itemView.findViewById(R.id.favorite_btn);
             start_switch = itemView.findViewById(R.id.start_switch);
 
@@ -152,17 +154,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         int sbj_num = filteredList.get(position).getSubject_num();
         String year = filteredList.get(position).getYear();
 
-        holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+        holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
         holder.sub_title.setText(filteredList.get(position).getSubject_title());
-        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
+        holder.pro_name.setText(filteredList.get(position).getProfessor_name().trim());
         holder.sub_num.setText(String.format("%04d", sbj_num));
+        holder.sub_num.setTextColor(Color.WHITE);
 //        holder.start_switch.setVisibility(View.VISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        if (year.equals("9")) {
-            holder.grade.setVisibility(View.INVISIBLE);
-        }
         holder.grade.setText(year);
+        if (year.equals("9")) {
+//            holder.grade.setVisibility(View.INVISIBLE);
+            holder.grade.setText("전체");
+        }
+        holder.grade.setTextColor(Color.WHITE);
+        holder.type.setText(filteredList.get(position).getMajor_division());
+        holder.type.setTextColor(Color.WHITE);
 
     }
 
