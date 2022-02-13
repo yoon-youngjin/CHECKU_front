@@ -20,16 +20,16 @@
                 android:orientation="vertical">
 
             <TextView
-                    android:id="@+id/capacity_total"
+                    android:id="@+id/emptySize"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="40"
+                    android:text="0"
                     android:textColor="@color/black"/>
 
             <TextView
-                    android:id="@+id/capacity_year"
+                    android:id="@+id/capacity_total"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"

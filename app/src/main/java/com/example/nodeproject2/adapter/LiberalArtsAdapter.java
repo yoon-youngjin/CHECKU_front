@@ -26,7 +26,9 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
     private ArrayList<Lecture> filteredList;
 
     private List<Lecture> lectureList;
+
     private String type="";
+    private boolean checked;
     Context context;
 
 
@@ -40,9 +42,10 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         this.itemClickListener = listener;
     }
 
-    public void swapItems(ArrayList<Lecture> items,String s) {
+    public void swapItems(ArrayList<Lecture> items,String s,boolean checked) {
         this.unFilteredlist = items;
         this.filteredList = items;
+        this.checked = checked;
         getFilter().filter(s);
         notifyDataSetChanged();
     }
@@ -62,9 +65,16 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
 
                 String charString = constraint.toString();
                 ArrayList<Lecture> filteringList = new ArrayList<>();
-                if(constraint.equals("")) {
+                if(constraint.equals("") && checked == false) {
                     filteredList = unFilteredlist;
-                }else {
+                }else if(constraint.equals("")) {
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getEmptySize() != 0) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+                }else if(checked == true) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getSubject_title().contains(charString)) {
                             filteringList.add(lec);
@@ -72,7 +82,14 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
                     }
                     filteredList = filteringList;
                 }
-
+                else {
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getSubject_title().contains(charString) && lec.getEmptySize() != 0) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+                }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredList;
                 return filterResults;
@@ -94,6 +111,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         public TextView pro_name;
         public TextView capacity_total;
         public TextView type;
+        public TextView empty;
         public TextView year;
         public Button btn;
 //        public Switch start_switch;
@@ -108,6 +126,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             type = itemView.findViewById(R.id.type);
             btn = itemView.findViewById(R.id.favorite_btn);
             year = itemView.findViewById(R.id.grade);
+            empty = itemView.findViewById(R.id.emptySize);
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,6 +163,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.year.setText(filteredList.get(position).getYear());
+        holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
         holder.year.setVisibility(View.INVISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
     }
@@ -159,7 +179,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
     }
     private LectureDao getLectureDao() {
 
-        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "my_db")
+        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "test_db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
 

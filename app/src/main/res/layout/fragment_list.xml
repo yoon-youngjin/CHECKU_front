@@ -1,21 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/swipe_layout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 xmlns:tools="http://schemas.android.com/tools"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 tools:context=".view.ListFragment">
+        xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-        />
 
-    </FrameLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <EditText
+                android:id="@+id/codeEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:hint="과목번호로 검색해서 수강리스트에 추가하기"/>
+        <Button
+                android:id="@+id/codeBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+    </LinearLayout>
+
+    <Switch
+            android:id="@+id/empty_check_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/swipe_layout"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                     xmlns:tools="http://schemas.android.com/tools"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     tools:context=".view.ListFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+            />
+
+        </FrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>
+

@@ -46,7 +46,10 @@ public class Lecture {
     @SerializedName("inwon")
     private String capacity_total;
 
-    //    @SerializedName("room")
+    private int emptySize;
+
+
+//    @SerializedName("room")
 //    private String room;
 //
 //
@@ -77,7 +80,13 @@ public class Lecture {
     public Lecture() {
 
     }
+    public int getEmptySize() {
+        return emptySize;
+    }
 
+    public void setEmptySize(int emptySize) {
+        this.emptySize = emptySize;
+    }
 
     public String getMain_num() {
         return main_num;

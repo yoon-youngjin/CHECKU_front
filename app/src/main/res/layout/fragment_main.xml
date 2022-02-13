@@ -93,6 +93,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/findlecture_edittext"/>
 
+        <Switch
+                android:id="@+id/empty_check_switch3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/main_recyclerview"

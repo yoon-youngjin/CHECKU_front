@@ -4,10 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.nodeproject2.R;
@@ -18,17 +15,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements Filterable {
 
-    public List<Lecture> data;
+    public List<Lecture> unFilteredlist;
+    public List<Lecture> filteredList;
+    private boolean checked;
     Context context;
 
-
-
-    public void swapItems(List<Lecture> items) {
-        this.data = items;
+    public void swapItems(List<Lecture> items,boolean checked) {
+        this.unFilteredlist = items;
+        this.filteredList = items;
+        this.checked = checked;
+        getFilter().filter("");
         notifyDataSetChanged();
     }
+
+
 
     public interface OnItemClickListener {
         void OnItemClick(ViewHolder holder, View view, int pos);
@@ -52,8 +54,38 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
 
     public ListAdapter(Context context, List<Lecture> data) {
-        this.data = data;
+        this.unFilteredlist = data;
+        this.filteredList = data;
         this.context = context;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<Lecture> filteringList = new ArrayList<>();
+                if(checked == false) {
+                    filteredList = unFilteredlist;
+                }
+                else {
+                    for (Lecture lec : unFilteredlist) {
+                        if (lec.getEmptySize() != 0) {
+                            filteringList.add(lec);
+                        }
+                    }
+                    filteredList = filteringList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredList = (ArrayList<Lecture>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 
@@ -62,7 +94,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public TextView sub_title;
         public TextView pro_name;
         public TextView capacity_total;
-        public TextView capacity_year;
+        public TextView empty;
         public TextView grade;
         public Button btn;
         public Switch start_switch;
@@ -74,8 +106,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             sub_title = itemView.findViewById(R.id.subject_title);
             pro_name = itemView.findViewById(R.id.professor_name);
             capacity_total = itemView.findViewById(R.id.capacity_total);
-            capacity_year = itemView.findViewById(R.id.capacity_year);
             grade = itemView.findViewById(R.id.grade);
+            empty = itemView.findViewById(R.id.emptySize);
 
             btn = itemView.findViewById(R.id.favorite_btn);
             start_switch = itemView.findViewById(R.id.start_switch);
@@ -117,16 +149,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
-        int sbj_num = data.get(position).getSubject_num();
-        String year = data.get(position).getYear();
+        int sbj_num = filteredList.get(position).getSubject_num();
+        String year = filteredList.get(position).getYear();
 
         holder.btn.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-        holder.sub_title.setText(data.get(position).getSubject_title());
-        holder.pro_name.setText(data.get(position).getProfessor_name());
+        holder.sub_title.setText(filteredList.get(position).getSubject_title());
+        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
         holder.sub_num.setText(String.format("%04d", sbj_num));
-        holder.start_switch.setVisibility(View.VISIBLE);
-        holder.capacity_total.setText(data.get(position).getCapacity_total());
-
+//        holder.start_switch.setVisibility(View.VISIBLE);
+        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
+        holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
         if (year.equals("9")) {
             holder.grade.setVisibility(View.INVISIBLE);
         }
@@ -137,10 +169,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (data == null) {
+        if (filteredList == null) {
             return 0;
         } else {
-            return data.size();
+            return filteredList.size();
         }
 
     }

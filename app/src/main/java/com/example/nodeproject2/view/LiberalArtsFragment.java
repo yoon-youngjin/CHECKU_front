@@ -8,10 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,13 +45,15 @@ public class LiberalArtsFragment extends Fragment {
     private LoadingDialog loadingDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LectureViewModel lectureViewModel;
+    private ArrayAdapter<String> adapter2;
+    private ArrayList<Lecture> originData;
+    private boolean empty_checked = false;
     private String type = "";
 
-//    @Override
-//    public void onResume() {
-//        adatper.notifyDataSetChanged();
-//        super.onResume();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,24 +73,27 @@ public class LiberalArtsFragment extends Fragment {
 
     private void init() {
         showView();
+        String[] items = {"선택하세요", "기교", "심교", "일선"};
+        adapter2 = new ArrayAdapter<>(
+                getContext(), android.R.layout.simple_list_item_1, items
+        );
+        adapter2.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        binding.artsSpinner.setAdapter(adapter2);
 
-        binding.findlectureEdittext.addTextChangedListener(new TextWatcher() {
+        binding.artsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (s.toString().equals("")) {
-                    adatper.getFilter().filter("");
-                } else {
-                    adatper.getFilter().filter(s.toString());
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position != 0) {
+                    loadingDialog.show();
+                    char pos = (char) (position + 96);
+                    int id = getResources().getIdentifier(String.valueOf(pos), "string", getContext().getPackageName());
+                    type = getResources().getString(id);
+                    lectureViewModel.getChangeAllData("", type, "liberalArts");
                 }
             }
-            @Override
-            public void afterTextChanged(Editable editable) {
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 
@@ -100,33 +102,17 @@ public class LiberalArtsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 loadingDialog.show();
-                lectureViewModel.getChangeAllData("",type);
+                lectureViewModel.getChangeAllData("", type, "liberalArts");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
+        binding.emptyCheckSwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int ckeckedID) {
-                loadingDialog.show();
-
-                switch (ckeckedID) {
-                    case R.id.radioButton1:
-                        //기교
-                        type = "B0404P";
-                        break;
-                    case R.id.radioButton2:
-                        //심교
-                        type = "B04054";
-                        break;
-                    case R.id.radioButton3:
-                        //일선
-                        type = "B04046";
-                        break;
-                }
-                lectureViewModel.getChangeAllData("",type);
-
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                String current_text = binding.findlectureEdittext.getText().toString();
+                empty_checked = checked;
+                adatper.swapItems(originData,current_text,empty_checked);
             }
         });
 
@@ -134,11 +120,12 @@ public class LiberalArtsFragment extends Fragment {
 
 
     private void initObserver() {
-        lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
+        lectureViewModel.liberalArts.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
+                originData = lectures;
                 String current_text = binding.findlectureEdittext.getText().toString();
-                adatper.swapItems(lectures,current_text);
+                adatper.swapItems(lectures, current_text,empty_checked);
                 loadingDialog.dismiss();
             }
         });
@@ -146,7 +133,7 @@ public class LiberalArtsFragment extends Fragment {
 
     private void showView() {
         recyclerView = binding.mainRecyclerview;
-        adatper = new LiberalArtsAdapter(getContext(), lectureViewModel.getLectures());
+        adatper = new LiberalArtsAdapter(getContext(), lectureViewModel.getLiberalArts());
 
         adatper.setOnItemClickListener(new LiberalArtsAdapter.OnItemClickListener() {
             @Override
@@ -155,10 +142,9 @@ public class LiberalArtsFragment extends Fragment {
                 List<Lecture> lectures = lectureDao.getLectureAll();
                 Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();
 
-                if(lectures.contains(lecture)) {
-                    Toast.makeText(getContext(),"이미 등록된 강의입니다.",Toast.LENGTH_LONG).show();
-                }
-                else {
+                if (lectures.contains(lecture)) {
+                    Toast.makeText(getContext(), "이미 등록된 강의입니다.", Toast.LENGTH_LONG).show();
+                } else {
                     Lecture lecture2 = Lecture.builder()
                             .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
                             .subject_title(holder.sub_title.getText().toString())
@@ -166,10 +152,8 @@ public class LiberalArtsFragment extends Fragment {
                             .capacity_total(holder.capacity_total.getText().toString())
                             .year(holder.year.getText().toString())
                             .build();
-
                     lectureDao.setInsertLecture(lecture2);
                 }
-
             }
         });
 
@@ -179,7 +163,7 @@ public class LiberalArtsFragment extends Fragment {
 
     private LectureDao getLectureDao() {
 
-        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "my_db")
+        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "test_db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
 

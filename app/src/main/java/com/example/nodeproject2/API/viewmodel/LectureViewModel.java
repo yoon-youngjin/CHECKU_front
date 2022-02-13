@@ -1,6 +1,7 @@
 package com.example.nodeproject2.API.viewmodel;
 
 import android.util.Log;
+import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nodeproject2.API.RetrofitClient;
@@ -14,12 +15,16 @@ import retrofit2.Response;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LectureViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Lecture>> lectures
             = new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<Lecture>> myLectures
+            = new MutableLiveData<>();
+
+    public MutableLiveData<ArrayList<Lecture>> liberalArts
             = new MutableLiveData<>();
 
 //
@@ -37,6 +42,10 @@ public class LectureViewModel extends ViewModel {
 
     public ArrayList<Lecture> getLectures() {
         return lectures.getValue();
+    }
+
+    public ArrayList<Lecture> getLiberalArts() {
+        return liberalArts.getValue();
     }
 
     public void getData() {
@@ -65,21 +74,37 @@ public class LectureViewModel extends ViewModel {
         });
     }
 
-    public void getChangeAllData(String departmentId,String type) {
+    public void getChangeAllData(String departmentId,String type,String category) {
         Map<String, String> map = new HashMap<>();
-
         map.put("departmentId", departmentId);
         map.put("type", type);
-
-
 
         Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChangeAll(map);
         call.enqueue(new Callback<List<Lecture>>() {
             @SneakyThrows
             @Override
             public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
-                ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
-                lectures.setValue(data);
+
+                if(response.code() == 200) {
+                    ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                    ArrayList<Lecture> updateData = (ArrayList<Lecture>) data.stream().map(lecture -> {
+                        String total = lecture.getCapacity_total();
+                        String[] arr = total.split("/");
+                        int emptySize = (Integer.parseInt(arr[1].trim()) - Integer.parseInt(arr[0].trim()));
+                        lecture.setEmptySize(emptySize);
+                        return lecture;
+                    }).collect(Collectors.toList());
+
+                    if(category.equals("subject")) {
+                        lectures.setValue(updateData);
+                    }else {
+                        liberalArts.setValue(updateData);
+                    }
+                }else {
+
+//                    Toast.makeText()
+                }
+
             }
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
@@ -87,6 +112,7 @@ public class LectureViewModel extends ViewModel {
             }
         });
     }
+
 
     public void getChangeData(List<Lecture> lectureList) {
         HashMap<String, String[]> map = new HashMap<>();
@@ -107,7 +133,18 @@ public class LectureViewModel extends ViewModel {
                 if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
                     System.out.println(data);
-                    myLectures.setValue(data);
+
+                    ArrayList<Lecture> lectures = (ArrayList<Lecture>) data.stream().map(lecture -> {
+                        String total = lecture.getCapacity_total();
+                        String[] arr = total.split("/");
+                        int emptySize = (Integer.parseInt(arr[1].trim()) - Integer.parseInt(arr[0].trim()));
+                        lecture.setEmptySize(emptySize);
+                        return lecture;
+                    }).collect(Collectors.toList());
+//
+                    System.out.println(lectures);
+
+                    myLectures.setValue(lectures);
                 } else {
                     //TODO 변경
 //                    Log.d("error", response.body().toString());

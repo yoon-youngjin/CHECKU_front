@@ -10,39 +10,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-
-        <RadioGroup
-                android:id="@+id/radioGroup"
+        <Spinner
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <RadioButton
-                    android:text="기교"
-                    android:checked="true"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/artsSpinner"/>
 
-                    android:id="@+id/radioButton1"/>
-            <RadioButton
-                    android:text="심교"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radioButton2"/>
-            <RadioButton
-                    android:text="일선"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radioButton3"/>
 
-        </RadioGroup>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/findlecture_edittext"/>
+
+        <Switch android:id="@+id/empty_check_switch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
 
