@@ -22,6 +22,7 @@
         <item name="android:fontFamily">@font/scdream5</item>
     </style>
 
+
     <style name="scdreamRadioButton" parent="android:Widget.CompoundButton.RadioButton">
         <item name="android:fontFamily">@font/scdream5</item>
     </style>

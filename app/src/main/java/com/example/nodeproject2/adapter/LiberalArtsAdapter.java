@@ -157,7 +157,13 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
     public void onBindViewHolder(@NonNull LiberalArtsAdapter.ViewHolder holder, int position) {
         String sub_title = filteredList.get(position).getSubject_title();
         holder.sub_title.setText(sub_title);
-        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
+        String pro_name = filteredList.get(position).getProfessor_name();
+
+        if(!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        }else {
+            holder.pro_name.setText(pro_name);
+        }
 
         int sbj_num = filteredList.get(position).getSubject_num();
 

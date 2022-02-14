@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_margin="10dp">
 
 
             <TextView
@@ -45,7 +45,8 @@
                     android:layout_marginLeft="5dp"
                     android:text="강의목록"
                     android:textSize="20dp"
-                    android:textColor="#3EAF36"/>
+                    android:textColor="@color/kukie_green"/>
+
             <LinearLayout
                     android:id="@+id/clicklayout"
                     android:layout_width="25dp"
@@ -80,8 +81,9 @@
 
         <EditText
                 android:layout_width="match_parent"
-                android:theme="@style/scdreamEditText"
                 android:layout_height="40dp"
+                android:theme="@style/scdreamEditText"
+
                 android:padding="10dp"
                 android:id="@+id/findlecture_edittext"
                 android:inputType="text"

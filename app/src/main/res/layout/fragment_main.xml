@@ -22,18 +22,19 @@
 <!--                android:layout_marginLeft="10dp"-->
 <!--                android:padding="5dp"-->
 <!--                android:textSize="15dp"/>-->
+
+
         <Spinner
                 android:layout_width="match_parent"
-                android:layout_margin="10dp"
-                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:layout_height="40dp"
                 android:id="@+id/spinner"/>
-
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_margin="10dp">
 
 
             <TextView
@@ -43,7 +44,9 @@
                     android:gravity="center"
                     android:layout_marginLeft="5dp"
                     android:text="강의목록"
-                    android:textColor="#3EAF36"/>
+                    android:layout_margin="5dp"
+                    android:textColor="@color/kukie_green"/>
+
             <LinearLayout
                     android:id="@+id/clicklayout"
                     android:layout_width="25dp"
@@ -68,7 +71,7 @@
                     android:layout_width="0dp"
                     android:layout_height="32dp"
                     android:layout_weight="0.5"
-                    android:layout_marginRight="10dp"
+                    android:layout_margin="5dp"
                     android:textOn="빈 강의"
                     android:textOff="빈 강의"
                     android:background="@drawable/radio_selector"
@@ -85,7 +88,7 @@
                 android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
@@ -95,7 +98,6 @@
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/selector_radio_text"
                     android:layout_margin="5dp"
-
                     android:button="@null"
                     android:checked="true"
                     android:textAlignment="center"
@@ -153,7 +155,7 @@
 
         <RadioGroup
                 android:id="@+id/typeRadioGroup"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
@@ -165,8 +167,7 @@
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/selector_radio_text"
                     android:textAlignment="center"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
+                   android:layout_margin="5dp"
                     android:button="@null"
                     android:checked="true"
                     android:layout_width="0dp"
@@ -179,9 +180,7 @@
                     android:textColor="@drawable/selector_radio_text"
                     android:textAlignment="center"
                     android:button="@null"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
-
+                    android:layout_margin="5dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="25dp"
@@ -192,8 +191,7 @@
                     android:textColor="@drawable/selector_radio_text"
                     android:textAlignment="center"
                     android:button="@null"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_margin="5dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="25dp"
@@ -204,8 +202,7 @@
                     android:textColor="@drawable/selector_radio_text"
                     android:textAlignment="center"
                     android:button="@null"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="5dp"
+                   android:layout_margin="5dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="25dp"
@@ -219,10 +216,10 @@
 
         <EditText
                 android:layout_width="match_parent"
-                android:theme="@style/scdreamEditText"
                 android:layout_margin="10dp"
                 android:layout_height="40dp"
                 android:id="@+id/findlecture_edittext"
+                android:theme="@style/scdreamEditText"
                 android:inputType="text"
                 android:textSize="15dp"
                 android:hint="아래 목록 중 원하는 과목을 찾아보세요"

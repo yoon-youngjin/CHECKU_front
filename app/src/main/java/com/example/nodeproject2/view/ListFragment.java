@@ -83,7 +83,7 @@ public class ListFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.42f)
+                .setArrowPosition(0.49f)
                 .setWidthRatio(0.6f)
                 .setHeight(65)
                 .setTextSize(10f)

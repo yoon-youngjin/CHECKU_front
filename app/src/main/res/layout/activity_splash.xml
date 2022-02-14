@@ -5,48 +5,29 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/kukie_yellow"
+        android:background="@color/kukie_green"
         tools:context=".view.SplashActivity">
 
     <ImageView
-            android:layout_width="230dp"
-            android:layout_height="300dp"
-            android:background="@drawable/cookie1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/imageView">
-    </ImageView>
-
-    <ImageView
-            android:layout_width="220dp"
+            android:layout_width="250dp"
             android:layout_height="70dp"
-            android:background="@drawable/ic_kukie"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_checku2"
             android:id="@+id/imageView2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="312dp" app:layout_constraintHorizontal_bias="0.497">
     </ImageView>
-
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="건국대 수강신청 인원조회"
             android:textSize="18sp"
-            android:textColor="@color/kukie_green"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/imageView2"
             android:layout_marginTop="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             >
     </TextView>
-
-    <ImageView
-            android:layout_width="260dp"
-            android:layout_height="250dp"
-            android:background="@drawable/cookie2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-    </ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.42f)
+                .setArrowPosition(0.46f)
                 .setWidthRatio(0.6f)
                 .setHeight(65)
                 .setTextSize(10f)
@@ -310,9 +310,8 @@ public class MainFragment extends Fragment {
                     holder.sub_num.setTextColor(Color.BLACK);
                     holder.type.setTextColor(Color.BLACK);
                     holder.grade.setTextColor(Color.BLACK);
-                    Toast.makeText(getContext(),lecture.getSubject_title()+"이 등록 해제되었습니다.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 해제되었습니다.",Toast.LENGTH_SHORT).show();
                     lectureDao.setDeleteLecture(lecture);
-
                 }
                 else {
                     holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
@@ -320,7 +319,7 @@ public class MainFragment extends Fragment {
                     holder.type.setTextColor(Color.WHITE);
                     holder.grade.setTextColor(Color.WHITE);
                     lectureDao.setInsertLecture(lecture);
-                    Toast.makeText(getContext(),lecture.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 되었습니다.",Toast.LENGTH_SHORT).show();
                 }
             }
         });

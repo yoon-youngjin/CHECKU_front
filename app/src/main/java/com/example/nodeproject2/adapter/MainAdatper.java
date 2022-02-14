@@ -152,7 +152,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                     filteredList = filteringList;
                 }
                 // 학년선택x && 과목입력x && 이수구분o && 빈강의o
-                else if(current_grade.equals("") && charString.equals("") && checked == true){
+                else if (current_grade.equals("") && charString.equals("") && checked == true) {
                     for (Lecture lec : unFilteredlist) {
                         if (type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
@@ -161,7 +161,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                     filteredList = filteringList;
                 }
                 // 학년선택x && 과목입력o && 이수구분o && 빈강의o
-                else if(current_grade.equals("") && checked == true){
+                else if (current_grade.equals("") && checked == true) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
@@ -171,7 +171,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 }
 
                 // 학년선택o && 과목입력x && 이수구분o && 빈강의o
-                else if(charString.equals("") && checked == true){
+                else if (charString.equals("") && checked == true) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getYear().contains(current_grade) && type.contains(lec.getMajor_division()) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
@@ -181,7 +181,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 }
 
                 // 학년선택o && 과목입력o && 이수구분x && 빈강의o
-                else if(type.equals("") && checked == true){
+                else if (type.equals("") && checked == true) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && lec.getEmptySize() > 0) {
                             filteringList.add(lec);
@@ -191,7 +191,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                 }
 
                 // 학년선택o && 과목입력o && 이수구분o && 빈강의x
-                else if(checked == false){
+                else if (checked == false) {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getYear().contains(current_grade) && lec.getSubject_title().contains(charString) && type.contains(lec.getMajor_division())) {
                             filteringList.add(lec);
@@ -303,16 +303,22 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String sub_title = filteredList.get(position).getSubject_title();
-        holder.sub_title.setText(sub_title);
-        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
         int sbj_num = filteredList.get(position).getSubject_num();
+        String pro_name = filteredList.get(position).getProfessor_name();
+
+        holder.sub_title.setText(sub_title);
+        if (!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        } else {
+            holder.pro_name.setText(pro_name);
+        }
 
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
         holder.sub_num.setTextColor(Color.BLACK);
         holder.type.setTextColor(Color.BLACK);
         holder.grade.setTextColor(Color.BLACK);
 
-        if(getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
+        if (getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
             holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
             holder.sub_num.setTextColor(Color.WHITE);
             holder.type.setTextColor(Color.WHITE);
@@ -322,7 +328,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.grade.setText(filteredList.get(position).getYear()+"학년");
+        holder.grade.setText(filteredList.get(position).getYear() + "학년");
     }
 
     @Override

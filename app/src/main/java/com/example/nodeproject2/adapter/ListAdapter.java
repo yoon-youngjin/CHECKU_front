@@ -152,10 +152,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
         int sbj_num = filteredList.get(position).getSubject_num();
         String year = filteredList.get(position).getYear();
+        String pro_name = filteredList.get(position).getProfessor_name();
 
+
+        if (!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        } else {
+            holder.pro_name.setText(pro_name);
+        }
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
         holder.sub_title.setText(filteredList.get(position).getSubject_title());
-        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.sub_num.setTextColor(Color.WHITE);
 //        holder.start_switch.setVisibility(View.VISIBLE);
