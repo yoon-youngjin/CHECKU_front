@@ -15,7 +15,6 @@
         <item name="android:textViewStyle">@style/scdreamTextView</item>
         <item name="android:buttonStyle">@style/scdreamButton</item>
         <item name="android:buttonStyleToggle">@style/scdreamToggle</item>
-        <item name="android:editTextStyle">@style/scdreamEditText</item>
         <item name="android:radioButtonStyle">@style/scdreamRadioButton</item>
     </style>
 
@@ -27,7 +26,7 @@
         <item name="android:fontFamily">@font/scdream5</item>
     </style>
 
-    <style name="scdreamEditText" parent="android:Widget.EditText">
+    <style name="scdreamEditText" parent="Widget.AppCompat.EditText">
         <item name="android:fontFamily">@font/scdream5</item>
     </style>
 
@@ -39,7 +38,6 @@
     <style name="scdreamButton" parent="android:Widget.Button">
         <item name="android:fontFamily">@font/scdream5</item>
     </style>
-
 
 
     <style name="TabText" parent="TextAppearance.Design.Tab">

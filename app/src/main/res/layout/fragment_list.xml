@@ -15,13 +15,15 @@
 
         <EditText
                 android:id="@+id/codeEditText"
+                android:theme="@style/scdreamEditText"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_width="0dp"
                 android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:singleLine="true"
-                android:textSize="15dp"
+                android:textSize="17dp"
                 android:hint="과목번호를 입력해주세요."/>
         <Button
                 android:id="@+id/codeBtn"

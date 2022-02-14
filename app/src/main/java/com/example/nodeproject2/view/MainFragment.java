@@ -54,20 +54,9 @@ public class MainFragment extends Fragment {
     private Balloon balloon;
 
 
-//    @Override
-//    public void onPause() {
-//        binding.spinner.setSelection(0);
-//        binding.radioButton1.setChecked(true);
-//        binding.typeRadioButton1.setChecked(true);
-//        adatper.swapItems(new ArrayList<>(),"","","");
-//        super.onPause();
-//    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("onCreateView2", "onCreateView2");
 
         binding = FragmentMainBinding.inflate(inflater, container, false);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
@@ -93,7 +82,6 @@ public class MainFragment extends Fragment {
 
         init();
         initObserver();
-        Log.d("onCreateView2", "onCreateView2");
 
         return binding.getRoot();
 
@@ -289,6 +277,14 @@ public class MainFragment extends Fragment {
                 binding.findlectureEdittext.setText("");
                 maindata = lectures;
                 adatper.swapItems(lectures, "" ,current_grade,type, current_checked);
+                loadingDialog.dismiss();
+            }
+        });
+
+        lectureViewModel.status.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+
                 loadingDialog.dismiss();
             }
         });

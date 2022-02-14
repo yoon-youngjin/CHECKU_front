@@ -197,6 +197,15 @@ public class LiberalArtsFragment extends Fragment {
                 loadingDialog.dismiss();
             }
         });
+
+        lectureViewModel.status.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+
+                loadingDialog.dismiss();
+            }
+        });
+
     }
 
     private void showView() {

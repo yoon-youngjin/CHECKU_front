@@ -60,8 +60,6 @@ public class CodeDialog {
     public CodeDialog(Context context) {
         this.context = context;
         this.dlg = new Dialog(context);
-        // 액티비티의 타이틀바를 숨긴다.
-//        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.setContentView(R.layout.code_dialog);
 
         okButton = dlg.findViewById(R.id.yesBtn);
@@ -113,7 +111,6 @@ public class CodeDialog {
                     pro_name_textView.setText(lecture.getProfessor_name());
                     emptysize_textView.setText(String.valueOf(lecture.getEmptySize()));
                     dlg.show();
-
                 } else {
                     Toast.makeText(context,"없는 과목번호입니다.",Toast.LENGTH_SHORT).show();
                     dlg.dismiss();
@@ -134,20 +131,8 @@ public class CodeDialog {
         dlg.dismiss();
     }
 
-    public void okClick() {
 
 
-    }
-
-    private LectureDao getLectureDao() {
-
-        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "test_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        return db.lectureDao();
-
-    }
 
 
 

@@ -26,7 +26,7 @@ public class LectureViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Lecture>> liberalArts
             = new MutableLiveData<>();
-
+    public MutableLiveData<Integer> status = new MutableLiveData<>();
 
 
 //
@@ -50,33 +50,8 @@ public class LectureViewModel extends ViewModel {
         return liberalArts.getValue();
     }
 
-    public void getData() {
-        Call<String> call = RetrofitClient.retrofitInterface.excuteInit();
 
-        call.enqueue(new Callback<String>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-                JSONObject jsonObject = new JSONObject(response.body());
-                ArrayList<Lecture> arr_lec = new ArrayList<>();
-                for (int i = 0; i < jsonObject.length(); i++) {
-                    JSONArray temp = (JSONArray) jsonObject.get(String.valueOf(i));
-                    Lecture lec = Lecture.builder().capacity_total(temp.get(3).toString().trim()).capacity_year(temp.get(4).toString().trim())
-                            .professor_name(temp.get(1).toString().trim()).subject_title(temp.get(2).toString().trim()).subject_num(Integer.parseInt(temp.get(0).toString())).build();
-                    arr_lec.add(lec);
-                }
-                lectures.setValue(arr_lec);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("check", "Fail!!");
-            }
-        });
-    }
-
-    public void getChangeAllData(String departmentId,String type,String category) {
+    public void getChangeAllData(String departmentId, String type, String category) {
         Map<String, String> map = new HashMap<>();
         map.put("departmentId", departmentId);
         map.put("type", type);
@@ -87,7 +62,7 @@ public class LectureViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
 
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
                     ArrayList<Lecture> updateData = (ArrayList<Lecture>) data.stream().map(lecture -> {
                         String total = lecture.getCapacity_total();
@@ -97,17 +72,17 @@ public class LectureViewModel extends ViewModel {
                         return lecture;
                     }).collect(Collectors.toList());
 
-                    if(category.equals("subject")) {
+                    if (category.equals("subject")) {
                         lectures.setValue(updateData);
-                    }else {
+                    } else {
                         liberalArts.setValue(updateData);
                     }
-                }else {
-
-//                    Toast.makeText()
+                } else {
+                    status.setValue(response.code());
                 }
 
             }
+
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");
@@ -124,7 +99,6 @@ public class LectureViewModel extends ViewModel {
         while (it.hasNext()) {
             int sbj_num = it.next().getSubject_num();
             data[i++] = String.format("%04d", sbj_num);
-
         }
         map.put("sbj_num", data);
         Call<List<Lecture>> call = RetrofitClient.retrofitInterface.excuteChange(map);
@@ -134,7 +108,6 @@ public class LectureViewModel extends ViewModel {
             public void onResponse(Call<List<Lecture>> call, Response<List<Lecture>> response) {
                 if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
-                    System.out.println(data);
 
                     ArrayList<Lecture> lectures = (ArrayList<Lecture>) data.stream().map(lecture -> {
                         String total = lecture.getCapacity_total();
@@ -143,14 +116,11 @@ public class LectureViewModel extends ViewModel {
                         lecture.setEmptySize(emptySize);
                         return lecture;
                     }).collect(Collectors.toList());
-//
 
                     myLectures.setValue(lectures);
                 } else {
                     //TODO 변경
-//                    status.setValue(404);
-//                    Log.d("error", response.body().toString());
-                    myLectures.setValue(null);
+                    status.setValue(response.code());
                 }
 
 //                JSONObject jsonObject = new JSONObject(response.body());

@@ -68,7 +68,6 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.d("onCreateView1", "onCreateView1");
 
         binding = FragmentListBinding.inflate(inflater, container, false);
         swipeRefreshLayout = binding.swipeLayout;
@@ -169,9 +168,6 @@ public class ListFragment extends Fragment {
                 });
             }
         });
-        Log.d("onCreateView1", "onCreateView1");
-
-        Log.d("performance", "performance");
 
         return binding.getRoot();
 
@@ -181,20 +177,17 @@ public class ListFragment extends Fragment {
         lectureViewModel.myLectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-
                 adatper.swapItems(lectures,empty_check);
                 loadingDialog.dismiss();
             }
         });
 
-//        lectureViewModel.status.observe(this, new Observer<Integer>() {
-//            @Override
-//            public void onChanged(Integer integer) {
-//                Toast.makeText(getContext(),"check",Toast.LENGTH_SHORT).show();
-//                loadingDialog.dismiss();
-//                lectureViewModel.status.setValue(200);
-//            }
-//        });
+        lectureViewModel.status.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                loadingDialog.dismiss();
+            }
+        });
     }
 
     private void init() {
