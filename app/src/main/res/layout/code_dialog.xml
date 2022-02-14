@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
+
               android:orientation="vertical">
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:orientation="horizontal">
         <TextView
                 android:layout_width="wrap_content"
@@ -80,17 +84,26 @@
 
         <Button
                 android:id="@+id/yesBtn"
+                android:layout_margin="10dp"
+                android:padding="10dp"
                 android:layout_width="0dp"
+                android:background="@drawable/btn_status"
+                android:textColor="@color/white"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="네"/>
+                android:text="추가"/>
 
         <Button
                 android:id="@+id/noBtn"
+                android:layout_margin="10dp"
+                android:padding="10dp"
                 android:layout_width="0dp"
+                android:background="@drawable/btn_status"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="아니요"/>
+                android:text="취소"/>
     </LinearLayout>
 
 </LinearLayout>

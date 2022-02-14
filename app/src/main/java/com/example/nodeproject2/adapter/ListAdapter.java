@@ -23,14 +23,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     private boolean checked;
     Context context;
 
-    public void swapItems(List<Lecture> items,boolean checked) {
+    public void swapItems(List<Lecture> items, boolean checked) {
         this.unFilteredlist = items;
         this.filteredList = items;
         this.checked = checked;
         getFilter().filter("");
         notifyDataSetChanged();
     }
-
 
 
     public interface OnItemClickListener {
@@ -66,10 +65,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 ArrayList<Lecture> filteringList = new ArrayList<>();
-                if(checked == false) {
+                if (checked == false) {
                     filteredList = unFilteredlist;
-                }
-                else {
+                } else {
                     for (Lecture lec : unFilteredlist) {
                         if (lec.getEmptySize() > 0) {
                             filteringList.add(lec);
@@ -81,6 +79,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 filterResults.values = filteredList;
                 return filterResults;
             }
+
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filteredList = (ArrayList<Lecture>) results.values;
@@ -156,17 +155,21 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
         holder.sub_title.setText(filteredList.get(position).getSubject_title());
-        holder.pro_name.setText(filteredList.get(position).getProfessor_name().trim());
+        holder.pro_name.setText(filteredList.get(position).getProfessor_name());
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.sub_num.setTextColor(Color.WHITE);
 //        holder.start_switch.setVisibility(View.VISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.grade.setText(year);
+
         if (year.equals("9")) {
-//            holder.grade.setVisibility(View.INVISIBLE);
             holder.grade.setText("전체");
+        } else {
+            holder.grade.setText(year + "학년");
+
         }
+
+
         holder.grade.setTextColor(Color.WHITE);
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.type.setTextColor(Color.WHITE);

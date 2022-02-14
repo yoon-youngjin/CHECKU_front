@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinner_data">
-        <item>선택하세요. </item>
+        <item>전공을 선택하세요. </item>
         <item>KU융합과학기술원 미래에너지공학과</item>
         <item>KU융합과학기술원 스마트운행체공학과</item>
         <item>KU융합과학기술원 스마트ICT융합공학과</item>

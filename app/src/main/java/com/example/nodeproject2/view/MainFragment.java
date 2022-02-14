@@ -9,6 +9,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("onCreateView2", "onCreateView2");
 
         binding = FragmentMainBinding.inflate(inflater, container, false);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
@@ -77,28 +79,32 @@ public class MainFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.32f)
+                .setArrowPosition(0.42f)
                 .setWidthRatio(0.6f)
                 .setHeight(65)
                 .setTextSize(10f)
                 .setCornerRadius(4f)
                 .setAlpha(0.9f)
-                .setText("1. 좌측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 위로 스크롤 하면 새로고침 할 수 있어요.")
+                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
                 .build();
+
         init();
         initObserver();
+        Log.d("onCreateView2", "onCreateView2");
+
         return binding.getRoot();
+
     }
 
 
     private void init() {
         showView();
-        SpannableStringBuilder builder = new SpannableStringBuilder("쿠키님들의 전공을 알려주세요.");
-        builder.setSpan(new ForegroundColorSpan(Color.parseColor("#3EAF36")), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        binding.tv.append(builder);
+//        SpannableStringBuilder builder = new SpannableStringBuilder("쿠키님들의 전공을 알려주세요.");
+//        builder.setSpan(new ForegroundColorSpan(Color.parseColor("#3EAF36")), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        binding.tv.append(builder);
 
         binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,10 +286,9 @@ public class MainFragment extends Fragment {
         lectureViewModel.lectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                String current_text = binding.findlectureEdittext.getText().toString();
+                binding.findlectureEdittext.setText("");
                 maindata = lectures;
-                adatper.swapItems(lectures, current_text ,current_grade,type, current_checked);
-
+                adatper.swapItems(lectures, "" ,current_grade,type, current_checked);
                 loadingDialog.dismiss();
             }
         });
@@ -297,18 +302,29 @@ public class MainFragment extends Fragment {
             @Override
             public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
                 List<Lecture> lectures = lectureDao.getLectureAll();
-                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();
+                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
+                        .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
+                        .year(holder.grade.getText().toString().substring(0,1))
+                        .emptySize(Integer.parseInt(holder.empty.getText().toString()))
+                        .major_division(holder.type.getText().toString())
+                        .build();
+
                 if(lectures.contains(lecture)) {
-                    Toast.makeText(getContext(),"이미 등록된 강의입니다.",Toast.LENGTH_LONG).show();
+                    holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
+                    holder.sub_num.setTextColor(Color.BLACK);
+                    holder.type.setTextColor(Color.BLACK);
+                    holder.grade.setTextColor(Color.BLACK);
+                    Toast.makeText(getContext(),lecture.getSubject_title()+"이 등록 해제되었습니다.",Toast.LENGTH_LONG).show();
+                    lectureDao.setDeleteLecture(lecture);
+
                 }
                 else {
-                    Lecture lecture2 = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-                            .year(holder.grade.getText().toString())
-                            .emptySize(Integer.parseInt(holder.empty.getText().toString()))
-                            .build();
-                    lectureDao.setInsertLecture(lecture2);
-                    Toast.makeText(getContext(),lecture2.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
+                    holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
+                    holder.sub_num.setTextColor(Color.WHITE);
+                    holder.type.setTextColor(Color.WHITE);
+                    holder.grade.setTextColor(Color.WHITE);
+                    lectureDao.setInsertLecture(lecture);
+                    Toast.makeText(getContext(),lecture.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -14,17 +14,84 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+           >
+            <Button
+                    android:id="@+id/emptySize"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:text="220"
+                    android:textSize="20dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/kukie_green"/>
+
+            <TextView
+                    android:id="@+id/capacity_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:text="30/250"/>
+
+
+
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/start_switch"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="5dp">
+
+            <TextView
+                    android:id="@+id/subject_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="선형대수학"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"/>
+
+            <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/professor_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="유승주"
+                    android:textSize="14dp"/>
+
+        </LinearLayout>
+
         <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+<!--            <ToggleButton-->
+<!--                    android:id="@+id/favorite_btn"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_width="60dp" -->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/btn_favorite_off"/>-->
 
             <Button
                     android:id="@+id/favorite_btn"
                     android:background="@drawable/btn_favorite_off"
                     android:layout_gravity="center"
                     android:layout_width="60dp"
-                    android:layout_height="match_parent">
-            </Button>
+                    android:layout_height="match_parent"/>
 
             <LinearLayout
                     android:layout_width="70dp"
@@ -58,68 +125,13 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="0001"/>
+                        android:text="0001"
+                        android:textColor="@color/black"/>
             </LinearLayout>
 
         </FrameLayout>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_margin="5dp">
 
-            <TextView
-                    android:id="@+id/subject_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="선형대수학"
-                    android:textColor="@color/black"
-                    android:textSize="14dp"/>
-
-            <TextView
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/professor_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="유승주"
-                    android:textSize="14sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_margin="5dp">
-
-            <TextView
-                    android:id="@+id/capacity_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30/250"/>
-
-            <Button
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/emptySize"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:text="220"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/btn_status"/>
-
-            <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:id="@+id/start_switch"/>
-        </LinearLayout>
     </LinearLayout>
 
     <View

@@ -27,6 +27,8 @@ public class LectureViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Lecture>> liberalArts
             = new MutableLiveData<>();
 
+
+
 //
 //    ArrayList<Lecture> lecturesList = new ArrayList<>();
 //    ArrayList<Lecture> myLecturesList = new ArrayList<>();
@@ -142,11 +144,11 @@ public class LectureViewModel extends ViewModel {
                         return lecture;
                     }).collect(Collectors.toList());
 //
-                    System.out.println(lectures);
 
                     myLectures.setValue(lectures);
                 } else {
                     //TODO 변경
+//                    status.setValue(404);
 //                    Log.d("error", response.body().toString());
                     myLectures.setValue(null);
                 }

@@ -15,7 +15,6 @@ import java.util.List;
 
 public class FragementAdapter extends FragmentStateAdapter {
 
-    public static int PAGE_POSITION = 3;
     private final List<Fragment> mFragmentList = new ArrayList<>();
 
     public FragementAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {

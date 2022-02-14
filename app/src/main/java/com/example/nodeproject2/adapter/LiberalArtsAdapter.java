@@ -1,6 +1,7 @@
 package com.example.nodeproject2.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,9 +163,30 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
 
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.type.setText(filteredList.get(position).getMajor_division());
-        holder.year.setText(filteredList.get(position).getYear());
+
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.year.setVisibility(View.INVISIBLE);
+
+        String year = filteredList.get(position).getYear();
+        
+        holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
+        holder.sub_num.setTextColor(Color.BLACK);
+        holder.type.setTextColor(Color.BLACK);
+        holder.year.setTextColor(Color.BLACK);
+
+        if(getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
+            holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
+            holder.sub_num.setTextColor(Color.WHITE);
+            holder.type.setTextColor(Color.WHITE);
+            holder.year.setTextColor(Color.WHITE);
+        }
+
+        if(year.equals("9")) {
+            holder.year.setText("전체");
+        }else {
+            holder.year.setText(year+"학년");
+        }
+
+
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
     }
 

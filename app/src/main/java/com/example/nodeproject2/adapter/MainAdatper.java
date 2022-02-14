@@ -1,6 +1,7 @@
 package com.example.nodeproject2.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         this.checked = current_checked;
         this.type = type;
         getFilter().filter(s);
+
         notifyDataSetChanged();
     }
 
@@ -246,6 +248,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             sub_num = itemView.findViewById(R.id.subject_num);
             sub_title = itemView.findViewById(R.id.subject_title);
             pro_name = itemView.findViewById(R.id.professor_name);
@@ -256,6 +259,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
 
 //            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
+
+            btn.setBackgroundResource(R.drawable.btn_favorite_off);
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -282,6 +287,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewitem, parent, false);
@@ -298,13 +305,24 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         String sub_title = filteredList.get(position).getSubject_title();
         holder.sub_title.setText(sub_title);
         holder.pro_name.setText(filteredList.get(position).getProfessor_name());
-
         int sbj_num = filteredList.get(position).getSubject_num();
+
+        holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
+        holder.sub_num.setTextColor(Color.BLACK);
+        holder.type.setTextColor(Color.BLACK);
+        holder.grade.setTextColor(Color.BLACK);
+
+        if(getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
+            holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
+            holder.sub_num.setTextColor(Color.WHITE);
+            holder.type.setTextColor(Color.WHITE);
+            holder.grade.setTextColor(Color.WHITE);
+        }
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.grade.setText(filteredList.get(position).getYear());
+        holder.grade.setText(filteredList.get(position).getYear()+"학년");
     }
 
     @Override

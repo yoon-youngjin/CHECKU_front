@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
@@ -55,21 +56,20 @@ public class ListFragment extends Fragment {
     private Balloon balloon;
 
 
-    @Override
-    public void onPause() {
-        System.out.println("onPause");
-        super.onPause();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
+        loadingDialog.show();
         lectureViewModel.getChangeData(lectureDao.getLectureAll());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.d("onCreateView1", "onCreateView1");
+
         binding = FragmentListBinding.inflate(inflater, container, false);
         swipeRefreshLayout = binding.swipeLayout;
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
@@ -84,17 +84,31 @@ public class ListFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.32f)
+                .setArrowPosition(0.42f)
                 .setWidthRatio(0.6f)
                 .setHeight(65)
                 .setTextSize(10f)
+                .setTextGravity(Gravity.LEFT)
                 .setCornerRadius(4f)
                 .setAlpha(0.9f)
-                .setText("1. 좌측 탭을 눌러 수강바구니에 과목을 추가해보세요!\n2. 화면을 위로 스크롤 하면 새로고침 할 수 있습니다. ")
+                .setText("1. 우측 하단탭을 눌러 수강바구니에 과목을 추가해보세요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있습니다. ")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
                 .build();
+
+        binding.clicklayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                balloon.showAlignBottom(binding.tooltipbtn);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        balloon.dismiss();
+                    }
+                }, 5000);
+            }
+        });
 
         init();
         initObserver();
@@ -108,11 +122,9 @@ public class ListFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
+        binding.clicklayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("test");
-
                 balloon.showAlignBottom(binding.tooltipbtn);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -157,17 +169,32 @@ public class ListFragment extends Fragment {
                 });
             }
         });
+        Log.d("onCreateView1", "onCreateView1");
+
+        Log.d("performance", "performance");
+
         return binding.getRoot();
+
     }
 
     private void initObserver() {
         lectureViewModel.myLectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
+
                 adatper.swapItems(lectures,empty_check);
                 loadingDialog.dismiss();
             }
         });
+
+//        lectureViewModel.status.observe(this, new Observer<Integer>() {
+//            @Override
+//            public void onChanged(Integer integer) {
+//                Toast.makeText(getContext(),"check",Toast.LENGTH_SHORT).show();
+//                loadingDialog.dismiss();
+//                lectureViewModel.status.setValue(200);
+//            }
+//        });
     }
 
     private void init() {

@@ -2,6 +2,7 @@ package com.example.nodeproject2.view;
 
 
 import android.os.*;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
+
+
 //        init();
         createFragment();
         createViewpager();
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         ).attach();
         setContentView(binding.getRoot());
+
+
 
     }
 

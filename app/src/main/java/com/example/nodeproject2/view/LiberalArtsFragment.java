@@ -1,11 +1,13 @@
 package com.example.nodeproject2.view;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +67,7 @@ public class LiberalArtsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("onCreateView3", "onCreateView3");
 
         binding = FragmentLiberalArtsBinding.inflate(inflater, container, false);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
@@ -75,26 +78,28 @@ public class LiberalArtsFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.32f)
+                .setArrowPosition(0.42f)
                 .setWidthRatio(0.6f)
+                .setTextGravity(Gravity.LEFT)
                 .setHeight(65)
                 .setTextSize(10f)
                 .setCornerRadius(4f)
                 .setAlpha(0.9f)
-                .setText("1. 좌측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 위로 스크롤 하면 새로고침 할 수 있어요.")
+                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
                 .build();
         init();
         initObserver();
+
         return binding.getRoot();
     }
 
 
     private void init() {
         showView();
-        String[] items = {"선택하세요", "기교", "심교", "일선"};
+        String[] items = {"교양을 구분하세요.", "기교", "심교", "일선"};
         adapter2 = new ArrayAdapter<>(
                 getContext(), android.R.layout.simple_list_item_1, items
         );
@@ -112,6 +117,7 @@ public class LiberalArtsFragment extends Fragment {
                     lectureViewModel.getChangeAllData("", type, "liberalArts");
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
@@ -131,6 +137,7 @@ public class LiberalArtsFragment extends Fragment {
                     adatper.getFilter().filter(s.toString());
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -142,9 +149,9 @@ public class LiberalArtsFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                if(type.equals("")) {
-                    Toast.makeText(getContext(),"선택하세요.",Toast.LENGTH_SHORT).show();
-                }else {
+                if (type.equals("")) {
+                    Toast.makeText(getContext(), "선택하세요.", Toast.LENGTH_SHORT).show();
+                } else {
                     loadingDialog.show();
                     lectureViewModel.getChangeAllData("", type, "liberalArts");
                 }
@@ -158,7 +165,7 @@ public class LiberalArtsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 empty_checked = checked;
-                adatper.swapItems(originData,edit_text,empty_checked);
+                adatper.swapItems(originData, edit_text, empty_checked);
 
             }
         });
@@ -186,7 +193,7 @@ public class LiberalArtsFragment extends Fragment {
             public void onChanged(ArrayList<Lecture> lectures) {
                 originData = lectures;
                 String current_text = binding.findlectureEdittext.getText().toString();
-                adatper.swapItems(lectures, current_text,empty_checked);
+                adatper.swapItems(lectures, current_text, empty_checked);
                 loadingDialog.dismiss();
             }
         });
@@ -201,23 +208,42 @@ public class LiberalArtsFragment extends Fragment {
             public void OnItemClick(LiberalArtsAdapter.ViewHolder holder, View view, int pos) {
 
                 List<Lecture> lectures = lectureDao.getLectureAll();
-                Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();
 
+                String pro_name = holder.pro_name.getText().toString();
+                Lecture lecture = Lecture.builder()
+                        .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
+                        .subject_title(holder.sub_title.getText().toString())
+                        .capacity_total(holder.capacity_total.getText().toString())
+                        .major_division(holder.type.getText().toString())
+                        .emptySize(Integer.parseInt(holder.empty.getText().toString()))
+                        .build();
 
+                if(holder.year.getText().toString().equals("전체")) {
+                    lecture.setYear("9");
+                }else {
+                    lecture.setYear(holder.year.getText().toString().substring(0,1));
+                }
+
+                if (pro_name.equals("")) {
+                    lecture.setProfessor_name(pro_name);
+                } else {
+                    lecture.setProfessor_name(pro_name.trim());
+                }
 
                 if (lectures.contains(lecture)) {
-                    Toast.makeText(getContext(), "이미 등록된 강의입니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    Lecture lecture2 = Lecture.builder()
-                            .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
-                            .subject_title(holder.sub_title.getText().toString())
-                            .professor_name(holder.pro_name.getText().toString())
-                            .capacity_total(holder.capacity_total.getText().toString())
-                            .year(holder.year.getText().toString())
-                            .build();
-                    lectureDao.setInsertLecture(lecture2);
+                    holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
+                    holder.sub_num.setTextColor(Color.BLACK);
+                    holder.type.setTextColor(Color.BLACK);
+                    holder.year.setTextColor(Color.BLACK);
 
-                    Toast.makeText(getContext(),lecture2.getSubject_title()+"이 등록되었습니다.",Toast.LENGTH_LONG).show();
+                    lectureDao.setDeleteLecture(lecture);
+                } else {
+                    holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
+                    holder.sub_num.setTextColor(Color.WHITE);
+                    holder.type.setTextColor(Color.WHITE);
+                    holder.year.setTextColor(Color.WHITE);
+
+                    lectureDao.setInsertLecture(lecture);
 
                 }
             }
