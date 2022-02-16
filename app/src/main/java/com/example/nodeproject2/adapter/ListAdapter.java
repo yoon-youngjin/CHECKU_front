@@ -164,7 +164,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         holder.sub_title.setText(filteredList.get(position).getSubject_title());
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.sub_num.setTextColor(Color.WHITE);
-//        holder.start_switch.setVisibility(View.VISIBLE);
+        holder.start_switch.setVisibility(View.VISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
 
