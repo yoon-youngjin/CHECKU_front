@@ -5,10 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -103,7 +100,6 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             }
         };
     }
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

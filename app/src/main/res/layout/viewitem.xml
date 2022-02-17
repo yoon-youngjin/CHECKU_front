@@ -86,9 +86,21 @@
 <!--                    android:layout_height="match_parent"-->
 <!--                    android:background="@drawable/btn_favorite_off"/>-->
 
-            <Button
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Elastic Button"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:textSize="17sp"-->
+<!--                    app:button_cornerRadius="4dp"-->
+<!--                    app:button_duration="250"-->
+<!--                    app:button_scale="0.87" />-->
+            <!--                    android:background="@drawable/btn_favorite_off"-->
+
+            <com.skydoves.elasticviews.ElasticButton
                     android:id="@+id/favorite_btn"
-                    android:background="@drawable/btn_favorite_off"
+                    app:button_cornerRadius="4dp"
+                    app:button_duration="250"
+                    app:button_scale="0.87"
                     android:layout_gravity="center"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"/>

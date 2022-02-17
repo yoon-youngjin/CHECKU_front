@@ -159,16 +159,25 @@ public class LiberalArtsFragment extends Fragment {
             }
         });
 
-        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
             String edit_text = binding.findlectureEdittext.getText().toString();
-
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                empty_checked = checked;
+            public void onClick(View view) {
+                empty_checked = binding.toggleButton.isChecked();
                 adatper.swapItems(originData, edit_text, empty_checked);
-
             }
         });
+
+//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            String edit_text = binding.findlectureEdittext.getText().toString();
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+//                empty_checked = checked;
+//                adatper.swapItems(originData, edit_text, empty_checked);
+//
+//            }
+//        });
         binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,10 +236,10 @@ public class LiberalArtsFragment extends Fragment {
                         .emptySize(Integer.parseInt(holder.empty.getText().toString()))
                         .build();
 
-                if(holder.year.getText().toString().equals("전체")) {
+                if (holder.year.getText().toString().equals("전체")) {
                     lecture.setYear("9");
-                }else {
-                    lecture.setYear(holder.year.getText().toString().substring(0,1));
+                } else {
+                    lecture.setYear(holder.year.getText().toString().substring(0, 1));
                 }
 
                 if (pro_name.equals("")) {
@@ -245,7 +254,7 @@ public class LiberalArtsFragment extends Fragment {
                     holder.type.setTextColor(Color.BLACK);
                     holder.year.setTextColor(Color.BLACK);
                     lectureDao.setDeleteLecture(lecture);
-                    Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 해제되었습니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), lecture.getSubject_title() + "이(가) 등록 해제되었습니다.", Toast.LENGTH_SHORT).show();
 
 
                 } else {
@@ -254,7 +263,7 @@ public class LiberalArtsFragment extends Fragment {
                     holder.type.setTextColor(Color.WHITE);
                     holder.year.setTextColor(Color.WHITE);
                     lectureDao.setInsertLecture(lecture);
-                    Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 되었습니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), lecture.getSubject_title() + "이(가) 등록 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 }
             }

@@ -204,15 +204,22 @@ public class ListFragment extends Fragment {
                 adatper.swapItems(lectureDao.getLectureAll(),empty_check);
             }
         });
-        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
+        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                empty_check = checked;
-                adatper.swapItems(lectureDao.getLectureAll(),empty_check);
-
+            public void onClick(View view) {
+                empty_check = binding.toggleButton.isChecked();
+                adatper.swapItems(lectureDao.getLectureAll(), empty_check);
             }
         });
+//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+//                empty_check = checked;
+//                adatper.swapItems(lectureDao.getLectureAll(),empty_check);
+//
+//            }
+//        });
 
 
         adatper.setOnCheckedChangeListener(new ListAdapter.OnCheckedChangeListener() {

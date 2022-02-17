@@ -208,16 +208,23 @@ public class MainFragment extends Fragment {
             }
         });
 
-        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
             String edit_text = binding.findlectureEdittext.getText().toString();
 
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                current_checked = checked;
+            public void onClick(View view) {
+                current_checked = binding.toggleButton.isChecked();
                 adatper.swapItems(maindata,edit_text,current_grade,type,current_checked);
 
             }
         });
+//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+//
+//            }
+//        });
 
 
         binding.typeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
