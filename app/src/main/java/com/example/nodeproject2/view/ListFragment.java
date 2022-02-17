@@ -71,6 +71,7 @@ public class ListFragment extends Fragment {
 
         binding = FragmentListBinding.inflate(inflater, container, false);
         swipeRefreshLayout = binding.swipeLayout;
+
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         codeDialog = new CodeDialog(getContext());
         loadingDialog = new LoadingDialog(getContext());
@@ -121,24 +122,13 @@ public class ListFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        binding.clicklayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                balloon.showAlignBottom(binding.tooltipbtn);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        balloon.dismiss();
-                    }
-                }, 5000);
 
-            }
-        });
 
         binding.codeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String sbj_num = binding.codeEditText.getText().toString();
+                binding.codeEditText.setText("");
 
                 if(sbj_num.equals("")) {
                     Toast.makeText(getContext(), "과목번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
