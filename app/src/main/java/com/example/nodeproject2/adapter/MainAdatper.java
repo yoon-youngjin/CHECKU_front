@@ -16,6 +16,7 @@ import com.example.nodeproject2.datas.Lecture;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> implements Filterable {
 
@@ -51,7 +52,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                String charString = constraint.toString();
+                String charString = constraint.toString().toUpperCase(Locale.ROOT);
                 ArrayList<Lecture> filteringList = new ArrayList<>();
 
                 // 학년선택x && 과목입력x && 이수구분x && 빈강의x=> filtering x

@@ -16,6 +16,7 @@ import com.example.nodeproject2.datas.Lecture;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.ViewHolder> implements Filterable{
 
@@ -61,7 +62,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
-                String charString = constraint.toString();
+                String charString = constraint.toString().toUpperCase(Locale.ROOT);
                 ArrayList<Lecture> filteringList = new ArrayList<>();
                 if(constraint.equals("") && checked == false) {
                     filteredList = unFilteredlist;
