@@ -159,25 +159,25 @@ public class LiberalArtsFragment extends Fragment {
             }
         });
 
-        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
-            String edit_text = binding.findlectureEdittext.getText().toString();
-            @Override
-            public void onClick(View view) {
-                empty_checked = binding.toggleButton.isChecked();
-                adatper.swapItems(originData, edit_text, empty_checked);
-            }
-        });
-
-//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
 //            String edit_text = binding.findlectureEdittext.getText().toString();
-//
 //            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-//                empty_checked = checked;
+//            public void onClick(View view) {
+//                empty_checked = binding.toggleButton.isChecked();
 //                adatper.swapItems(originData, edit_text, empty_checked);
-//
 //            }
 //        });
+
+        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            String edit_text = binding.findlectureEdittext.getText().toString();
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                empty_checked = checked;
+                adatper.swapItems(originData, edit_text, empty_checked);
+
+            }
+        });
         binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

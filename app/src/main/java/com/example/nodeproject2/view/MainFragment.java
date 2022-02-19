@@ -10,6 +10,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class MainFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
+                .setTextGravity(Gravity.LEFT)
                 .setArrowPosition(0.46f)
                 .setWidthRatio(0.6f)
                 .setHeight(65)
@@ -208,23 +210,26 @@ public class MainFragment extends Fragment {
             }
         });
 
-        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
+//        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
+//            String edit_text = binding.findlectureEdittext.getText().toString();
+//
+//            @Override
+//            public void onClick(View view) {
+//                current_checked = binding.toggleButton.isChecked();
+//                adatper.swapItems(maindata,edit_text,current_grade,type,current_checked);
+//
+//            }
+//        });
+        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             String edit_text = binding.findlectureEdittext.getText().toString();
 
             @Override
-            public void onClick(View view) {
-                current_checked = binding.toggleButton.isChecked();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                current_checked = checked;
                 adatper.swapItems(maindata,edit_text,current_grade,type,current_checked);
 
             }
         });
-//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-//
-//            }
-//        });
 
 
         binding.typeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

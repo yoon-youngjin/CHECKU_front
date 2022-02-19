@@ -67,30 +67,30 @@
                   android:layout_height="0dp"
                   android:layout_weight="1"/>
 
-            <com.skydoves.elasticviews.ElasticCheckButton
-                    android:id="@+id/toggleButton"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="0.5"
-                    android:layout_margin="5dp"
-                    android:text="빈 강의"
-                    android:background="@color/kukie_green"
-                    android:textColor="@color/white"
-                    app:checkButton_cornerRadius="12dp"
-                    app:checkButton_alpha="0.7"
-                    app:checkButton_duration="400"
-                    app:checkButton_scale="0.9" />
-<!--            <ToggleButton-->
-<!--                    android:text="ToggleButton"-->
+<!--            <com.skydoves.elasticviews.ElasticCheckButton-->
+<!--                    android:id="@+id/toggleButton"-->
 <!--                    android:layout_width="0dp"-->
 <!--                    android:layout_height="32dp"-->
 <!--                    android:layout_weight="0.5"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:textOn="빈 강의"-->
-<!--                    android:textOff="빈 강의"-->
-<!--                    android:background="@drawable/radio_selector"-->
-<!--                    android:textColor="@drawable/selector_radio_text"-->
-<!--                    android:id="@+id/toggleButton"/>-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="빈 강의"-->
+<!--                    android:background="@color/kukie_green"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    app:checkButton_cornerRadius="12dp"-->
+<!--                    app:checkButton_alpha="0.7"-->
+<!--                    app:checkButton_duration="400"-->
+<!--                    app:checkButton_scale="0.9" />-->
+            <ToggleButton
+                    android:text="ToggleButton"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginRight="10dp"
+                    android:textOn="빈 강의"
+                    android:textOff="빈 강의"
+                    android:background="@drawable/radio_selector"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:id="@+id/toggleButton"/>
 
         </LinearLayout>
 

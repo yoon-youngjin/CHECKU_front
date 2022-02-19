@@ -85,13 +85,13 @@ public class ListFragment extends Fragment {
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.49f)
-                .setWidthRatio(0.6f)
-                .setHeight(65)
+                .setWidthRatio(0.f)
+                .setHeight(70)
                 .setTextSize(10f)
                 .setTextGravity(Gravity.LEFT)
                 .setCornerRadius(4f)
                 .setAlpha(0.9f)
-                .setText("1. 우측 하단탭을 눌러 수강바구니에 과목을 추가해보세요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있습니다. ")
+                .setText("1. 우측 하단탭을 눌러 수강바구니에 과목을 추가해보세요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있습니다.\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
@@ -194,22 +194,22 @@ public class ListFragment extends Fragment {
                 adatper.swapItems(lectureDao.getLectureAll(),empty_check);
             }
         });
-        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                empty_check = binding.toggleButton.isChecked();
-                adatper.swapItems(lectureDao.getLectureAll(), empty_check);
-            }
-        });
-//        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
+//        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-//                empty_check = checked;
-//                adatper.swapItems(lectureDao.getLectureAll(),empty_check);
-//
+//            public void onClick(View view) {
+//                empty_check = binding.toggleButton.isChecked();
+//                adatper.swapItems(lectureDao.getLectureAll(), empty_check);
 //            }
 //        });
+        binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                empty_check = checked;
+                adatper.swapItems(lectureDao.getLectureAll(),empty_check);
+
+            }
+        });
 
 
         adatper.setOnCheckedChangeListener(new ListAdapter.OnCheckedChangeListener() {
