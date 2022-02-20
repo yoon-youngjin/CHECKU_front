@@ -87,7 +87,7 @@
                 android:id="@+id/view_pager"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/iv_kukie"
                 android:layout_above="@+id/tablayout_control"/>
 

@@ -29,19 +29,6 @@ public class LectureViewModel extends ViewModel {
     public MutableLiveData<Integer> status = new MutableLiveData<>();
 
 
-//
-//    ArrayList<Lecture> lecturesList = new ArrayList<>();
-//    ArrayList<Lecture> myLecturesList = new ArrayList<>();
-//
-//    public void setLectures(ArrayList<Lecture> lecture) {
-//
-//        lecturesList.addAll(lecture);
-//        if (lectures.getValue() != null) {
-//            lectures.getValue().clear();
-//        }
-//        lectures.setValue(lecturesList);
-//    }
-
     public ArrayList<Lecture> getLectures() {
         return lectures.getValue();
     }
@@ -64,6 +51,7 @@ public class LectureViewModel extends ViewModel {
 
                 if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
+                    System.out.println(data);
                     ArrayList<Lecture> updateData = (ArrayList<Lecture>) data.stream().map(lecture -> {
                         String total = lecture.getCapacity_total();
                         String[] arr = total.split("/");

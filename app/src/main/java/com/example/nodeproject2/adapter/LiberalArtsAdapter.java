@@ -111,7 +111,10 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         public TextView type;
         public TextView empty;
         public TextView year;
+        public TextView room;
         public Button btn;
+        public TextView detail;
+
 //        public Switch start_switch;
 
 
@@ -124,7 +127,9 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             type = itemView.findViewById(R.id.type);
             btn = itemView.findViewById(R.id.favorite_btn);
             year = itemView.findViewById(R.id.grade);
+            room = itemView.findViewById(R.id.room);
             empty = itemView.findViewById(R.id.emptySize);
+            detail = itemView.findViewById(R.id.detail);
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,6 +160,9 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         String sub_title = filteredList.get(position).getSubject_title();
         holder.sub_title.setText(sub_title);
         String pro_name = filteredList.get(position).getProfessor_name();
+        String room = filteredList.get(position).getRoom();
+        String detail = filteredList.get(position).getDetail();
+
 
         if(!(pro_name == null)) {
             holder.pro_name.setText(pro_name.trim());
@@ -189,7 +197,28 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             holder.year.setText(year+"학년");
         }
 
+        if (!(room == null)) {
+            holder.room.setText(room.trim());
+        } else {
+            holder.room.setText(room);
+        }
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.detail.getVisibility() == View.VISIBLE) {
+                    holder.detail.setVisibility(View.GONE);
+                }else {
+                    if(!holder.detail.getText().equals(""))
+                        holder.detail.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        if (!(detail == null)) {
+            holder.detail.setText(detail.trim());
+        } else {
+            holder.detail.setText(detail);
+        }
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
     }
 

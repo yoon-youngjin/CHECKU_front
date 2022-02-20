@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 //    13.209.140.156
-    private static String BASE_URL = "http:/13.209.140.156:3000";
+    private static String BASE_URL = "http:/172.30.1.9:3000";
 
     static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.DAYS)

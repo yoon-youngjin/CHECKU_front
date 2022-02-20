@@ -6,6 +6,7 @@
               android:layout_height="wrap_content"
               android:gravity="center"
               android:layout_margin="10dp"
+
               android:orientation="vertical">
 
     <LinearLayout
@@ -72,29 +73,20 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="유승주"
-                    android:textSize="14dp"/>
+                    android:textSize="12dp"/>
+            <TextView
+                    android:id="@+id/room"
+                    android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="left"
+                      android:text="월 1시~3시"
+                      android:textSize="12dp"/>
 
         </LinearLayout>
 
         <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-<!--            <ToggleButton-->
-<!--                    android:id="@+id/favorite_btn"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_width="60dp" -->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@drawable/btn_favorite_off"/>-->
-
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Elastic Button"-->
-<!--                    android:textColor="@android:color/white"-->
-<!--                    android:textSize="17sp"-->
-<!--                    app:button_cornerRadius="4dp"-->
-<!--                    app:button_duration="250"-->
-<!--                    app:button_scale="0.87" />-->
-            <!--                    android:background="@drawable/btn_favorite_off"-->
 
             <com.skydoves.elasticviews.ElasticButton
                     android:id="@+id/favorite_btn"
@@ -152,5 +144,17 @@
             android:background="@color/recyclerview_line">
 
     </View>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <TextView
+                android:id="@+id/detail"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_height="wrap_content"/>
+<!--                android:textColor="@color/red"/>-->
+    </LinearLayout>
 
 </LinearLayout>

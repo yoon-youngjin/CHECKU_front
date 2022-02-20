@@ -243,6 +243,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         public TextView grade;
         public TextView empty;
         public TextView type;
+        public TextView room;
+        public TextView detail;
         public Button btn;
 //        public Switch start_switch;
 
@@ -257,6 +259,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             grade = itemView.findViewById(R.id.grade);
             empty = itemView.findViewById(R.id.emptySize);
             type = itemView.findViewById(R.id.type);
+            room = itemView.findViewById(R.id.room);
+            detail = itemView.findViewById(R.id.detail);
 
 //            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
@@ -269,6 +273,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
                     itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
                 }
             });
+
+
 
 
 //            start_switch = itemView.findViewById(R.id.start_switch);
@@ -306,6 +312,9 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         String sub_title = filteredList.get(position).getSubject_title();
         int sbj_num = filteredList.get(position).getSubject_num();
         String pro_name = filteredList.get(position).getProfessor_name();
+        String room = filteredList.get(position).getRoom();
+        String detail = filteredList.get(position).getDetail();
+        holder.detail.setVisibility(View.GONE);
 
         holder.sub_title.setText(sub_title);
         if (!(pro_name == null)) {
@@ -330,6 +339,30 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
         holder.grade.setText(filteredList.get(position).getYear() + "학년");
+//        holder.detail.setText(filteredList.get(position).getDetail());
+
+        if (!(room == null)) {
+            holder.room.setText(room.trim());
+        } else {
+            holder.room.setText(room);
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.detail.getVisibility() == View.VISIBLE) {
+                    holder.detail.setVisibility(View.GONE);
+                }else {
+                    if(!holder.detail.getText().equals(""))
+                    holder.detail.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        if (!(detail == null)) {
+            holder.detail.setText(detail.trim());
+        } else {
+            holder.detail.setText(detail);
+        }
+
     }
 
     @Override

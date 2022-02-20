@@ -99,6 +99,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         public TextView type;
         public Button btn;
         public Switch start_switch;
+        public TextView note;
+        public TextView room;
+        public TextView detail;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -111,12 +114,27 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             empty = itemView.findViewById(R.id.emptySize);
             type = itemView.findViewById(R.id.type);
             btn = itemView.findViewById(R.id.favorite_btn);
+            note = itemView.findViewById(R.id.detail);
+            room = itemView.findViewById(R.id.room);
             start_switch = itemView.findViewById(R.id.start_switch);
+            detail = itemView.findViewById(R.id.detail);
+
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(note.getVisibility() == View.VISIBLE) {
+                        note.setVisibility(View.GONE);
+                    }else {
+                        note.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
@@ -153,7 +171,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         int sbj_num = filteredList.get(position).getSubject_num();
         String year = filteredList.get(position).getYear();
         String pro_name = filteredList.get(position).getProfessor_name();
-
+        String room = filteredList.get(position).getRoom();
+        String detail = filteredList.get(position).getDetail();
+        holder.detail.setVisibility(View.GONE);
 
         if (!(pro_name == null)) {
             holder.pro_name.setText(pro_name.trim());
@@ -167,12 +187,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 //        holder.start_switch.setVisibility(View.VISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
+        holder.room.setText(filteredList.get(position).getRoom());
 
         if (year.equals("9")) {
             holder.grade.setText("전체");
         } else {
             holder.grade.setText(year + "학년");
-
         }
 
 
@@ -180,6 +200,28 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.type.setTextColor(Color.WHITE);
 
+
+        if (!(room == null)) {
+            holder.room.setText(room.trim());
+        } else {
+            holder.room.setText(room);
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.detail.getVisibility() == View.VISIBLE) {
+                    holder.detail.setVisibility(View.GONE);
+                }else {
+                    if(!holder.detail.getText().equals(""))
+                        holder.detail.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        if (!(detail == null)) {
+            holder.detail.setText(detail.trim());
+        } else {
+            holder.detail.setText(detail);
+        }
     }
 
 

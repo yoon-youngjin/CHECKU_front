@@ -2,8 +2,11 @@ package com.example.nodeproject2.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +39,6 @@ public class CodeDialog {
     private TextView emptysize_textView;
     private Lecture lecture;
 
-    private String sbj_num;
-
 
     public interface OnItemClickListener {
         void OnItemClick(Lecture lecture);
@@ -68,6 +69,10 @@ public class CodeDialog {
         sbj_num_textView =  dlg.findViewById(R.id.sbj_num);
         pro_name_textView = dlg.findViewById(R.id.professor);
         emptysize_textView =  dlg.findViewById(R.id.emSize);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+
 
         okButton.setOnClickListener(view -> {
             itemClickListener.OnItemClick(lecture);
@@ -79,9 +84,7 @@ public class CodeDialog {
 
     }
 
-
     public void show(String sbj_num) {
-        this.sbj_num = sbj_num;
         showData(sbj_num);
     }
 
@@ -123,7 +126,6 @@ public class CodeDialog {
                 Log.d("check", "Fail!!");
             }
         });
-
 
     }
 

@@ -30,9 +30,7 @@ import com.example.nodeproject2.adapter.MainAdatper;
 import com.example.nodeproject2.databinding.FragmentLiberalArtsBinding;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
-import com.skydoves.balloon.ArrowOrientation;
-import com.skydoves.balloon.Balloon;
-import com.skydoves.balloon.BalloonAnimation;
+import com.skydoves.balloon.*;
 import lombok.SneakyThrows;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,13 +76,16 @@ public class LiberalArtsFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.45f)
-                .setWidthRatio(0.6f)
-                .setTextGravity(Gravity.LEFT)
-                .setHeight(65)
-                .setTextSize(10f)
-                .setCornerRadius(4f)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setTextSize(12f)
+                .setCornerRadius(8f)
+                .setPadding(10)
                 .setAlpha(0.9f)
+                .setTextGravity(Gravity.START)
+                .setBackgroundColorResource(R.color.kukie_gray)
                 .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
@@ -234,6 +235,8 @@ public class LiberalArtsFragment extends Fragment {
                         .capacity_total(holder.capacity_total.getText().toString())
                         .major_division(holder.type.getText().toString())
                         .emptySize(Integer.parseInt(holder.empty.getText().toString()))
+                        .room(holder.room.getText().toString())
+                        .detail(holder.detail.getText().toString())
                         .build();
 
                 if (holder.year.getText().toString().equals("전체")) {

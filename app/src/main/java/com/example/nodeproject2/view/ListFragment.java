@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,10 +29,9 @@ import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.databinding.FragmentListBinding;
 import com.example.nodeproject2.datas.Lecture;
 import com.example.nodeproject2.service.MyService;
-import com.skydoves.balloon.ArrowOrientation;
-import com.skydoves.balloon.Balloon;
-import com.skydoves.balloon.BalloonAnimation;
+import com.skydoves.balloon.*;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +52,8 @@ public class ListFragment extends Fragment {
     private LectureViewModel lectureViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CodeDialog codeDialog;
+    private DeleteDialog deleteDialog;
+
     private boolean empty_check = false;
     private Balloon balloon;
 
@@ -74,6 +76,7 @@ public class ListFragment extends Fragment {
 
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         codeDialog = new CodeDialog(getContext());
+        deleteDialog = new DeleteDialog(getContext());
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "test_db")
@@ -84,17 +87,20 @@ public class ListFragment extends Fragment {
         balloon = new Balloon.Builder(getContext())
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.49f)
-                .setWidthRatio(0.f)
-                .setHeight(70)
-                .setTextSize(10f)
-                .setTextGravity(Gravity.LEFT)
-                .setCornerRadius(4f)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setTextSize(12f)
+                .setCornerRadius(8f)
+                .setPadding(10)
                 .setAlpha(0.9f)
-                .setText("1. 우측 하단탭을 눌러 수강바구니에 과목을 추가해보세요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있습니다.\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.")
+                .setTextGravity(Gravity.START)
+                .setBackgroundColorResource(R.color.kukie_gray)
+                .setText("1. 우측 하단 탭을 눌러 수강바구니에 과목을 추가해보세요.\n\n2. 화면을 아래로 스크롤 하면 새로고침할 수 있습니다.\n\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
-                .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
+                .setLifecycleOwner(getViewLifecycleOwner())
                 .build();
 
         binding.clicklayout.setOnClickListener(new View.OnClickListener() {
@@ -189,18 +195,30 @@ public class ListFragment extends Fragment {
             @Override
             public void OnItemClick(ListAdapter.ViewHolder holder, View view, int pos) {
                 Lecture lecture = new Lecture();
+                lecture.setSubject_title(holder.sub_title.getText().toString());
                 lecture.setSubject_num(Integer.parseInt(holder.sub_num.getText().toString()));
-                lectureDao.setDeleteLecture(lecture);
-                adatper.swapItems(lectureDao.getLectureAll(),empty_check);
+                deleteDialog.show(lecture);
+                deleteDialog.setOnItemClickListener(new DeleteDialog.OnItemClickListener() {
+
+                    @Override
+                    public void OnItemClick() {
+                        lectureDao.setDeleteLecture(lecture);
+                        adatper.swapItems(lectureDao.getLectureAll(),empty_check);
+                        deleteDialog.dlg.dismiss();
+                    }
+                });
+                deleteDialog.setOnItemClickListener2(new DeleteDialog.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick() {
+                        deleteDialog.dlg.dismiss();
+                    }
+                });
+
+
+
             }
         });
-//        binding.toggleButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                empty_check = binding.toggleButton.isChecked();
-//                adatper.swapItems(lectureDao.getLectureAll(), empty_check);
-//            }
-//        });
+
         binding.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -212,27 +230,33 @@ public class ListFragment extends Fragment {
         });
 
 
-        adatper.setOnCheckedChangeListener(new ListAdapter.OnCheckedChangeListener() {
-            @Override
-            public void OnItemChange(ListAdapter.ViewHolder holder, View view, int pos, boolean isChecked) throws IOException {
 
-                Intent intent = new Intent(getContext(), MyService.class);
-                String subject_num = holder.sub_num.getText().toString();
-                intent.putExtra("subject_num", subject_num);
 
-                if (isChecked) {
-                    intent.putExtra("checked", "true");
-                    getActivity().startService(intent);
-                } else {
-                    //TODO 보낸 요청 취소
-                    intent.putExtra("checked", "false");
-                    getActivity().startService(intent);
-                }
-            }
-        });
+//        adatper.setOnCheckedChangeListener(new ListAdapter.OnCheckedChangeListener() {
+//            @Override
+//            public void OnItemChange(ListAdapter.ViewHolder holder, View view, int pos, boolean isChecked) throws IOException {
+//
+//                Intent intent = new Intent(getContext(), MyService.class);
+//                String subject_num = holder.sub_num.getText().toString();
+//                intent.putExtra("subject_num", subject_num);
+//
+//                if (isChecked) {
+//                    intent.putExtra("checked", "true");
+//                    getActivity().startService(intent);
+//                } else {
+//                    //TODO 보낸 요청 취소
+//                    intent.putExtra("checked", "false");
+//                    getActivity().startService(intent);
+//                }
+//            }
+//        });
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
+
+
+
     }
 
 }

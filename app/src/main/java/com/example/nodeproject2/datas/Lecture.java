@@ -49,34 +49,28 @@ public class Lecture {
     private int emptySize;
 
 
-//    @SerializedName("room")
-//    private String room;
-//
-//
-//    @SerializedName("detail")
+    @SerializedName("room")
+    private String room;
 
 
-//    public void setRoom(String room) {
-//        this.room = room;
-//    }
-//
-//
-////
-//    public String getRoom() {
-//        return room;
-//    }
-//
-//
-//    public String getDetail() {
-//        return detail;
-//    }
-//
+    public String getRoom() {
+        return room;
+    }
 
-//    private String detail;
+    public void setRoom(String room) {
+        this.room = room;
+    }
+    @SerializedName("detail")
+    private String detail;
+    public String getDetail() {
+        return detail;
+    }
 
-//    public void setDetail(String detail) {
-//        this.detail = detail;
-//    }
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+
     public Lecture() {
 
     }

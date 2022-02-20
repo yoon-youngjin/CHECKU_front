@@ -4,6 +4,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/border2"
               android:layout_gravity="center"
 
               android:orientation="vertical">
@@ -82,28 +84,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <Button
+        <com.skydoves.elasticviews.ElasticButton
                 android:id="@+id/yesBtn"
+                app:button_cornerRadius="4dp"
+                app:button_duration="250"
+                app:button_scale="0.87"
+                android:background="@drawable/btn_status"
                 android:layout_margin="10dp"
                 android:padding="10dp"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:background="@drawable/btn_status"
-                android:textColor="@color/white"
-
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="추가"/>
+                android:text="추가"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"/>
 
-        <Button
+        <com.skydoves.elasticviews.ElasticButton
                 android:id="@+id/noBtn"
+                app:button_cornerRadius="4dp"
+                app:button_duration="250"
+                app:button_scale="0.87"
+                android:background="@drawable/btn_status"
                 android:layout_margin="10dp"
                 android:padding="10dp"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:background="@drawable/btn_status"
-                android:textColor="@color/white"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="취소"/>
+                android:text="취소"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 </LinearLayout>
