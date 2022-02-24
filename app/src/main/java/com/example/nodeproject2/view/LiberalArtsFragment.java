@@ -65,7 +65,6 @@ public class LiberalArtsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("onCreateView3", "onCreateView3");
 
         binding = FragmentLiberalArtsBinding.inflate(inflater, container, false);
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
@@ -86,7 +85,7 @@ public class LiberalArtsFragment extends Fragment {
                 .setAlpha(0.9f)
                 .setTextGravity(Gravity.START)
                 .setBackgroundColorResource(R.color.kukie_gray)
-                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
+                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)

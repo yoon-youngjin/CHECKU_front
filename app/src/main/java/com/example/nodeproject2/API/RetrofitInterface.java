@@ -33,4 +33,7 @@ public interface RetrofitInterface {
 
     @POST("/subjects")
     Call<List<Lecture>> excuteChange(@Body HashMap<String, String[]> map);
+
+    @POST("/register")
+    Call<String> excuteRegister(@Body HashMap<String,String> map);
 }

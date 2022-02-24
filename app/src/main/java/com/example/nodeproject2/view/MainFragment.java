@@ -77,7 +77,7 @@ public class MainFragment extends Fragment {
                 .setAlpha(0.9f)
                 .setTextGravity(Gravity.START)
                 .setBackgroundColorResource(R.color.kukie_gray)
-                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
+                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
                 .setBalloonAnimation(BalloonAnimation.FADE)
@@ -100,8 +100,6 @@ public class MainFragment extends Fragment {
         binding.tooltipbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("test");
-
                 balloon.showAlignBottom(binding.tooltipbtn);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -289,6 +287,7 @@ public class MainFragment extends Fragment {
             public void onChanged(ArrayList<Lecture> lectures) {
                 binding.findlectureEdittext.setText("");
                 maindata = lectures;
+
                 adatper.swapItems(lectures, "" ,current_grade,type, current_checked);
                 loadingDialog.dismiss();
             }

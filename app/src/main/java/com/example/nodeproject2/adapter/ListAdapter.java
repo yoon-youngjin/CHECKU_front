@@ -36,6 +36,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         void OnItemClick(ViewHolder holder, View view, int pos);
     }
 
+
     public interface OnCheckedChangeListener {
         void OnItemChange(ViewHolder holder, View view, int pos, boolean isChecked) throws IOException;
     }
@@ -47,9 +48,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     }
 
     private OnItemClickListener itemClickListener = null;
+    private OnItemClickListener itemClickListener2 = null;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
+    }
+    public void setOnItemClickListener2(OnItemClickListener listener) {
+        this.itemClickListener2 = listener;
     }
 
 
@@ -102,6 +107,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         public TextView note;
         public TextView room;
         public TextView detail;
+        public Button register;
+        public LinearLayout detail_layout;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -118,12 +125,23 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             room = itemView.findViewById(R.id.room);
             start_switch = itemView.findViewById(R.id.start_switch);
             detail = itemView.findViewById(R.id.detail);
+            register = itemView.findViewById(R.id.register_btn);
+            detail_layout = itemView.findViewById(R.id.detail_layout);
+
+//            register.setVisibility(View.VISIBLE);
 
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     itemClickListener.OnItemClick(ViewHolder.this, itemView, getAdapterPosition());
+                }
+            });
+
+            register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemClickListener2.OnItemClick(ViewHolder.this,itemView,getAdapterPosition());
                 }
             });
 
@@ -173,7 +191,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         String pro_name = filteredList.get(position).getProfessor_name();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
-        holder.detail.setVisibility(View.GONE);
+        holder.detail_layout.setVisibility(View.GONE);
 
         if (!(pro_name == null)) {
             holder.pro_name.setText(pro_name.trim());
@@ -222,6 +240,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         } else {
             holder.detail.setText(detail);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.detail_layout.getVisibility() == View.VISIBLE) {
+                    holder.detail_layout.setVisibility(View.GONE);
+                }else {
+                    if(!holder.detail.getText().equals(""))
+                        holder.detail_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
 

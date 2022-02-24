@@ -114,6 +114,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         public TextView room;
         public Button btn;
         public TextView detail;
+        public LinearLayout detail_layout;
 
 //        public Switch start_switch;
 
@@ -130,6 +131,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
             room = itemView.findViewById(R.id.room);
             empty = itemView.findViewById(R.id.emptySize);
             detail = itemView.findViewById(R.id.detail);
+            detail_layout = itemView.findViewById(R.id.detail_layout);
 
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -162,7 +164,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         String pro_name = filteredList.get(position).getProfessor_name();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
-
+        holder.detail_layout.setVisibility(View.GONE);
 
         if(!(pro_name == null)) {
             holder.pro_name.setText(pro_name.trim());
@@ -206,11 +208,11 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.detail.getVisibility() == View.VISIBLE) {
-                    holder.detail.setVisibility(View.GONE);
+                if(holder.detail_layout.getVisibility() == View.VISIBLE) {
+                    holder.detail_layout.setVisibility(View.GONE);
                 }else {
                     if(!holder.detail.getText().equals(""))
-                        holder.detail.setVisibility(View.VISIBLE);
+                        holder.detail_layout.setVisibility(View.VISIBLE);
                 }
             }
         });

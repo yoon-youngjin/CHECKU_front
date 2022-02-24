@@ -1,6 +1,5 @@
 package com.example.nodeproject2.view;
 
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,15 +26,12 @@ import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.databinding.FragmentListBinding;
 import com.example.nodeproject2.datas.Lecture;
-import com.example.nodeproject2.service.MyService;
 import com.skydoves.balloon.*;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +92,8 @@ public class ListFragment extends Fragment {
                 .setAlpha(0.9f)
                 .setTextGravity(Gravity.START)
                 .setBackgroundColorResource(R.color.kukie_gray)
-                .setText("1. 우측 하단 탭을 눌러 수강바구니에 과목을 추가해보세요.\n\n2. 화면을 아래로 스크롤 하면 새로고침할 수 있습니다.\n\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.")
+                .setText("1. 우측 하단 탭을 눌러 수강바구니에 과목을 추가해보세요.\n\n2. 화면을 아래로 스크롤 하면 새로고침할 수 있습니다.\n\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.\n\n" +
+                        "4. 강의를 클릭하면 비고를 확인할 수 있어요." )
                 .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
                 .setBalloonAnimation(BalloonAnimation.FADE)
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -124,6 +120,9 @@ public class ListFragment extends Fragment {
             public void onRefresh() {
                 //TODO 변경
                 loadingDialog.show();
+
+
+
                 lectureViewModel.getChangeData(lectureDao.getLectureAll());
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -165,6 +164,7 @@ public class ListFragment extends Fragment {
             }
         });
 
+
         return binding.getRoot();
 
     }
@@ -173,6 +173,9 @@ public class ListFragment extends Fragment {
         lectureViewModel.myLectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
+                for (Lecture lecture:lectures) {
+                    lectureDao.setUpdateLecture(lecture);
+                }
                 adatper.swapItems(lectures,empty_check);
                 loadingDialog.dismiss();
             }
@@ -213,6 +216,34 @@ public class ListFragment extends Fragment {
                         deleteDialog.dlg.dismiss();
                     }
                 });
+
+            }
+        });
+
+        adatper.setOnItemClickListener2(new ListAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(ListAdapter.ViewHolder holder, View view, int pos) {
+
+                holder.sub_num.getText().toString();
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("sbj_num",  holder.sub_num.getText().toString());
+
+                Call<String> call = RetrofitClient.retrofitInterface.excuteRegister(map);
+
+                call.enqueue(new Callback<String>() {
+                    @SneakyThrows
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        System.out.println(response.body());
+
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d("check", "Fail!!");
+                    }
+                });
+
 
 
 

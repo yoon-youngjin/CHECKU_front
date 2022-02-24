@@ -7,17 +7,18 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.nodeproject2"
+        applicationId "com.yoon.nodeproject2"
         minSdkVersion 28
         targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            debuggable = false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

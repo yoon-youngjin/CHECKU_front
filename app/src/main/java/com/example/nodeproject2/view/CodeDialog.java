@@ -110,7 +110,7 @@ public class CodeDialog {
                     lecture = lectures.get(0);
 
                     sbj_title_textView.setText(lecture.getSubject_title());
-                    sbj_num_textView.setText(String.valueOf(lecture.getSubject_num()));
+                    sbj_num_textView.setText(String.format("%04d",lecture.getSubject_num()));
                     pro_name_textView.setText(lecture.getProfessor_name());
                     emptysize_textView.setText(String.valueOf(lecture.getEmptySize()));
                     dlg.show();

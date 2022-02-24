@@ -6,7 +6,7 @@
               android:layout_height="wrap_content"
               android:gravity="center"
               android:layout_margin="10dp"
-
+              android:background="?attr/selectableItemBackground"
               android:orientation="vertical">
 
     <LinearLayout
@@ -84,6 +84,20 @@
 
         </LinearLayout>
 
+        <com.skydoves.elasticviews.ElasticButton
+                android:id="@+id/register_btn"
+                app:button_cornerRadius="4dp"
+                app:button_duration="250"
+                app:button_scale="0.87"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_favorite_on"
+                android:visibility="gone"
+                android:text="수강신청"
+                android:textColor="@color/white"
+                android:layout_width="60dp"
+                android:layout_margin="10dp"
+                android:layout_height="match_parent"/>
+
         <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -137,6 +151,26 @@
 
 
     </LinearLayout>
+    <LinearLayout
+            android:id="@+id/detail_layout"
+            android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+                  android:orientation="horizontal">
+        <View android:layout_width="0dp" android:layout_height="match_parent"
+              android:layout_weight="0.2"/>
+
+        <TextView
+                android:id="@+id/detail"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+
+                android:textSize="10dp"
+                android:layout_gravity="center"
+
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <View
             android:layout_width="match_parent"
@@ -145,16 +179,6 @@
 
     </View>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
-        <TextView
-                android:id="@+id/detail"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_margin="5dp"
-                android:layout_height="wrap_content"/>
-<!--                android:textColor="@color/red"/>-->
-    </LinearLayout>
+
 
 </LinearLayout>

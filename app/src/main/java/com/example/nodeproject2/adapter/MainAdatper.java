@@ -246,6 +246,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         public TextView room;
         public TextView detail;
         public Button btn;
+        public LinearLayout detail_layout;
 //        public Switch start_switch;
 
 
@@ -261,6 +262,8 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
             type = itemView.findViewById(R.id.type);
             room = itemView.findViewById(R.id.room);
             detail = itemView.findViewById(R.id.detail);
+            detail_layout = itemView.findViewById(R.id.detail_layout);
+
 
 //            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
@@ -314,7 +317,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         String pro_name = filteredList.get(position).getProfessor_name();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
-        holder.detail.setVisibility(View.GONE);
+        holder.detail_layout.setVisibility(View.GONE);
 
         holder.sub_title.setText(sub_title);
         if (!(pro_name == null)) {
@@ -362,6 +365,17 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
         } else {
             holder.detail.setText(detail);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.detail_layout.getVisibility() == View.VISIBLE) {
+                    holder.detail_layout.setVisibility(View.GONE);
+                }else {
+                    if(!holder.detail.getText().equals(""))
+                        holder.detail_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
     }
 

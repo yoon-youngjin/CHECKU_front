@@ -51,7 +51,6 @@ public class LectureViewModel extends ViewModel {
 
                 if (response.code() == 200) {
                     ArrayList<Lecture> data = (ArrayList<Lecture>) response.body();
-                    System.out.println(data);
                     ArrayList<Lecture> updateData = (ArrayList<Lecture>) data.stream().map(lecture -> {
                         String total = lecture.getCapacity_total();
                         String[] arr = total.split("/");

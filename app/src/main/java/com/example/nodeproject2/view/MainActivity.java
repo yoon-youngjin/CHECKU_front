@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         viewPager.setAdapter(viewPagerAdapter);
-//        viewPager.setUserInputEnabled(false);//터치 스크롤 막음
+        viewPager.setUserInputEnabled(false);//터치 스크롤 막음
     }
     //tablayout - viewpager 연결
     public void settingTabLayout() {
