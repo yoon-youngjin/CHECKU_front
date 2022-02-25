@@ -5,17 +5,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.room.Room;
-import com.example.nodeproject2.API.Lecture.LectureDao;
-import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.R;
-import com.example.nodeproject2.adapter.ListAdapter;
 import com.example.nodeproject2.datas.Lecture;
 import lombok.SneakyThrows;
 import retrofit2.Call;
@@ -27,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CodeDialog {
+public class SearchDialog {
 
     private Context context;
     final Dialog dlg;
@@ -48,17 +42,17 @@ public class CodeDialog {
     private OnItemClickListener item2ClickListener = null;
 
     // ok
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnAcceptItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
 
     //no
-    public void setOnItemClickListener2(OnItemClickListener listener) {
+    public void setOnRejectItemClickListener(OnItemClickListener listener) {
         this.item2ClickListener = listener;
     }
 
 
-    public CodeDialog(Context context) {
+    public SearchDialog(Context context) {
         this.context = context;
         this.dlg = new Dialog(context);
         dlg.setContentView(R.layout.code_dialog);

@@ -1,19 +1,15 @@
 package com.example.nodeproject2.API.viewmodel;
 
 import android.util.Log;
-import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.datas.Lecture;
 import lombok.SneakyThrows;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +31,25 @@ public class LectureViewModel extends ViewModel {
 
     public ArrayList<Lecture> getLiberalArts() {
         return liberalArts.getValue();
+    }
+
+    public void letsRegister(String sbj_num) {
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("sbj_num",  sbj_num);
+
+            Call<String> call = RetrofitClient.retrofitInterface.excuteRegister(map);
+            call.enqueue(new Callback<String>() {
+                @SneakyThrows
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    System.out.println(response.body());
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("check", "Fail!!");
+                }
+            });
     }
 
 
@@ -67,9 +82,7 @@ public class LectureViewModel extends ViewModel {
                 } else {
                     status.setValue(response.code());
                 }
-
             }
-
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");

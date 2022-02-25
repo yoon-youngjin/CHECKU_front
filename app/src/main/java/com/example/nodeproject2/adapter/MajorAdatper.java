@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> implements Filterable {
+public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> implements Filterable {
 
     private ArrayList<Lecture> unFilteredlist;
     private ArrayList<Lecture> filteredList;
@@ -40,7 +40,7 @@ public class MainAdatper extends RecyclerView.Adapter<MainAdatper.ViewHolder> im
     }
 
 
-    public MainAdatper(Context context, ArrayList<Lecture> data) {
+    public MajorAdatper(Context context, ArrayList<Lecture> data) {
         this.unFilteredlist = data;
         this.filteredList = data;
         this.context = context;

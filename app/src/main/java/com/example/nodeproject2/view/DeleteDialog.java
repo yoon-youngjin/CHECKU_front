@@ -16,23 +16,23 @@ public class DeleteDialog {
     final Button okButton;
     final Button cancelButton;
     private TextView textView;
-    private boolean result;
+    private Lecture lecture;
 
     public interface OnItemClickListener {
-        void OnItemClick();
+        void OnItemClick(Lecture lecture);
     }
+    private DeleteDialog.OnItemClickListener itemAcceptClickListener = null;
 
-    private DeleteDialog.OnItemClickListener itemClickListener = null;
-    private DeleteDialog.OnItemClickListener item2ClickListener = null;
+    private DeleteDialog.OnItemClickListener itemRejectClickListener = null;
 
     // ok
-    public void setOnItemClickListener(DeleteDialog.OnItemClickListener listener) {
-        this.itemClickListener = listener;
+    public void setOnAcceptItemClickListener(DeleteDialog.OnItemClickListener listener) {
+        this.itemAcceptClickListener = listener;
     }
 
     //no
-    public void setOnItemClickListener2(DeleteDialog.OnItemClickListener listener) {
-        this.item2ClickListener = listener;
+    public void setOnItemRejectClickListener(DeleteDialog.OnItemClickListener listener) {
+        this.itemRejectClickListener = listener;
     }
 
     public DeleteDialog(Context context) {
@@ -44,19 +44,19 @@ public class DeleteDialog {
         okButton = dlg.findViewById(R.id.yesBtn);
         cancelButton = dlg.findViewById(R.id.noBtn);
         okButton.setOnClickListener(view -> {
-            itemClickListener.OnItemClick();
+            itemAcceptClickListener.OnItemClick(lecture);
         });
 
         cancelButton.setOnClickListener(view -> {
-            item2ClickListener.OnItemClick();
+            itemRejectClickListener.OnItemClick(lecture);
         });
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
     }
 
     public void show(Lecture lecture) {
+        this.lecture = lecture;
         textView.setText(lecture.getSubject_title() + "(" + String.format("%04d", lecture.getSubject_num()) + ")" + " 을(를) 삭제하시겠습니까? ");
-
         dlg.show();
 
 

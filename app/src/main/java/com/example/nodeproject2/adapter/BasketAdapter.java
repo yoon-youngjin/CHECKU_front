@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements Filterable {
+public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> implements Filterable {
 
     public List<Lecture> unFilteredlist;
     public List<Lecture> filteredList;
@@ -48,17 +48,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     }
 
     private OnItemClickListener itemClickListener = null;
-    private OnItemClickListener itemClickListener2 = null;
+    private OnItemClickListener RegisterListener = null;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
-    public void setOnItemClickListener2(OnItemClickListener listener) {
-        this.itemClickListener2 = listener;
+    public void setOnRegisterClickListener(OnItemClickListener listener) {
+        this.RegisterListener = listener;
     }
 
 
-    public ListAdapter(Context context, List<Lecture> data) {
+    public BasketAdapter(Context context, List<Lecture> data) {
         this.unFilteredlist = data;
         this.filteredList = data;
         this.context = context;
@@ -141,7 +141,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemClickListener2.OnItemClick(ViewHolder.this,itemView,getAdapterPosition());
+                    RegisterListener.OnItemClick(ViewHolder.this,itemView,getAdapterPosition());
                 }
             });
 
@@ -161,7 +161,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 @SneakyThrows
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    itemChangeListener.OnItemChange(ListAdapter.ViewHolder.this, itemView, getAdapterPosition(), isChecked);
+                    itemChangeListener.OnItemChange(BasketAdapter.ViewHolder.this, itemView, getAdapterPosition(), isChecked);
 
                 }
             });
@@ -171,11 +171,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
     @NonNull
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BasketAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewitem, parent, false);
-        return new ListAdapter.ViewHolder(view);
+        return new BasketAdapter.ViewHolder(view);
     }
 
 
@@ -185,7 +185,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BasketAdapter.ViewHolder holder, int position) {
         int sbj_num = filteredList.get(position).getSubject_num();
         String year = filteredList.get(position).getYear();
         String pro_name = filteredList.get(position).getProfessor_name();

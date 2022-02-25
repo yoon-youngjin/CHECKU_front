@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,26 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.example.nodeproject2.API.RetrofitClient;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.API.Lecture.LectureDao;
 import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
 import com.example.nodeproject2.adapter.LiberalArtsAdapter;
-import com.example.nodeproject2.adapter.MainAdatper;
+import com.example.nodeproject2.config.BuildBallon;
 import com.example.nodeproject2.databinding.FragmentLiberalArtsBinding;
-import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
 import com.skydoves.balloon.*;
-import lombok.SneakyThrows;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LiberalArtsFragment extends Fragment {
 
@@ -58,11 +47,6 @@ public class LiberalArtsFragment extends Fragment {
 
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -72,24 +56,9 @@ public class LiberalArtsFragment extends Fragment {
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         swipeRefreshLayout = binding.swipeLayout;
         lectureDao = getLectureDao();
-        balloon = new Balloon.Builder(getContext())
-                .setArrowSize(10)
-                .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-                .setArrowPosition(0.5f)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setTextSize(12f)
-                .setCornerRadius(8f)
-                .setPadding(10)
-                .setAlpha(0.9f)
-                .setTextGravity(Gravity.START)
-                .setBackgroundColorResource(R.color.kukie_gray)
-                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
-                .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
-                .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
-                .setBalloonAnimation(BalloonAnimation.FADE)
-                .build();
+        balloon = BuildBallon.getBalloon(getContext(),getViewLifecycleOwner(),
+                "1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요."
+        );
         init();
         initObserver();
 

@@ -1,4 +1,4 @@
-package com.example.nodeproject2;
+package com.example.nodeproject2.config;
 
 
 import com.example.nodeproject2.datas.Lecture;

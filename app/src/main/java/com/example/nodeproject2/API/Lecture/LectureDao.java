@@ -19,7 +19,7 @@ public interface LectureDao {
     void setDeleteLecture(Lecture lecture);
 
     //조회 쿼리
-    @Query("SELECT * FROM Lecture")
+    @Query("SELECT * FROM lecture_table")
     List<Lecture> getLectureAll();
 
 }

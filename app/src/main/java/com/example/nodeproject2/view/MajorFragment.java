@@ -5,29 +5,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.nodeproject2.API.viewmodel.LectureViewModel;
-import com.example.nodeproject2.API.Lecture.LectureDao;
-import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
-import com.example.nodeproject2.adapter.MainAdatper;
+import com.example.nodeproject2.adapter.MajorAdatper;
+import com.example.nodeproject2.config.BuildBallon;
+import com.example.nodeproject2.config.BuildLecturDatabase;
 import com.example.nodeproject2.databinding.FragmentMainBinding;
 import com.example.nodeproject2.datas.Lecture;
 import com.skydoves.balloon.*;
@@ -35,11 +28,11 @@ import com.skydoves.balloon.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends Fragment {
+public class MajorFragment extends Fragment {
 
-    private LectureDao lectureDao;
+    private BuildLecturDatabase lecturDatabase;
     private RecyclerView recyclerView;
-    private MainAdatper adatper;
+    private MajorAdatper adatper;
     private FragmentMainBinding binding;
     private LoadingDialog loadingDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -58,30 +51,17 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentMainBinding.inflate(inflater, container, false);
+        lecturDatabase = new BuildLecturDatabase(getContext(),"lecture_table");
+
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         swipeRefreshLayout = binding.swipeLayout;
-        lectureDao = getLectureDao();
         maindata = new ArrayList<>();
-        balloon = new Balloon.Builder(getContext())
-                .setArrowSize(10)
-                .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-                .setArrowPosition(0.5f)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setTextSize(12f)
-                .setCornerRadius(8f)
-                .setPadding(10)
-                .setAlpha(0.9f)
-                .setTextGravity(Gravity.START)
-                .setBackgroundColorResource(R.color.kukie_gray)
-                .setText("1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요.")
-                .setTextColor(ContextCompat.getColor(getContext(), R.color.black))
-                .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.kukie_gray))
-                .setBalloonAnimation(BalloonAnimation.FADE)
-                .build();
+
+        balloon = BuildBallon.getBalloon(getContext(),getViewLifecycleOwner(),
+                "1. 우측버튼을 누르면 수강바구니에 추가할 수 있어요.\n\n2. 화면을 아래로 스크롤 하면 새로고침 할 수 있어요."
+        );
 
         init();
         initObserver();
@@ -304,12 +284,12 @@ public class MainFragment extends Fragment {
 
     private void showView() {
         recyclerView = binding.mainRecyclerview;
-        adatper = new MainAdatper(getContext(), lectureViewModel.getLectures());
+        adatper = new MajorAdatper(getContext(), lectureViewModel.getLectures());
 
-        adatper.setOnItemClickListener(new MainAdatper.OnItemClickListener() {
+        adatper.setOnItemClickListener(new MajorAdatper.OnItemClickListener() {
             @Override
-            public void OnItemClick(MainAdatper.ViewHolder holder, View view, int pos) {
-                List<Lecture> lectures = lectureDao.getLectureAll();
+            public void OnItemClick(MajorAdatper.ViewHolder holder, View view, int pos) {
+                List<Lecture> lectures = lecturDatabase.getLecturesFromDB();
                 Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
                         .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
                         .year(holder.grade.getText().toString().substring(0,1))
@@ -325,84 +305,26 @@ public class MainFragment extends Fragment {
                     holder.type.setTextColor(Color.BLACK);
                     holder.grade.setTextColor(Color.BLACK);
                     Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 해제되었습니다.",Toast.LENGTH_SHORT).show();
-                    lectureDao.setDeleteLecture(lecture);
+                    lecturDatabase.setDeleteLecture(lecture);
                 }
                 else {
                     holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
                     holder.sub_num.setTextColor(Color.WHITE);
                     holder.type.setTextColor(Color.WHITE);
                     holder.grade.setTextColor(Color.WHITE);
-                    lectureDao.setInsertLecture(lecture);
+                    lecturDatabase.setInsertLecture(lecture);
                     Toast.makeText(getContext(),lecture.getSubject_title()+"이(가) 등록 되었습니다.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
-
-//        adatper.setOnCheckedChangeListener(new MainAdatper.OnCheckedChangeListener() {
-//            @Override
-//            public void OnItemChange(MainAdatper.ViewHolder holder, View view, int pos, boolean isChecked) {
-//
-//
-//                if (isChecked) {
-////                    Lecture lecture = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).subject_title(holder.sub_title.getText().toString())
-////                            .professor_name(holder.pro_name.getText().toString()).capacity_total(holder.capacity_total.getText().toString())
-////                            .capacity_year(holder.capacity_year.getText().toString())
-////                            .build();
-////                    lectureDao.setInsertLecture(lecture);
-//
-//                } else {
-////                    Lecture lec = Lecture.builder().subject_num(Integer.parseInt(holder.sub_num.getText().toString())).build();;
-////                    lectureDao.setDeleteLecture(lec);
-//
-//                }
-//            }
-//        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adatper);
     }
 
 
-    //    public void initData() {
-//
-//        try (InputStream is = getResources().getAssets().open("file.csv");
-//        ) {
-//            lectures = new ArrayList();
-//            CSVFile file = new CSVFile(is);
-//            lectures = file.read();
-//            lectureViewModel.setLectures(lectures);
-//
-//            // 엑셀 읽기
-////            Workbook wb = new HSSFWorkbook(is);
-////            Sheet sheet = wb.getSheetAt(0);
-////            int rows = sheet.getPhysicalNumberOfRows();
-////
-////            for (int i = 0; i < rows; i++) {
-////                HSSFRow row = (HSSFRow) sheet.getRow(i);
-////                Subject sub;
-////                if(row!=null) {
-//////                    int cells = row.getPhysicalNumberOfCells();
-////                    sub = Subject.builder().subject_title(row.getCell(7).getStringCellValue()).professor_name(row.getCell(16).getStringCellValue())
-////                            .total_num("40").current_num("0").subject_num(row.getCell(6).getStringCellValue()).build();
-////                    subData.add(sub);
-////                }
-////            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        showView();
-//
-//    }
-    private LectureDao getLectureDao() {
 
-        LectureDatabase db = Room.databaseBuilder(getContext(), LectureDatabase.class, "test_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        return db.lectureDao();
-
-    }
 
 
 }
