@@ -12,6 +12,7 @@ import androidx.room.Room;
 import com.example.nodeproject2.API.Lecture.LectureDao;
 import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
+import com.example.nodeproject2.config.BuildLecturDatabase;
 import com.example.nodeproject2.datas.Lecture;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
 
     private ArrayList<Lecture> unFilteredlist;
     private ArrayList<Lecture> filteredList;
+    private BuildLecturDatabase lecturDatabase;
+    private ArrayList<Lecture> currentDB;
 
-    private List<Lecture> lectureList;
-
-    private String type="";
     private boolean checked;
+
     Context context;
 
 
@@ -45,6 +46,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         this.unFilteredlist = items;
         this.filteredList = items;
         this.checked = checked;
+        currentDB = lecturDatabase.getLecturesFromDB();
         getFilter().filter(s);
         notifyDataSetChanged();
     }
@@ -53,7 +55,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         this.unFilteredlist = data;
         this.filteredList = data;
         this.context = context;
-        this.lectureList = getLectureDao().getLectureAll();
+        this.lecturDatabase = new BuildLecturDatabase(this.context, "lecture_table");
     }
 
     @Override
@@ -159,50 +161,32 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull LiberalArtsAdapter.ViewHolder holder, int position) {
-        String sub_title = filteredList.get(position).getSubject_title();
-        holder.sub_title.setText(sub_title);
+        int sbj_num = filteredList.get(position).getSubject_num();
         String pro_name = filteredList.get(position).getProfessor_name();
+        String sub_title = filteredList.get(position).getSubject_title();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
+        String year = filteredList.get(position).getYear();
+
         holder.detail_layout.setVisibility(View.GONE);
 
-        if(!(pro_name == null)) {
-            holder.pro_name.setText(pro_name.trim());
-        }else {
-            holder.pro_name.setText(pro_name);
-        }
+        checkData(pro_name, year, room, detail, holder);
 
-        int sbj_num = filteredList.get(position).getSubject_num();
-
+        holder.sub_title.setText(sub_title);
         holder.sub_num.setText(String.format("%04d", sbj_num));
         holder.type.setText(filteredList.get(position).getMajor_division());
-
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-
-        String year = filteredList.get(position).getYear();
-        
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
         holder.sub_num.setTextColor(Color.BLACK);
         holder.type.setTextColor(Color.BLACK);
         holder.year.setTextColor(Color.BLACK);
+        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
 
-        if(getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
+        if(currentDB.contains(Lecture.builder().subject_num(sbj_num).build())) {
             holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
             holder.sub_num.setTextColor(Color.WHITE);
             holder.type.setTextColor(Color.WHITE);
             holder.year.setTextColor(Color.WHITE);
-        }
-
-        if(year.equals("9")) {
-            holder.year.setText("전체");
-        }else {
-            holder.year.setText(year+"학년");
-        }
-
-        if (!(room == null)) {
-            holder.room.setText(room.trim());
-        } else {
-            holder.room.setText(room);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -216,12 +200,32 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
                 }
             }
         });
+
+    }
+
+    private void checkData(String pro_name, String year, String room, String detail, ViewHolder holder) {
+
+        if(!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        }else {
+            holder.pro_name.setText(pro_name);
+        }
+        if(year.equals("9")) {
+            holder.year.setText("전체");
+        }else {
+            holder.year.setText(year+"학년");
+        }
+        if (!(room == null)) {
+            holder.room.setText(room.trim());
+        } else {
+            holder.room.setText(room);
+        }
         if (!(detail == null)) {
             holder.detail.setText(detail.trim());
         } else {
             holder.detail.setText(detail);
         }
-        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
+
     }
 
     @Override
@@ -233,15 +237,7 @@ public class LiberalArtsAdapter extends RecyclerView.Adapter<LiberalArtsAdapter.
         }
 
     }
-    private LectureDao getLectureDao() {
 
-        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "test_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        return db.lectureDao();
-
-    }
 
 
 

@@ -216,18 +216,29 @@
                     android:layout_height="25dp"
                     android:id="@+id/typeRadioButton3"/>
             <RadioButton
-                    android:text="기타"
+                android:text="기타"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/selector_radio_text"
+                android:textAlignment="center"
+                android:button="@null"
+                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="25dp"
+                android:id="@+id/typeRadioButton4"/>
+            <RadioButton
+                    android:text="invisible"
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/selector_radio_text"
                     android:textAlignment="center"
                     android:button="@null"
-                   android:layout_margin="5dp"
+                    android:layout_margin="5dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="25dp"
-                    android:id="@+id/typeRadioButton4"/>
-            <View android:layout_width="0dp" android:layout_height="0dp"
-                  android:layout_weight="1"/>
+                    android:visibility="invisible"
+                    android:id="@+id/visible"/>
+
 
         </RadioGroup>
 
@@ -236,13 +247,12 @@
         <EditText
                 android:layout_width="match_parent"
                 android:layout_margin="10dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/findlecture_edittext"
                 android:theme="@style/scdreamEditText"
                 android:inputType="text"
                 android:textSize="15dp"
                 android:hint="아래 목록 중 원하는 과목을 찾아보세요"
-
                 android:padding="10dp"
                 android:background="@drawable/border"/>
 

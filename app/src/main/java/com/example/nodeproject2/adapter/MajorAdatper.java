@@ -12,6 +12,7 @@ import androidx.room.Room;
 import com.example.nodeproject2.API.Lecture.LectureDao;
 import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.R;
+import com.example.nodeproject2.config.BuildLecturDatabase;
 import com.example.nodeproject2.datas.Lecture;
 
 import java.util.ArrayList;
@@ -22,11 +23,25 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
 
     private ArrayList<Lecture> unFilteredlist;
     private ArrayList<Lecture> filteredList;
-    private List<Lecture> lectureList;
-    private String current_grade = "";
+    private BuildLecturDatabase lecturDatabase;
+    private ArrayList<Lecture> currentDB;
 
     private boolean checked = false;
+    private String current_grade = "";
     private String type = "";
+
+    Context context;
+
+
+    public interface OnItemClickListener {
+        void OnItemClick(ViewHolder holder, View view, int pos);
+    }
+
+    private OnItemClickListener itemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
 
     public void swapItems(ArrayList<Lecture> items, String s, String current_grade, String type, boolean current_checked) {
         this.unFilteredlist = items;
@@ -34,8 +49,8 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
         this.current_grade = current_grade;
         this.checked = current_checked;
         this.type = type;
+        currentDB = lecturDatabase.getLecturesFromDB();
         getFilter().filter(s);
-
         notifyDataSetChanged();
     }
 
@@ -44,7 +59,7 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
         this.unFilteredlist = data;
         this.filteredList = data;
         this.context = context;
-        this.lectureList = getLectureDao().getLectureAll();
+        this.lecturDatabase = new BuildLecturDatabase(this.context, "lecture_table");
     }
 
     @Override
@@ -222,18 +237,6 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
         };
     }
 
-    public interface OnItemClickListener {
-        void OnItemClick(ViewHolder holder, View view, int pos);
-    }
-
-    private OnItemClickListener itemClickListener = null;
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.itemClickListener = listener;
-    }
-
-
-    Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView sub_num;
@@ -263,13 +266,15 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
             room = itemView.findViewById(R.id.room);
             detail = itemView.findViewById(R.id.detail);
             detail_layout = itemView.findViewById(R.id.detail_layout);
-
-
-//            start_switch = itemView.findViewById(R.id.start_switch);
             btn = itemView.findViewById(R.id.favorite_btn);
-
             btn.setBackgroundResource(R.drawable.btn_favorite_off);
+//            start_switch = itemView.findViewById(R.id.start_switch);
 
+            setListener();
+
+        }
+
+        private void setListener() {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -277,10 +282,6 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
                 }
             });
 
-
-
-
-//            start_switch = itemView.findViewById(R.id.start_switch);
 //
 //            start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @SneakyThrows
@@ -297,8 +298,6 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewitem, parent, false);
@@ -317,65 +316,62 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
         String pro_name = filteredList.get(position).getProfessor_name();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
+
         holder.detail_layout.setVisibility(View.GONE);
 
+        checkData(pro_name, room, detail, holder);
+
+
         holder.sub_title.setText(sub_title);
-        if (!(pro_name == null)) {
-            holder.pro_name.setText(pro_name.trim());
-        } else {
-            holder.pro_name.setText(pro_name);
-        }
+        holder.sub_num.setText(String.format("%04d", sbj_num));
+        holder.type.setText(filteredList.get(position).getMajor_division());
+        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
+        holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
+        holder.grade.setText(filteredList.get(position).getYear() + "학년");
 
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
         holder.sub_num.setTextColor(Color.BLACK);
         holder.type.setTextColor(Color.BLACK);
         holder.grade.setTextColor(Color.BLACK);
 
-        if (getLectureDao().getLectureAll().contains(Lecture.builder().subject_num(sbj_num).build())) {
+        if (currentDB.contains(Lecture.builder().subject_num(sbj_num).build())) {
             holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
             holder.sub_num.setTextColor(Color.WHITE);
             holder.type.setTextColor(Color.WHITE);
             holder.grade.setTextColor(Color.WHITE);
         }
-        holder.sub_num.setText(String.format("%04d", sbj_num));
-        holder.type.setText(filteredList.get(position).getMajor_division());
-        holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
-        holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.grade.setText(filteredList.get(position).getYear() + "학년");
-//        holder.detail.setText(filteredList.get(position).getDetail());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.detail_layout.getVisibility() == View.VISIBLE) {
+                    holder.detail_layout.setVisibility(View.GONE);
+                } else {
+                    if (!holder.detail.getText().equals(""))
+                        holder.detail_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void checkData(String pro_name, String room, String detail, ViewHolder holder) {
+
+        if (!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        } else {
+            holder.pro_name.setText(pro_name);
+        }
         if (!(room == null)) {
             holder.room.setText(room.trim());
         } else {
             holder.room.setText(room);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.detail.getVisibility() == View.VISIBLE) {
-                    holder.detail.setVisibility(View.GONE);
-                }else {
-                    if(!holder.detail.getText().equals(""))
-                    holder.detail.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         if (!(detail == null)) {
             holder.detail.setText(detail.trim());
         } else {
             holder.detail.setText(detail);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.detail_layout.getVisibility() == View.VISIBLE) {
-                    holder.detail_layout.setVisibility(View.GONE);
-                }else {
-                    if(!holder.detail.getText().equals(""))
-                        holder.detail_layout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
     }
 
@@ -389,15 +385,6 @@ public class MajorAdatper extends RecyclerView.Adapter<MajorAdatper.ViewHolder> 
 
     }
 
-    private LectureDao getLectureDao() {
-
-        LectureDatabase db = Room.databaseBuilder(context, LectureDatabase.class, "test_db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        return db.lectureDao();
-
-    }
 
 }
 

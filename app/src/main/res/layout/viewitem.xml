@@ -21,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-           >
+        >
             <Button
                     android:id="@+id/emptySize"
                     android:layout_width="70dp"
@@ -39,14 +39,12 @@
                     android:text="30/250"/>
 
 
-
             <Switch
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/start_switch"/>
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -77,10 +75,10 @@
             <TextView
                     android:id="@+id/room"
                     android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:gravity="left"
-                      android:text="월 1시~3시"
-                      android:textSize="12dp"/>
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="월 1시~3시"
+                    android:textSize="12dp"/>
 
         </LinearLayout>
 
@@ -154,9 +152,9 @@
     <LinearLayout
             android:id="@+id/detail_layout"
             android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-                  android:orientation="horizontal">
+            android:orientation="horizontal">
         <View android:layout_width="0dp" android:layout_height="match_parent"
               android:layout_weight="0.2"/>
 
@@ -178,7 +176,6 @@
             android:background="@color/recyclerview_line">
 
     </View>
-
 
 
 </LinearLayout>

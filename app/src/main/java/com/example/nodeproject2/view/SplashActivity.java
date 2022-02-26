@@ -15,6 +15,7 @@ public class SplashActivity extends AppCompatActivity {
         moveMain(1);
     }
 
+    //TODO 스플래시 변경
     private void moveMain(int sec) {
         new Handler().postDelayed(new Runnable() {
             @Override

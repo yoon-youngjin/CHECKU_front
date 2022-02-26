@@ -127,7 +127,7 @@ public class MyService extends Service {
             // Notification 세팅
             NotificationCompat.Builder notification
                     = new NotificationCompat.Builder(getApplicationContext(), "channel")
-                    .setSmallIcon(R.drawable.img)
+//                    .setSmallIcon(R.drawable.img)
                     .setContentTitle(response.body())
                     .setContentIntent(pendingIntent)
                     .setContentText("");

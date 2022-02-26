@@ -17,15 +17,16 @@ import com.example.nodeproject2.API.viewmodel.LectureViewModel;
 import com.example.nodeproject2.config.BuildBallon;
 import com.example.nodeproject2.adapter.BasketAdapter;
 import com.example.nodeproject2.config.BuildLecturDatabase;
-import com.example.nodeproject2.databinding.FragmentListBinding;
+import com.example.nodeproject2.databinding.FragmentBasketBinding;
 import com.example.nodeproject2.datas.Lecture;
 import com.skydoves.balloon.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class BasketFragment extends Fragment {
-    private FragmentListBinding binding;
+    private FragmentBasketBinding binding;
 
     private RecyclerView recyclerView;
     private BasketAdapter adatper;
@@ -33,7 +34,7 @@ public class BasketFragment extends Fragment {
     private BuildLecturDatabase lecturDatabase;
     private LectureViewModel lectureViewModel;
 
-    private SearchDialog codeDialog;
+    private SearchDialog searchDialog;
     private DeleteDialog deleteDialog;
     private LoadingDialog loadingDialog;
 
@@ -53,23 +54,21 @@ public class BasketFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentListBinding.inflate(inflater, container, false);
-        lecturDatabase = new BuildLecturDatabase(getContext(),"lecture_table");
+        binding = FragmentBasketBinding.inflate(inflater, container, false);
+        lecturDatabase = new BuildLecturDatabase(getContext(), "lecture_table");
 
         myLectures = lecturDatabase.getLecturesFromDB();
 
         swipeRefreshLayout = binding.swipeLayout;
-        recyclerView = binding.listRecyclerview;
-        adatper = new BasketAdapter(getContext(), myLectures);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(adatper);
+
 
         lectureViewModel = new ViewModelProvider(requireActivity()).get(LectureViewModel.class);
-        balloon = BuildBallon.getBalloon(getContext(),getViewLifecycleOwner(),
+        balloon = BuildBallon.getBalloon(getContext(), getViewLifecycleOwner(),
                 "1. 우측 하단 탭을 눌러 수강바구니에 과목을 추가해보세요.\n\n2. 화면을 아래로 스크롤 하면 새로고침할 수 있습니다.\n\n3. 우측 버튼을 클릭하면 과목을 지울 수 있습니다.\n\n" +
                         "4. 강의를 클릭하면 비고를 확인할 수 있어요."
-                );
+        );
 
+        initRecyclerView();
         init();
         initDialog();
         initObserver();
@@ -85,15 +84,14 @@ public class BasketFragment extends Fragment {
         lectureViewModel.myLectures.observe(this, new Observer<ArrayList<Lecture>>() {
             @Override
             public void onChanged(ArrayList<Lecture> lectures) {
-                for (Lecture lecture:lectures) {
+                for (Lecture lecture : lectures) {
                     lecturDatabase.updateLecture(lecture);
                 }
                 myLectures = lecturDatabase.getLecturesFromDB();
-                adatper.swapItems(myLectures,empty_check);
+                adatper.swapItems(myLectures, empty_check);
                 loadingDialog.dismiss();
             }
         });
-
         /**
          * 404오류 시 loading dlg를 지우기 위한 observe
          */
@@ -106,7 +104,6 @@ public class BasketFragment extends Fragment {
     }
 
 
-
     private void init() {
 
         /**
@@ -117,10 +114,10 @@ public class BasketFragment extends Fragment {
             public void onClick(View view) {
                 String sbj_num = binding.codeEditText.getText().toString();
                 binding.codeEditText.setText("");
-                if(sbj_num.equals("")) {
+                if (sbj_num.equals("")) {
                     Toast.makeText(getContext(), "과목번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }else {
-                    codeDialog.show(sbj_num);
+                } else {
+                    searchDialog.show(sbj_num);
                 }
 
             }
@@ -179,7 +176,7 @@ public class BasketFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 empty_check = checked;
-                adatper.swapItems(myLectures,empty_check);
+                adatper.swapItems(myLectures, empty_check);
             }
         });
 
@@ -205,44 +202,52 @@ public class BasketFragment extends Fragment {
 
     }
 
+    private void initRecyclerView() {
+        recyclerView = binding.listRecyclerview;
+        adatper = new BasketAdapter(getContext(), myLectures);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(adatper);
+    }
+
+
     private void initDialog() {
-        codeDialog = new SearchDialog(getContext());
+        searchDialog = new SearchDialog(getContext());
         deleteDialog = new DeleteDialog(getContext());
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        codeDialog.setOnAcceptItemClickListener(new SearchDialog.OnItemClickListener() {
+        searchDialog.setOnAcceptItemClickListener(new SearchDialog.OnItemClickListener() {
             @Override
             public void OnItemClick(Lecture lecture) {
                 List<Lecture> lectures = lecturDatabase.getLecturesFromDB();
-                if(lectures.contains(lecture)) {
-                    Toast.makeText(getContext(),"이미 등록된 강의입니다.",Toast.LENGTH_LONG).show();
-                }else {
+                if (lectures.contains(lecture)) {
+                    Toast.makeText(getContext(), "이미 등록된 강의입니다.", Toast.LENGTH_LONG).show();
+                } else {
                     lecturDatabase.setInsertLecture(lecture);
-                    adatper.swapItems(myLectures,empty_check);
+                    adatper.swapItems(myLectures, empty_check);
                 }
-                codeDialog.dismiss();
+                searchDialog.dismiss();
 
             }
         });
-        codeDialog.setOnRejectItemClickListener(new SearchDialog.OnItemClickListener() {
+        searchDialog.setOnRejectItemClickListener(new SearchDialog.OnItemClickListener() {
             @Override
             public void OnItemClick(Lecture lecture) {
-                codeDialog.dismiss();
+                searchDialog.dismiss();
             }
         });
         deleteDialog.setOnAcceptItemClickListener(new DeleteDialog.OnItemClickListener() {
             @Override
             public void OnItemClick(Lecture lecture) {
                 lecturDatabase.setDeleteLecture(lecture);
-                adatper.swapItems(myLectures,empty_check);
-                deleteDialog.dlg.dismiss();
+                adatper.swapItems(myLectures, empty_check);
+                deleteDialog.dismiss();
             }
         });
         deleteDialog.setOnItemRejectClickListener(new DeleteDialog.OnItemClickListener() {
             @Override
             public void OnItemClick(Lecture lecture) {
-                deleteDialog.dlg.dismiss();
+                deleteDialog.dismiss();
             }
         });
 

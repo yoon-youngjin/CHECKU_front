@@ -8,7 +8,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
-//    13.209.140.156
     private static String BASE_URL = "http:/13.209.140.156:3000";
 
     static OkHttpClient client = new OkHttpClient.Builder()
@@ -19,11 +18,12 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
-                .build();
+            .build();
 
-    public static RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);;
+    public static RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
+    ;
 
 }

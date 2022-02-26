@@ -16,7 +16,7 @@ public class FragementAdapter extends FragmentStateAdapter {
     public FragementAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
-//
+
     public void addFragment(Fragment fragment) {
         mFragmentList.add(fragment);
     }

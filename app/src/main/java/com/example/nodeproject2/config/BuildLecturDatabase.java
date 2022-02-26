@@ -7,7 +7,6 @@ import com.example.nodeproject2.API.Lecture.LectureDatabase;
 import com.example.nodeproject2.datas.Lecture;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BuildLecturDatabase {
     private Context context;

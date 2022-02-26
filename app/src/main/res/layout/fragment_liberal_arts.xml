@@ -13,23 +13,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-<!--        <TextView-->
-<!--                android:id="@+id/tv"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginRight="10dp"-->
-<!--                android:layout_marginLeft="10dp"-->
-<!--                android:padding="5dp"-->
-<!--                android:textSize="15dp"-->
-<!--                android:text="교양과목을 구분해주세요."/>-->
+        <!--        <TextView-->
+        <!--                android:id="@+id/tv"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginTop="10dp"-->
+        <!--                android:layout_marginRight="10dp"-->
+        <!--                android:layout_marginLeft="10dp"-->
+        <!--                android:padding="5dp"-->
+        <!--                android:textSize="15dp"-->
+        <!--                android:text="교양과목을 구분해주세요."/>-->
         <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_margin="10dp"
                 android:id="@+id/artsSpinner"/>
-
 
 
         <LinearLayout
@@ -67,19 +66,19 @@
                   android:layout_height="0dp"
                   android:layout_weight="1"/>
 
-<!--            <com.skydoves.elasticviews.ElasticCheckButton-->
-<!--                    android:id="@+id/toggleButton"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="32dp"-->
-<!--                    android:layout_weight="0.5"-->
-<!--                    android:layout_margin="5dp"-->
-<!--                    android:text="빈 강의"-->
-<!--                    android:background="@color/kukie_green"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    app:checkButton_cornerRadius="12dp"-->
-<!--                    app:checkButton_alpha="0.7"-->
-<!--                    app:checkButton_duration="400"-->
-<!--                    app:checkButton_scale="0.9" />-->
+            <!--            <com.skydoves.elasticviews.ElasticCheckButton-->
+            <!--                    android:id="@+id/toggleButton"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="32dp"-->
+            <!--                    android:layout_weight="0.5"-->
+            <!--                    android:layout_margin="5dp"-->
+            <!--                    android:text="빈 강의"-->
+            <!--                    android:background="@color/kukie_green"-->
+            <!--                    android:textColor="@color/white"-->
+            <!--                    app:checkButton_cornerRadius="12dp"-->
+            <!--                    app:checkButton_alpha="0.7"-->
+            <!--                    app:checkButton_duration="400"-->
+            <!--                    app:checkButton_scale="0.9" />-->
             <ToggleButton
                     android:text="ToggleButton"
                     android:layout_width="0dp"
@@ -94,11 +93,11 @@
 
         </LinearLayout>
 
+
         <EditText
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:theme="@style/scdreamEditText"
-
                 android:padding="10dp"
                 android:id="@+id/findlecture_edittext"
                 android:inputType="text"
@@ -106,8 +105,6 @@
                 android:textSize="15dp"
                 android:hint="아래 목록 중 원하는 과목을 찾아보세요"
                 android:background="@drawable/border"/>
-
-
         <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/main_recyclerview"

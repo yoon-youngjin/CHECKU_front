@@ -21,16 +21,13 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private FragementAdapter viewPagerAdapter;
 
-
     protected void onCreate(Bundle savedInstanceState) {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         super.onCreate(savedInstanceState);
 
         init();
 
-
         setContentView(binding.getRoot());
-
 
     }
 
@@ -46,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         ).attach();
     }
-
 
     /**
      * viewpager 및 어댑터 생성

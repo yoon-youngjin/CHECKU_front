@@ -23,6 +23,8 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     private boolean checked;
     Context context;
 
+
+
     public void swapItems(List<Lecture> items, boolean checked) {
         this.unFilteredlist = items;
         this.filteredList = items;
@@ -31,11 +33,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-
     public interface OnItemClickListener {
         void OnItemClick(ViewHolder holder, View view, int pos);
     }
-
 
     public interface OnCheckedChangeListener {
         void OnItemChange(ViewHolder holder, View view, int pos, boolean isChecked) throws IOException;
@@ -56,7 +56,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     public void setOnRegisterClickListener(OnItemClickListener listener) {
         this.RegisterListener = listener;
     }
-
 
     public BasketAdapter(Context context, List<Lecture> data) {
         this.unFilteredlist = data;
@@ -104,7 +103,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         public TextView type;
         public Button btn;
         public Switch start_switch;
-        public TextView note;
         public TextView room;
         public TextView detail;
         public Button register;
@@ -121,7 +119,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             empty = itemView.findViewById(R.id.emptySize);
             type = itemView.findViewById(R.id.type);
             btn = itemView.findViewById(R.id.favorite_btn);
-            note = itemView.findViewById(R.id.detail);
             room = itemView.findViewById(R.id.room);
             start_switch = itemView.findViewById(R.id.start_switch);
             detail = itemView.findViewById(R.id.detail);
@@ -130,7 +127,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
 //            register.setVisibility(View.VISIBLE);
 
+            setListener();
 
+        }
+
+        private void setListener() {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -145,18 +146,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(note.getVisibility() == View.VISIBLE) {
-                        note.setVisibility(View.GONE);
-                    }else {
-                        note.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-
-
             start_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @SneakyThrows
                 @Override
@@ -167,7 +156,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             });
         }
     }
-
 
     @NonNull
     @Override
@@ -191,13 +179,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         String pro_name = filteredList.get(position).getProfessor_name();
         String room = filteredList.get(position).getRoom();
         String detail = filteredList.get(position).getDetail();
+
         holder.detail_layout.setVisibility(View.GONE);
 
-        if (!(pro_name == null)) {
-            holder.pro_name.setText(pro_name.trim());
-        } else {
-            holder.pro_name.setText(pro_name);
-        }
+        checkData(pro_name, year, room, detail, holder);
+
         holder.btn.setBackgroundResource(R.drawable.btn_favorite_on);
         holder.sub_title.setText(filteredList.get(position).getSubject_title());
         holder.sub_num.setText(String.format("%04d", sbj_num));
@@ -205,41 +191,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 //        holder.start_switch.setVisibility(View.VISIBLE);
         holder.capacity_total.setText(filteredList.get(position).getCapacity_total());
         holder.empty.setText(String.valueOf(filteredList.get(position).getEmptySize()));
-        holder.room.setText(filteredList.get(position).getRoom());
-
-        if (year.equals("9")) {
-            holder.grade.setText("전체");
-        } else {
-            holder.grade.setText(year + "학년");
-        }
-
-
         holder.grade.setTextColor(Color.WHITE);
         holder.type.setText(filteredList.get(position).getMajor_division());
         holder.type.setTextColor(Color.WHITE);
 
 
-        if (!(room == null)) {
-            holder.room.setText(room.trim());
-        } else {
-            holder.room.setText(room);
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.detail.getVisibility() == View.VISIBLE) {
-                    holder.detail.setVisibility(View.GONE);
-                }else {
-                    if(!holder.detail.getText().equals(""))
-                        holder.detail.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        if (!(detail == null)) {
-            holder.detail.setText(detail.trim());
-        } else {
-            holder.detail.setText(detail);
-        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,6 +207,31 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 }
             }
         });
+    }
+
+    private void checkData(String pro_name, String year, String room, String detail, ViewHolder holder) {
+        if (!(pro_name == null)) {
+            holder.pro_name.setText(pro_name.trim());
+        } else {
+            holder.pro_name.setText(pro_name);
+        }
+        if (year.equals("9")) {
+            holder.grade.setText("전체");
+        } else {
+            holder.grade.setText(year + "학년");
+        }
+        if (!(room == null)) {
+            holder.room.setText(room.trim());
+        } else {
+            holder.room.setText(room);
+        }
+
+        if (!(detail == null)) {
+            holder.detail.setText(detail.trim());
+        } else {
+            holder.detail.setText(detail);
+        }
+
     }
 
 

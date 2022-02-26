@@ -24,15 +24,14 @@ import java.util.stream.Collectors;
 public class SearchDialog {
 
     private Context context;
-    final Dialog dlg;
-    final Button okButton;
-    final Button cancelButton;
+    private final Dialog dlg;
+    private Button okButton;
+    private Button cancelButton;
     private TextView sbj_title_textView;
     private TextView sbj_num_textView;
     private TextView pro_name_textView;
     private TextView emptysize_textView;
     private Lecture lecture;
-
 
     public interface OnItemClickListener {
         void OnItemClick(Lecture lecture);
@@ -46,7 +45,7 @@ public class SearchDialog {
         this.itemClickListener = listener;
     }
 
-    //no
+    // no
     public void setOnRejectItemClickListener(OnItemClickListener listener) {
         this.item2ClickListener = listener;
     }
@@ -55,18 +54,20 @@ public class SearchDialog {
     public SearchDialog(Context context) {
         this.context = context;
         this.dlg = new Dialog(context);
-        dlg.setContentView(R.layout.code_dialog);
 
+        dlg.setContentView(R.layout.search_dialog);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        init();
+    }
+
+    private void init() {
         okButton = dlg.findViewById(R.id.yesBtn);
         cancelButton =  dlg.findViewById(R.id.noBtn);
         sbj_title_textView = dlg.findViewById(R.id.sbj_title);
         sbj_num_textView =  dlg.findViewById(R.id.sbj_num);
         pro_name_textView = dlg.findViewById(R.id.professor);
         emptysize_textView =  dlg.findViewById(R.id.emSize);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
-
 
         okButton.setOnClickListener(view -> {
             itemClickListener.OnItemClick(lecture);
@@ -79,10 +80,7 @@ public class SearchDialog {
     }
 
     public void show(String sbj_num) {
-        showData(sbj_num);
-    }
 
-    private void showData(String sbj_num) {
         HashMap<String, String[]> map = new HashMap<>();
         String[] data = {sbj_num};
         map.put("sbj_num", data);
@@ -111,10 +109,8 @@ public class SearchDialog {
                 } else {
                     Toast.makeText(context,"없는 과목번호입니다.",Toast.LENGTH_SHORT).show();
                     dlg.dismiss();
-                    //TODO 변경
                 }
             }
-
             @Override
             public void onFailure(Call<List<Lecture>> call, Throwable t) {
                 Log.d("check", "Fail!!");
