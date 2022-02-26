@@ -1,6 +1,6 @@
 # CHECKU_front
+> `front : Android, server : Nodejs`
 
-> front : Android, server : Nodejs
 
 * 건국대학교 수강인원 확인 어플
 * 주 기능
