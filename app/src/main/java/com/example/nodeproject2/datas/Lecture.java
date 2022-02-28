@@ -10,12 +10,12 @@ import lombok.*;
 
 import java.util.Objects;
 
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity(tableName = "lecture_table")
+@EqualsAndHashCode(of = "subject_num")
 @Getter @Setter
 public class Lecture {
 
@@ -107,16 +107,4 @@ public class Lecture {
         return lecture;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Lecture)) return false;
-        Lecture lecture = (Lecture) o;
-        return subject_num == lecture.subject_num;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(subject_num);
-    }
 }
