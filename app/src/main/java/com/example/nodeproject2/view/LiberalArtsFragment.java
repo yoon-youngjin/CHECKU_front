@@ -76,7 +76,7 @@ public class LiberalArtsFragment extends Fragment {
         adatper.setOnItemClickListener(new LiberalArtsAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(LiberalArtsAdapter.ViewHolder holder, View view, int pos) {
-                insertDeletSbj(holder);
+                insertDeleteSbj(holder);
             }
         });
         /**
@@ -137,32 +137,10 @@ public class LiberalArtsFragment extends Fragment {
 
     }
 
-    private void insertDeletSbj(LiberalArtsAdapter.ViewHolder holder) {
+    private void insertDeleteSbj(LiberalArtsAdapter.ViewHolder holder) {
         List<Lecture> lectures = lecturDatabase.getLecturesFromDB();
 
-        String pro_name = holder.pro_name.getText().toString();
-        String year = holder.year.getText().toString();
-
-        Lecture lecture = Lecture.builder()
-                .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
-                .subject_title(holder.sub_title.getText().toString())
-                .capacity_total(holder.capacity_total.getText().toString())
-                .major_division(holder.type.getText().toString())
-                .emptySize(Integer.parseInt(holder.empty.getText().toString()))
-                .room(holder.room.getText().toString())
-                .detail(holder.detail.getText().toString())
-                .build();
-
-        if (year.equals("전체")) {
-            lecture.setYear("9");
-        } else {
-            lecture.setYear(year.substring(0, 1));
-        }
-        if (pro_name.equals("")) {
-            lecture.setProfessor_name(pro_name);
-        } else {
-            lecture.setProfessor_name(pro_name.trim());
-        }
+        Lecture lecture = Lecture.createLectureFromArts(holder);
 
         if (lectures.contains(lecture)) {
             holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);

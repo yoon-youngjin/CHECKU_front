@@ -3,9 +3,12 @@ package com.example.nodeproject2.datas;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import com.example.nodeproject2.adapter.LiberalArtsAdapter;
+import com.example.nodeproject2.adapter.MajorAdatper;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
+import java.util.Objects;
 
 
 @Builder
@@ -61,5 +64,59 @@ public class Lecture {
     @ColumnInfo(name = "detail")
     private String detail;
 
+    public static Lecture createLectureFromMajor(MajorAdatper.ViewHolder holder) {
+        Lecture lecture = Lecture.builder()
+                .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
+                .subject_title(holder.sub_title.getText().toString())
+                .professor_name(holder.pro_name.getText().toString())
+                .capacity_total(holder.capacity_total.getText().toString())
+                .year(holder.grade.getText().toString().substring(0,1))
+                .emptySize(Integer.parseInt(holder.empty.getText().toString()))
+                .major_division(holder.type.getText().toString())
+                .room(holder.room.getText().toString())
+                .detail(holder.detail.getText().toString())
+                .build();
+        return lecture;
+    }
 
+    public static Lecture createLectureFromArts(LiberalArtsAdapter.ViewHolder holder) {
+
+        String pro_name = holder.pro_name.getText().toString();
+        String year = holder.year.getText().toString();
+
+        Lecture lecture = Lecture.builder()
+                .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
+                .subject_title(holder.sub_title.getText().toString())
+                .capacity_total(holder.capacity_total.getText().toString())
+                .major_division(holder.type.getText().toString())
+                .emptySize(Integer.parseInt(holder.empty.getText().toString()))
+                .room(holder.room.getText().toString())
+                .detail(holder.detail.getText().toString())
+                .build();
+
+        if (year.equals("전체")) {
+            lecture.setYear("9");
+        } else {
+            lecture.setYear(year.substring(0, 1));
+        }
+        if (pro_name.equals("")) {
+            lecture.setProfessor_name(pro_name);
+        } else {
+            lecture.setProfessor_name(pro_name.trim());
+        }
+        return lecture;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lecture)) return false;
+        Lecture lecture = (Lecture) o;
+        return subject_num == lecture.subject_num;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subject_num);
+    }
 }

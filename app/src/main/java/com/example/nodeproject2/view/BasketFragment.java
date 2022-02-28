@@ -240,6 +240,7 @@ public class BasketFragment extends Fragment {
             @Override
             public void OnItemClick(Lecture lecture) {
                 lecturDatabase.setDeleteLecture(lecture);
+                myLectures = lecturDatabase.getLecturesFromDB();
                 adatper.swapItems(myLectures, empty_check);
                 deleteDialog.dismiss();
             }

@@ -87,7 +87,7 @@ public class MajorFragment extends Fragment {
         adatper.setOnItemClickListener(new MajorAdatper.OnItemClickListener() {
             @Override
             public void OnItemClick(MajorAdatper.ViewHolder holder, View view, int pos) {
-                insertDeletSbj(holder);
+                insertDeleteSbj(holder);
             }
         });
 
@@ -275,19 +275,9 @@ public class MajorFragment extends Fragment {
         lectureViewModel.getChangeAllData(value,"","subject");
     }
 
-    private void insertDeletSbj(MajorAdatper.ViewHolder holder) {
+    private void insertDeleteSbj(MajorAdatper.ViewHolder holder) {
         List<Lecture> lectures = lecturDatabase.getLecturesFromDB();
-        Lecture lecture = Lecture.builder()
-                .subject_num(Integer.parseInt(holder.sub_num.getText().toString()))
-                .subject_title(holder.sub_title.getText().toString())
-                .professor_name(holder.pro_name.getText().toString())
-                .capacity_total(holder.capacity_total.getText().toString())
-                .year(holder.grade.getText().toString().substring(0,1))
-                .emptySize(Integer.parseInt(holder.empty.getText().toString()))
-                .major_division(holder.type.getText().toString())
-                .room(holder.room.getText().toString())
-                .detail(holder.detail.getText().toString())
-                .build();
+        Lecture lecture = Lecture.createLectureFromMajor(holder);
 
         if(lectures.contains(lecture)) {
             holder.btn.setBackgroundResource(R.drawable.btn_favorite_off);
