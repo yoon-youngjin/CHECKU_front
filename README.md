@@ -14,7 +14,7 @@
 
 ## 화면 구성
 <p align="center">
-<a>'"
+<a>
   <img src="https://user-images.githubusercontent.com/83503188/155839129-1aa617c6-e222-4bcc-b05e-c0814367d9ff.jpg" width="150px" />
 </a>
 <a>
