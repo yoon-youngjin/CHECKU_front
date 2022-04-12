@@ -15,23 +15,23 @@
 ## 화면 구성
 <p align="center">
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/155839129-1aa617c6-e222-4bcc-b05e-c0814367d9ff.jpg" width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/155839129-1aa617c6-e222-4bcc-b05e-c0814367d9ff.jpg" width="140px" />
 </a>
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/155839598-60b90338-21a0-47c7-80c5-0079381987b4.jpg" width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/155839598-60b90338-21a0-47c7-80c5-0079381987b4.jpg" width="140px" />
 </a>
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/162699464-7d090fdf-ceee-42e3-925b-336d5c060e50.jpg"  width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/162699464-7d090fdf-ceee-42e3-925b-336d5c060e50.jpg"  width="140px" />
 </a>
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/155839602-c1f548c6-8947-4e74-94ea-20a1649a0694.jpg" width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/155839602-c1f548c6-8947-4e74-94ea-20a1649a0694.jpg" width="140px" />
 </a>
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/155839654-b938c505-3ccd-4ce3-80ed-eb2ed3a9987e.jpg"  width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/155839654-b938c505-3ccd-4ce3-80ed-eb2ed3a9987e.jpg"  width="140px" />
 </a>
     
 <a>
-  <img src="https://user-images.githubusercontent.com/83503188/155839677-87f122e3-0a17-474a-9d66-d27f11469c40.jpg"  width="150px" />
+  <img src="https://user-images.githubusercontent.com/83503188/155839677-87f122e3-0a17-474a-9d66-d27f11469c40.jpg"  width="140px" />
 </a>
                                                                                                                                 
 </p>
