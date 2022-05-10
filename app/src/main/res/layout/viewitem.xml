@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/viewLayout"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:layout_margin="10dp"
+              android:background="?attr/selectableItemBackground"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+        >
+            <Button
+                    android:id="@+id/emptySize"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:text="220"
+                    android:textSize="20dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/kukie_green"/>
+
+            <TextView
+                    android:id="@+id/capacity_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:text="30/250"/>
+
+
+            <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/start_switch"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="5dp">
+
+            <TextView
+                    android:id="@+id/subject_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="선형대수학"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"/>
+
+            <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/professor_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="유승주"
+                    android:textSize="12dp"/>
+            <TextView
+                    android:id="@+id/room"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="월 1시~3시"
+                    android:textSize="12dp"/>
+
+        </LinearLayout>
+
+        <com.skydoves.elasticviews.ElasticButton
+                android:id="@+id/register_btn"
+                app:button_cornerRadius="4dp"
+                app:button_duration="250"
+                app:button_scale="0.87"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_favorite_on"
+                android:visibility="gone"
+                android:text="수강신청"
+                android:textColor="@color/white"
+                android:layout_width="60dp"
+                android:layout_margin="10dp"
+                android:layout_height="match_parent"/>
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <com.skydoves.elasticviews.ElasticButton
+                    android:id="@+id/favorite_btn"
+                    app:button_cornerRadius="4dp"
+                    app:button_duration="250"
+                    app:button_scale="0.87"
+                    android:layout_gravity="center"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"/>
+
+            <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_margin="5dp">
+
+
+                <TextView
+                        android:id="@+id/type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="전선"
+                        android:textColor="@color/black"/>
+
+                <TextView
+                        android:id="@+id/grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="1학년"
+                        android:textColor="@color/black"/>
+
+                <TextView
+                        android:id="@+id/subject_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="0001"
+                        android:textColor="@color/black"/>
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal">
+        <View android:layout_width="0dp" android:layout_height="match_parent"
+              android:layout_weight="0.2"/>
+
+        <TextView
+                android:id="@+id/detail"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+
+                android:textSize="10dp"
+                android:layout_gravity="center"
+
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/recyclerview_line">
+
+    </View>
+
+
+</LinearLayout>
